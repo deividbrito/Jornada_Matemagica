@@ -6,7 +6,7 @@ class ObjetoJogo{
         this.y = config.y || 0;
         this.sprite = new Sprite({ //o "sprite" dá a chamada de como um objeto deve parecer dentro da interface
             objetoJogo: this,
-            src: config.src ||  "C:/Users/deivi/Desktop/ADS/Protótipo/imagens/personagens/p1.png", //caso uma fonte não seja informada, a imagem do personagem é chamada
+            src: config.src ||  "imagens/personagens/p1.png", //caso uma fonte não seja informada, a imagem do personagem é chamada
         }); 
     }
 }
