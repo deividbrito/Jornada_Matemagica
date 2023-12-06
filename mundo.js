@@ -16,6 +16,10 @@ class Mundo{
 
             //desenhar objetos de jogo
             Object.values(this.map.objetoJogo).forEach(object => {
+                object.x += 1;
+                object.update({
+                    arrow: this.inputDirecao.direcao
+                })
                 object.sprite.draw(this.ctx);
             })
 
@@ -32,6 +36,11 @@ class Mundo{
 
     iniciar(){
         this.map = new Mapas (window.Mapas.Mapa1);
+
+        this.inputDirecao = new inputDirecao();
+        this.inputDirecao.iniciar();
+        this.inputDirecao.direcao;
+
         this.iniciarLoopJogo();
         console.log("o mundo está girando", this);
 

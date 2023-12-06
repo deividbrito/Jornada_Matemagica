@@ -22,8 +22,8 @@ class Sprite {
 
     //como os objetos serão desenhados
     draw(ctx) {
-        const x = this.objetoJogo.x * 16;
-        const y = this.objetoJogo.y * 16;
+        const x = this.objetoJogo.x;
+        const y = this.objetoJogo.y;
     
         this.isLoaded && ctx.drawImage(this.image, 
             0,0,

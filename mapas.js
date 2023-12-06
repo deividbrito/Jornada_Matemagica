@@ -25,13 +25,14 @@ window.Mapas = {
     Mapa1: {
         lowerSrc: "imagens/mapas/teste.png",
         objetoJogo:  {
-            p1: new ObjetoJogo({
-                x: 5,
-                y: 6,
+            p1: new Entidade({
+                ehOPlayer: true,
+                x: utils.withGrid(5),
+                y: utils.withGrid(6),
             }),
             p2: new ObjetoJogo({
-                x: 7,
-                x: 9,
+                x: utils.withGrid(7),
+                x: utils.withGrid(9),
             })
         }
     },
@@ -39,12 +40,12 @@ window.Mapas = {
         lowerSrc: "imagens/mapas/teste2.jpeg",
         objetoJogo:  {
             p1: new ObjetoJogo({
-                x: 2,
-                y: 3,
+                x: utils.withGrid(2),
+                y: utils.withGrid(3),
             }),
             p2: new ObjetoJogo({
-                x: 7,
-                x: 7,
+                x: utils.withGrid(7),
+                x: utils.withGrid(7),
             })
         }
     }
