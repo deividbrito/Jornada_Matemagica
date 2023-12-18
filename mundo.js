@@ -16,7 +16,6 @@ class Mundo{
 
             //desenhar objetos de jogo
             Object.values(this.map.objetoJogo).forEach(object => {
-                object.x += 1;
                 object.update({
                     arrow: this.inputDirecao.direcao
                 })
@@ -24,7 +23,7 @@ class Mundo{
             })
 
             //desenhar camada de cima
-            this.map.drawUpperImage(this.ctx);
+            // this.map.drawUpperImage(this.ctx);
 
             requestAnimationFrame(() => {
                 step();
@@ -43,45 +42,6 @@ class Mundo{
 
         this.iniciarLoopJogo();
         console.log("o mundo está girando", this);
-
-        //CÓDIGOS OBSOLETOS: objetos e mapas inseridos diretamente como teste, agora serão inseridos de forma dinâmica
-
-        // //inserindo cenário no jogo
-        // const imagem = new Image();
-        // imagem.onload = () => {
-        //     this.ctx.drawImage(imagem, 0, 0);
-        // };
-        // imagem.src = "imagens/mapas/teste.png";
-
-        // // //x e y definem onde o personagem começará
-        // // let x = 1;
-        // // let y = 5;
-        // // const player = new Image();
-        // // player.onload = () => {
-        // //     this.ctx.drawImage(
-        // //         player, 
-        // //         0,      //parte esquerda 
-        // //         0,      //parte do topo
-        // //         32,     //largura do corte
-        // //         32,     //tamanho do corte
-        // //         x * 16,      //posição
-        // //         y * 16,
-        // //         32,
-        // //         32
-        // //         );
-        // // };
-        // // player.src = "C:/Users/deivi/Desktop/ADS/Protótipo/imagens/personagens/p1.png";
-
-
-        // // colocando alguns objetos no jogo
-        // const p1 = new ObjetoJogo({     //inserindo um personagem
-        //     x: 3,
-        //     y: 5,
-        // })
-
-        // setTimeout(() => {
-        //     p1.sprite.draw(this.ctx);
-        // }, 300);
 
 
     }

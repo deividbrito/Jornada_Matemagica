@@ -15,9 +15,9 @@ class Mapas {
     }
 
     //construtor que desenha a camada alta
-    drawUpperImage(ctx){
-        ctx.drawImage(this.upperImage, 0, 0);
-    }
+    // drawUpperImage(ctx){
+    //     ctx.drawImage(this.upperImage, 0, 0);
+    // }
 }
 
 //criando mapas e desenhando seus objetos
@@ -39,13 +39,10 @@ window.Mapas = {
     Mapa2: {
         lowerSrc: "imagens/mapas/teste2.jpeg",
         objetoJogo:  {
-            p1: new ObjetoJogo({
+            p1: new Entidade({
+                ehOPlayer: true,
                 x: utils.withGrid(2),
                 y: utils.withGrid(3),
-            }),
-            p2: new ObjetoJogo({
-                x: utils.withGrid(7),
-                x: utils.withGrid(7),
             })
         }
     }

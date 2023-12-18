@@ -23,13 +23,14 @@ class inputDirecao {
             const dir = this.map[e.code]; //valida se as keys pressionadas são as que procuramos, definidas acima
             if(dir && this.direcaoPressionada.indexOf(dir) === -1){
                 this.direcaoPressionada.unshift(dir);
+                console.log(this.direcaoPressionada);
             }
         });
 
         document.addEventListener("keyup", e => {
             const dir = this.map[e.code];
             const index = this.direcaoPressionada.indexOf(dir);
-            if(index > 1) {
+            if(index > -1) {
                 this.direcaoPressionada.splice(index, 1);
             }
         })

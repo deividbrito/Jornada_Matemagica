@@ -10,7 +10,6 @@ class ObjetoJogo{
             src: config.src ||  "imagens/personagens/p1.png", //caso uma fonte não seja informada, a imagem do personagem é chamada
         }); 
     }
-
     update(){
 
     }

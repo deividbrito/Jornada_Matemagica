@@ -14,17 +14,16 @@ class Entidade extends ObjetoJogo{
     }
 
     update(state){
-        this.atualizarPosicao();
-
         if(this.ehOPlayer && this.progressoMovimentoFaltante === 0 && state.arrow){
             this.direcao = state.arrow;
             this.progressoMovimentoFaltante = 16;
         }
+        this.atualizarPosicao();
     }
 
     atualizarPosicao(){
         if(this.progressoMovimentoFaltante > 0){
-            const [property, change] = this.direcaoUpdate[this.direcao];
+            const[property, change] = this.direcaoUpdate[this.direcao];
             this[property] += change;
             this.progressoMovimentoFaltante -= 1;
         }
