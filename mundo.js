@@ -11,15 +11,22 @@ class Mundo{
             //para que o jogo limpe o canvas a cada frame que se passa (assim, um objeto que se move não vai ter dois frames coexistindo)
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            //desenhar camada baixa
-            this.map.drawLowerImage(this.ctx);
+            //estabelecendo o objeto que a câmera deve seguir (p1 sendo o personagem controlado)
+            const cameraEntidade = this.map.objetoJogo.p1;
 
-            //desenhar objetos de jogo
+            //atualiza todos os objetos do mapa antes de serem desenhados
             Object.values(this.map.objetoJogo).forEach(object => {
                 object.update({
                     arrow: this.inputDirecao.direcao
                 })
-                object.sprite.draw(this.ctx);
+            })
+
+            //desenhar camada baixa
+            this.map.drawLowerImage(this.ctx, cameraEntidade);
+
+            //desenhar objetos de jogo
+            Object.values(this.map.objetoJogo).forEach(object => {
+                object.sprite.draw(this.ctx, cameraEntidade);
             })
 
             //desenhar camada de cima

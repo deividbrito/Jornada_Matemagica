@@ -62,9 +62,10 @@ class Sprite {
     }
 
     //como os objetos serão desenhados
-    draw(ctx) {
-        const x = this.objetoJogo.x;
-        const y = this.objetoJogo.y;
+    draw(ctx, cameraEntidade) {
+        //posiciona o personagem em uma câmera centralizada, de forma que ele fique centralizado na tela do jogo. esse valores podem ser alterados posteriormente.
+        const x = this.objetoJogo.x - 8 + utils.withGrid(10.5) - cameraEntidade.x;
+        const y = this.objetoJogo.y - 18 + utils.withGrid(6) - cameraEntidade.y;
 
         const [frameX, frameY] = this.frame;
     
