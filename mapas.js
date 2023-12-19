@@ -30,10 +30,10 @@ window.Mapas = {
                 x: utils.withGrid(5),
                 y: utils.withGrid(6),
             }),
-            p2: new ObjetoJogo({
-                x: utils.withGrid(7),
-                x: utils.withGrid(9),
-            })
+            // p2: new ObjetoJogo({
+            //     x: utils.withGrid(7),
+            //     x: utils.withGrid(9),
+            // })
         }
     },
     Mapa2: {

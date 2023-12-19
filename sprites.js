@@ -7,29 +7,74 @@ class Sprite {
             this.isLoaded = true;
         }
 
-        //configurando animaçao do objeto e seu estado inicial
+        //configurando animaçoes do objeto e seu estado inicial
         this.animacao = config.animacao  || {
-            praBaixo: [
-                [0,0]
-            ]
+            "pra-baixo"     : [ [0,0] ],
+            "pra-direita"   : [ [0,1] ],
+            "pra-cima"      : [ [0,2] ],
+            "pra-esquerda"  : [ [0,3] ],
+            "andar-baixo"   : [ [1,0],[0,0],[3,0],[0,0] ],
+            "andar-direita" : [ [1,1],[0,1],[3,1],[0,1] ],
+            "andar-cima"    : [ [1,2],[0,2],[3,2],[0,2] ],
+            "andar-esquerda": [ [1,3],[0,3],[3,3],[0,3] ]
         }
-        this.animacaoAtual = config.animacaoAtual || "praBaixo";
-        this.frameAnimacaoAtual = 0;
+        this.animacaoAtual = "pra-baixo"; 
+        this.animacaoFrameAtual = 0;
+
+        //quantidade de frames que cada sprite ocupará na animação --> permite uma animação ser mais rápida ou mais lenta
+        this.animacaoLimiteFrame = config.animacaoLimiteFrame || 8;
+        this.animacaoProgressoFrame = this.animacaoLimiteFrame;
 
         //referenciando o objeto do jogo
         this.objetoJogo = config.objetoJogo;
+    }
+
+    //getter dos frames da animação
+    get frame(){
+        return this.animacao[this.animacaoAtual][this.animacaoFrameAtual];
+    }
+
+    //método que determina as animações para diferentes ações de movimentação
+    setAnimacao(key){
+        if(this.animacaoAtual !== key){
+            this.animacaoAtual = key;
+            this.animacaoFrameAtual = 0;
+            this.animacaoProgressoFrame = this.animacaoLimiteFrame;
+        }
+    }
+
+    //esse método é responsável por atualizar o progresso da animação do objeto
+    updateProgressoAnimacao(){
+        //diminuir o progresso
+        if(this.animacaoProgressoFrame > 0){
+            this.animacaoProgressoFrame -= 1;
+            return;
+        }
+
+        //resetar o contador da animação
+        this.animacaoProgressoFrame = this.animacaoLimiteFrame;
+        this.animacaoFrameAtual += 1;
+
+        //sempre retornar ao estado inicial da animação caso o objeto ultrapasse o limite ou tenha valor indefinido de animação
+        if(this.frame == undefined){
+            this.animacaoFrameAtual = 0;
+        }
     }
 
     //como os objetos serão desenhados
     draw(ctx) {
         const x = this.objetoJogo.x;
         const y = this.objetoJogo.y;
+
+        const [frameX, frameY] = this.frame;
     
         this.isLoaded && ctx.drawImage(this.image, 
-            0,0,
+            frameX * 32, frameY * 32,   //32 é o tamanho do sprite placeholder utilizado, PODE SER ALTERADO DEPOIS
             32,32,
             x,y,
             32,32
         )
+
+        this.updateProgressoAnimacao();
     }
 }

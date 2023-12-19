@@ -14,11 +14,13 @@ class Entidade extends ObjetoJogo{
     }
 
     update(state){
+        this.atualizarPosicao();
+        this.atualizarSprite(state);
+
         if(this.ehOPlayer && this.progressoMovimentoFaltante === 0 && state.arrow){
             this.direcao = state.arrow;
             this.progressoMovimentoFaltante = 16;
         }
-        this.atualizarPosicao();
     }
 
     atualizarPosicao(){
@@ -26,6 +28,17 @@ class Entidade extends ObjetoJogo{
             const[property, change] = this.direcaoUpdate[this.direcao];
             this[property] += change;
             this.progressoMovimentoFaltante -= 1;
+        }
+    }
+
+    atualizarSprite(state){
+        if(this.ehOPlayer && this.progressoMovimentoFaltante === 0 && state.arrow){
+            this.sprite.setAnimacao("pra-"+this.direcao);
+            return;
+        }
+
+        if(this.progressoMovimentoFaltante > 0){
+            this.sprite.setAnimacao("andar-"+this.direcao);
         }
     }
 }
