@@ -23,7 +23,6 @@ class inputDirecao {
             const dir = this.map[e.code]; //valida se as keys pressionadas são as que procuramos, definidas acima
             if(dir && this.direcaoPressionada.indexOf(dir) === -1){
                 this.direcaoPressionada.unshift(dir);
-                console.log(this.direcaoPressionada);
             }
         });
 

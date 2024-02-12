@@ -17,7 +17,8 @@ class Mundo{
             //atualiza todos os objetos do mapa antes de serem desenhados
             Object.values(this.map.objetoJogo).forEach(object => {
                 object.update({
-                    arrow: this.inputDirecao.direcao
+                    arrow: this.inputDirecao.direcao,
+                    map: this.map,
                 })
             })
 
@@ -42,10 +43,10 @@ class Mundo{
 
     iniciar(){
         this.map = new Mapas (window.Mapas.Mapa1);
+        this.map.montarObjetos();
 
         this.inputDirecao = new inputDirecao();
         this.inputDirecao.iniciar();
-        this.inputDirecao.direcao;
 
         this.iniciarLoopJogo();
         console.log("o mundo está girando", this);

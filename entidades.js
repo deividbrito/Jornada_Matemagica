@@ -14,31 +14,49 @@ class Entidade extends ObjetoJogo{
     }
 
     update(state){
-        this.atualizarPosicao();
-        this.atualizarSprite(state);
+        if(this.progressoMovimentoFaltante > 0){
+            this.atualizarPosicao();
+        } else {
+            //mais casos para movimentação virão abaixo
+            //
+            //
 
-        if(this.ehOPlayer && this.progressoMovimentoFaltante === 0 && state.arrow){
-            this.direcao = state.arrow;
-            this.progressoMovimentoFaltante = 16;
+            //caso o player possa enviar comandos, e uma tecla esteja pressionada
+            if(this.ehOPlayer && state.arrow){
+                this.iniciaComportamento(state, {
+                    tipo: "andar",
+                    direcao: state.arrow,
+                })
+            }
+            this.atualizarSprite(state);
+        }
+    }
+
+    iniciaComportamento(state, comportamento){
+        //definindo a direção do personagem para seja lá qual o comportamento que possua
+        this.direcao = comportamento.direcao;
+        if(comportamento.tipo === "andar"){
+            //parar caso o espaço esteja ocupado
+            if(state.map.espacoTomado(this.x, this.y, this.direcao)){
+                return;
+            }
+        //pronto para andar
+        state.map.moverParede(this.x, this.y, this.direcao);
+        this.progressoMovimentoFaltante = 16;
         }
     }
 
     atualizarPosicao(){
-        if(this.progressoMovimentoFaltante > 0){
             const[property, change] = this.direcaoUpdate[this.direcao];
             this[property] += change;
             this.progressoMovimentoFaltante -= 1;
-        }
     }
 
     atualizarSprite(state){
-        if(this.ehOPlayer && this.progressoMovimentoFaltante === 0 && state.arrow){
-            this.sprite.setAnimacao("pra-"+this.direcao);
-            return;
-        }
-
         if(this.progressoMovimentoFaltante > 0){
             this.sprite.setAnimacao("andar-"+this.direcao);
+            return;
         }
+        this.sprite.setAnimacao("pra-"+this.direcao);
     }
 }
