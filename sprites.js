@@ -9,16 +9,16 @@ class Sprite {
 
         //configurando animaçoes do objeto e seu estado inicial
         this.animacao = config.animacao  || {
-            "pra-baixo"     : [ [0,0] ],
-            "pra-direita"   : [ [0,1] ],
-            "pra-cima"      : [ [0,2] ],
-            "pra-esquerda"  : [ [0,3] ],
+            "parar-baixo"     : [ [0,0] ],
+            "parar-direita"   : [ [0,1] ],
+            "parar-cima"      : [ [0,2] ],
+            "parar-esquerda"  : [ [0,3] ],
             "andar-baixo"   : [ [1,0],[0,0],[3,0],[0,0] ],
             "andar-direita" : [ [1,1],[0,1],[3,1],[0,1] ],
             "andar-cima"    : [ [1,2],[0,2],[3,2],[0,2] ],
             "andar-esquerda": [ [1,3],[0,3],[3,3],[0,3] ]
         }
-        this.animacaoAtual = "pra-baixo"; 
+        this.animacaoAtual = "parar-baixo"; 
         this.animacaoFrameAtual = 0;
 
         //quantidade de frames que cada sprite ocupará na animação --> permite uma animação ser mais rápida ou mais lenta

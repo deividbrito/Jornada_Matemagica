@@ -28,5 +28,13 @@ const utils = {
             y += tamanho;
         }
         return {x,y};
+    },
+
+    //para auxiliar na criação de eventos para o jogo
+    emitirEvento(name, detail){
+        const event = new CustomEvent(name, {
+            detail
+        });
+        document.dispatchEvent(event);
     }
 }

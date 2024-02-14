@@ -8,6 +8,8 @@ class Mapas {
 
         this.upperImage = new Image();
         this.upperImage.src = config.upperSrc;    //camadas altas, coisas que devem estar acima da cabeça de personagens/objetos
+
+        this.cutsceneAcontecendo = false;
     }
 
     //construtor que desenha a camada baixa
@@ -35,10 +37,12 @@ class Mapas {
     }
 
     montarObjetos(){
-        Object.values(this.objetoJogo).forEach(o => {
+        Object.keys(this.objetoJogo).forEach(key => {
+            //atribui uma id a cada objeto através de sua "key", nomeando-os automaticamente
+            let object = this.objetoJogo[key];
+            object.id = key;
 
-
-            o.Montar(this);
+            object.Montar(this);
         })
     }
 
@@ -69,9 +73,26 @@ window.Mapas = {
                 x: utils.withGrid(5),
                 y: utils.withGrid(6),
             }),
-            p2: new ObjetoJogo({
+            p2: new Entidade({
                 x: utils.withGrid(7),
-                x: utils.withGrid(9),
+                y: utils.withGrid(2),
+                loopComportamento: [
+                    {type: "parar", direcao: "cima", time: 800},
+                    {type: "parar", direcao: "baixo", time: 800},
+                    {type: "parar", direcao: "esquerda", time: 800},
+                    {type: "parar", direcao: "direita", time: 800},
+                ]
+            }),
+            p3: new Entidade({
+                x: utils.withGrid(7),
+                y: utils.withGrid(7),
+                loopComportamento: [
+                    {type: "andar", direcao: "esquerda"},
+                    {type: "andar", direcao: "cima"},
+                    {type: "andar", direcao: "direita"},
+                    {type: "andar", direcao: "baixo"},
+                    
+                ]
             })
         },
         walls: {}

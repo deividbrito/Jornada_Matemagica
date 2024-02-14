@@ -40,9 +40,19 @@ class Entidade extends ObjetoJogo{
             if(state.map.espacoTomado(this.x, this.y, this.direcao)){
                 return;
             }
+
         //pronto para andar
         state.map.moverParede(this.x, this.y, this.direcao);
         this.progressoMovimentoFaltante = 16;
+        this.atualizarSprite(state);
+        }
+
+        if(comportamento.tipo === "parar") {
+            setTimeout(() => {
+                utils.emitirEvento("paradaTerminada", {
+                    quemId: this.id
+                })
+            }, comportamento.time)
         }
     }
 
@@ -50,6 +60,12 @@ class Entidade extends ObjetoJogo{
             const[property, change] = this.direcaoUpdate[this.direcao];
             this[property] += change;
             this.progressoMovimentoFaltante -= 1;
+
+            if(this.progressoMovimentoFaltante === 0){
+                utils.emitirEvento("caminhadaTerminada", {
+                    quemId: this.id
+                })
+            }
     }
 
     atualizarSprite(state){
@@ -57,6 +73,6 @@ class Entidade extends ObjetoJogo{
             this.sprite.setAnimacao("andar-"+this.direcao);
             return;
         }
-        this.sprite.setAnimacao("pra-"+this.direcao);
+        this.sprite.setAnimacao("parar-"+this.direcao);
     }
 }
