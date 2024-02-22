@@ -65,7 +65,7 @@ class Overworld {
  }
 
  init() {
-  this.startMap(window.OverworldMaps.Mapa1);
+  this.startMap(window.OverworldMaps.Mapa2);
 
 
   this.bindActionInput();
@@ -78,7 +78,8 @@ class Overworld {
 
 
   // this.map.startCutscene([
-  //   { type: "changeMap", map: "Mapa1"}
+  //   {type: "battle"}
+  //   //{ type: "changeMap", map: "Mapa1"}
   //   // { type: "textMessage", text: "bla bla bla"}
   // ])
 

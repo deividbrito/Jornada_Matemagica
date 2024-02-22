@@ -33,7 +33,6 @@ class GameObject {
   }
 
   async doBehaviorEvent(map) { 
-
     //NÃO FAZER NADA caso tenha uma cutscene acontecendo ou se não existe configuração de comportamento
     if (map.isCutscenePlaying || this.behaviorLoop.length === 0 || this.isStanding) {
       return;
@@ -55,9 +54,5 @@ class GameObject {
 
     //fazer novamente
     this.doBehaviorEvent(map);
-    
-
   }
-
-
 }

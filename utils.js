@@ -28,6 +28,7 @@ const utils = {
     }
     return {x,y};
   },
+  
   oppositeDirection(direction) {
     if (direction === "left") { return "right" }
     if (direction === "right") { return "left" }
