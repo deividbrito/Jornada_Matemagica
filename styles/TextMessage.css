@@ -34,3 +34,19 @@
   right: 2px;
   bottom: 0;
 }
+
+.TextMessage_button2{
+  margin: 0;
+  font-size: 8px;  
+  padding:0;
+  -webkit-appearance: none;
+  background:none;
+  border:0;
+  font-family: inherit;
+  cursor: pointer;
+  margin-left: 30px;
+
+  left: 15px;
+  right: 15px;
+  bottom: 0;
+}

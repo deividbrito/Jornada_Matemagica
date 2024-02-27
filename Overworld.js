@@ -65,7 +65,7 @@ class Overworld {
  }
 
  init() {
-  this.startMap(window.OverworldMaps.Mapa2);
+  this.startMap(window.OverworldMaps.Mapa1);
 
 
   this.bindActionInput();

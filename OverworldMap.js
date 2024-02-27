@@ -480,11 +480,86 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Você está pronta? Me desafie! Enfrente os seus medos!", faceHero:"vilao" },
-              { type: "battle"},
+              { type: "quizGame", text: "Lupos: Quanto é 2 + 2?", options: ["3", "4", "5"], correctAnswer: 1 },
+              { type: "quizGame", text: "Lupos: Quanto é 3 + 3?", options: ["6", "8", "12"], correctAnswer: 0 },
+              { type: "quizGame", text: "Lupos: Quanto é 4 + 4?", options: ["9", "17", "8"], correctAnswer: 2 },
+              { type: "textMessage", text: "Hmpf. Parece que você estava mais preparada do que o imaginado.", faceHero:"vilao" },
+              {type: "changeMap", map: "Mapa4"},
             ]
           }
         ]
       })
     }
+  },
+  Mapa4: { 
+  lowerSrc: "imagens/mapas/corredor2.png",
+  gameObjects: {
+    hero: new Person({
+      isPlayerControlled: true,
+      x: utils.withGrid(5),
+      y: utils.withGrid(3),
+      src: "imagens/personagens/alice.png",
+    }),
+    vilao: new Person({
+      x: utils.withGrid(5),
+      y: utils.withGrid(2),
+      src: "imagens/personagens/vilao.png",
+      talking: [
+        {
+          events: [
+            { type: "textMessage", text: "Aparentemente, você domina a matemática, por mais que tenha tanto medo da mesma.", faceHero:"vilao" },
+            { type: "textMessage", text: "O caminho a frente não será fácil, Alice. Esteja preparada.", faceHero:"vilao" },
+            { type: "textMessage", text: "A própria matemática te desafiará.", faceHero:"vilao" },
+          ]
+        }
+      ]
+    }),
+  },
+  walls: {
+    //paredes segundo mapa
+    [utils.asGridCoord(0,1)] : true,
+    [utils.asGridCoord(1,1)] : true,
+    [utils.asGridCoord(2,1)] : true,
+    [utils.asGridCoord(3,1)] : true,
+    [utils.asGridCoord(4,1)] : true,
+    [utils.asGridCoord(5,1)] : true,
+    [utils.asGridCoord(6,1)] : true,
+    [utils.asGridCoord(7,1)] : true,
+    [utils.asGridCoord(8,1)] : true,
+    [utils.asGridCoord(9,1)] : true,
+    [utils.asGridCoord(10,1)] : true,
+    [utils.asGridCoord(11,1)] : true,
+    [utils.asGridCoord(12,1)] : true,
+    [utils.asGridCoord(13,1)] : true,
+    [utils.asGridCoord(14,1)] : true,
+    [utils.asGridCoord(15,1)] : true,
+    [utils.asGridCoord(16,1)] : true,
+    [utils.asGridCoord(17,1)] : true,
+    [utils.asGridCoord(18,1)] : true,
+    [utils.asGridCoord(19,1)] : true,
+    [utils.asGridCoord(0,2)] : true,
+    [utils.asGridCoord(0,3)] : true,
+    [utils.asGridCoord(0,4)] : true,
+    [utils.asGridCoord(0,4)] : true,
+    [utils.asGridCoord(1,4)] : true,
+    [utils.asGridCoord(2,4)] : true,
+    [utils.asGridCoord(3,4)] : true,
+    [utils.asGridCoord(4,4)] : true,
+    [utils.asGridCoord(5,4)] : true,
+    [utils.asGridCoord(6,4)] : true,
+    [utils.asGridCoord(7,4)] : true,
+    [utils.asGridCoord(8,4)] : true,
+    [utils.asGridCoord(9,4)] : true,
+    [utils.asGridCoord(10,4)] : true,
+    [utils.asGridCoord(11,4)] : true,
+    [utils.asGridCoord(12,4)] : true,
+    [utils.asGridCoord(13,4)] : true,
+    [utils.asGridCoord(14,4)] : true,
+    [utils.asGridCoord(15,4)] : true,
+    [utils.asGridCoord(16,4)] : true,
+    [utils.asGridCoord(17,4)] : true,
+    [utils.asGridCoord(18,4)] : true,
+    [utils.asGridCoord(19,4)] : true,
+  },
   }
 }
