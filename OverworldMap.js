@@ -452,9 +452,9 @@ window.OverworldMaps = {
           {type: "textMessage", text:"???: Permita-me me apresentar..."},
           {who: "hero", type: "stand",  direction: "up" },
           {type: "textMessage", text:"???: O meu nome é Silvônio Lupos. Mas pode me chamar apenas de Lupos."},
-          {type: "textMessage", text:"Lupos: Sou um mago matemático."},
+          {type: "textMessage", text:"Lupos: Sou um mago fracionário."},
           {type: "textMessage", text:"Lupos: Estou aqui para convencê-la a amar a matemática, da mesma forma que eu amo."},
-          {type: "textMessage", text:"Alice: Sem chance, eu detesto matemática. E essa coisa de mago matemático não existe."},
+          {type: "textMessage", text:"Alice: Sem chance, eu detesto matemática. E essa coisa de mago fracionário não existe."},
           {type: "textMessage", text:"Lupos: Tem certeza que vai me ignorar?..."},
           {type: "textMessage", text:"Lupos: Então enfrente seus maiores medos!"},
           {type: "changeMap", map: "Mapa3"},
@@ -463,34 +463,152 @@ window.OverworldMaps = {
     ]
     }
   },
-  Mapa3: {
-    lowerSrc: "imagens/mapas/templateBatalha.png",
+  Mapa2B: {
+    lowerSrc: "imagens/mapas/corredor.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
-        x: utils.withGrid(11),
-        y: utils.withGrid(6),
-        src: "imagens/personagens/alice.png",
+        x: utils.withGrid(4),
+        y: utils.withGrid(3),
+        src:"imagens/personagens/alice.png"
       }),
       vilao: new Person({
-        x: utils.withGrid(11),
-        y: utils.withGrid(4),
+        x: utils.withGrid(5),
+        y: utils.withGrid(2),
         src: "imagens/personagens/vilao.png",
+      }),
+    },
+    cutsceneSpaces: {
+      [utils.asGridCoord(4,1)] : [{
+        events : [
+            { type: "changeMap", map: "Mapa1"},
+          ]
+        }
+      ],
+      [utils.asGridCoord(5,3)] : [{
+        events: [
+            {who: "vilao", type: "stand",  direction: "down" },
+            {type: "textMessage", text:"Lupos: EI! Acha que pode simplesmente me ignorar e ir embora?"},
+            {who: "hero", type: "stand",  direction: "up" },
+            {type: "textMessage", text:"Lupos: De volta ao desafio! E não fuja de mim novamente!"},
+            {type: "changeMap", map: "Mapa3"},
+          ]
+        }
+      ]
+    },
+  },
+  Mapa3: {
+    lowerSrc: "imagens/mapas/quizGame.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(4),
+        y: utils.withGrid(2),
+        src: "imagens/personagens/alice.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(4),
+        y: utils.withGrid(3),
+        src:"imagens/personagens/vazio.png",
         talking: [
           {
             events: [
-              { type: "textMessage", text: "Você está pronta? Me desafie! Enfrente os seus medos!", faceHero:"vilao" },
-              { type: "quizGame", text: "Lupos: Quanto é 2 + 2?", options: ["3", "4", "5"], correctAnswer: 1 },
-              { type: "quizGame", text: "Lupos: Quanto é 3 + 3?", options: ["6", "8", "12"], correctAnswer: 0 },
-              { type: "quizGame", text: "Lupos: Quanto é 4 + 4?", options: ["9", "17", "8"], correctAnswer: 2 },
-              { type: "textMessage", text: "Hmpf. Parece que você estava mais preparada do que o imaginado.", faceHero:"vilao" },
+              {who: "vilao", type: "stand",  direction: "up" },
+              { type: "textMessage", text: "Lupos: Está pronta para o desafio?", faceHero:"vilao" },
+              { type: "quizGame", text: "Lupos: Quanto é 1/2 + 1/2?", options: ["1/4", "1", "1/8"], correctAnswer: 1 },
+              { type: "quizGame", text: "Lupos: Quanto é 1/3 x 1/3?", options: ["1/9", "1/12", "1/15"], correctAnswer: 0 },
+              { type: "quizGame", text: "Lupos: Quanto é 1 + 1/2?", options: ["1", "3", "1.5"], correctAnswer: 2 },
+              { type: "textMessage", text: "Lupos: Hmpf. Parece que você estava mais preparada do que o imaginado.", faceHero:"vilao" },
               {type: "changeMap", map: "Mapa4"},
             ]
           }
         ]
-      })
-    }
+      }),
+      tutorial: new Person({
+        x: utils.withGrid(7),
+        y: utils.withGrid(1),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              {type: "quizGame", text: "Este é um cenário de desafio! Aqui, você deverá acertar corretamente todas as perguntas propostas.", options: ["OK!"], correctAnswer: 0},
+              {type: "quizGame", text: "Caso deseje voltar para o cenário anterior, basta usar a porta!", options: ["OK!"], correctAnswer: 0},
+            ]
+          }
+        ]
+      }),
+      porta: new Person({
+        x: utils.withGrid(4),
+        y: utils.withGrid(1),
+        src:"imagens/personagens/vazio.png",
+        talking: [{
+          events: [
+            {type: "changeMap", map: "Mapa2B"},
+          ]
+        }]
+      }),
+      vilao: new Person({
+        x: utils.withGrid(4),
+        y: utils.withGrid(6),
+        src: "imagens/personagens/vilao.png",
+        talking: [{
+          events: [
+            { type: "textMessage", text: "Alice: Onde estamos?", faceHero:"vilao" },
+            { type: "textMessage", text: "Lupos: Essa é a dimensão do desafio! Você está aqui para ser desafiada por mim.", faceHero:"vilao" },
+            { type: "textMessage", text: "Lupos: E não te deixarei livre enquanto não terminarmos com isso...", faceHero:"vilao" },
+            { type: "textMessage", text: "Alice: E como isso funciona?", faceHero:"vilao" },
+            { type: "textMessage", text: "Lupos: Basta ir até o palco e responder as minhas perguntas! Erros não serão admitidos!", faceHero:"vilao" },
+          ]
+        }]
+    }),
   },
+  walls:{
+    [utils.asGridCoord(0,1)] : true,
+    [utils.asGridCoord(1,1)] : true,
+    [utils.asGridCoord(2,1)] : true,
+    [utils.asGridCoord(3,1)] : true,
+    [utils.asGridCoord(5,1)] : true,
+    [utils.asGridCoord(6,1)] : true,
+    [utils.asGridCoord(8,1)] : true,
+    [utils.asGridCoord(9,1)] : true,
+    [utils.asGridCoord(-1,2)] : true,
+    [utils.asGridCoord(-1,3)] : true,
+    [utils.asGridCoord(-1,4)] : true,
+    [utils.asGridCoord(-1,5)] : true,
+    [utils.asGridCoord(-1,6)] : true,
+    [utils.asGridCoord(-1,7)] : true,
+    [utils.asGridCoord(-1,8)] : true,
+    [utils.asGridCoord(-1,9)] : true,
+    [utils.asGridCoord(0,10)] : true,
+    [utils.asGridCoord(1,10)] : true,
+    [utils.asGridCoord(2,10)] : true,
+    [utils.asGridCoord(3,10)] : true,
+    [utils.asGridCoord(4,10)] : true,
+    [utils.asGridCoord(5,10)] : true,
+    [utils.asGridCoord(6,10)] : true,
+    [utils.asGridCoord(7,10)] : true,
+    [utils.asGridCoord(8,10)] : true,
+    [utils.asGridCoord(9,10)] : true,
+    [utils.asGridCoord(10,1)] : true,
+    [utils.asGridCoord(10,2)] : true,
+    [utils.asGridCoord(10,3)] : true,
+    [utils.asGridCoord(10,4)] : true,
+    [utils.asGridCoord(10,5)] : true,
+    [utils.asGridCoord(10,6)] : true,
+    [utils.asGridCoord(10,7)] : true,
+    [utils.asGridCoord(10,8)] : true,
+    [utils.asGridCoord(10,9)] : true,
+    [utils.asGridCoord(10,10)] : true,
+    [utils.asGridCoord(0,4)] : true,
+    [utils.asGridCoord(1,4)] : true,
+    [utils.asGridCoord(2,4)] : true,
+    [utils.asGridCoord(3,4)] : true,
+    [utils.asGridCoord(4,4)] : true,
+    [utils.asGridCoord(5,4)] : true,
+    [utils.asGridCoord(6,4)] : true,
+    [utils.asGridCoord(7,4)] : true,
+  }
+},
   Mapa4: { 
   lowerSrc: "imagens/mapas/corredor2.png",
   gameObjects: {

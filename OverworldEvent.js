@@ -67,7 +67,7 @@ class OverworldEvent {
       obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
     }
 
-    const quizGame = new TextMessage({
+    const quizGame = new QuizGame({
       text: this.event.text,
       options: this.event.options,
       correctAnswer: this.event.correctAnswer,

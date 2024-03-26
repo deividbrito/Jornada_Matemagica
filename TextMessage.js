@@ -1,8 +1,6 @@
 class TextMessage {
-  constructor({ text, options, correctAnswer, onComplete }) {
+  constructor({ text, onComplete }) {
     this.text = text;
-    this.options = options;
-    this.correctAnswer = correctAnswer;
     this.onComplete = onComplete;
     this.element = null;
   }
@@ -28,25 +26,6 @@ class TextMessage {
     });
   }
 
-  renderOptions() {
-    return this.options.map((option, index) => `<button class="TextMessage_button2" data-index="${index}">${option}</button>`).join('');
-  }
-
-  handleAnswer(selectedIndex) {
-    if (parseInt(selectedIndex) === this.correctAnswer) {
-      this.done();
-    } else {
-      const errorMessage = new TextMessage({
-        text: "Resposta incorreta! Tente novamente.",
-        onComplete: () => {
-          errorMessage.element.remove();
-          this.bindOptionButtons();
-        }
-      });
-      document.body.appendChild(errorMessage.element);
-    }
-  }
-
   done() {
     if (this.revealingText.isDone) {
       this.element.remove();
@@ -60,15 +39,6 @@ class TextMessage {
   init(container) {
     this.createElement();
     container.appendChild(this.element);
-    this.options && this.bindOptionButtons();
     this.revealingText.init();
-  }
-
-  bindOptionButtons() {
-    this.element.querySelectorAll(".TextMessage_button2").forEach(button => {
-      button.addEventListener("click", () => {
-        this.handleAnswer(button.getAttribute("data-index"));
-      });
-    });
   }
 }
