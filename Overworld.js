@@ -35,10 +35,12 @@ class Overworld {
       //desenhar camada alta
       // this.map.drawUpperImage(this.ctx, cameraPerson);
       
+      if(!this.map.isPaused){
       requestAnimationFrame(() => {
         step();   
       })
     }
+  }
     step();
  }
 
@@ -46,6 +48,13 @@ class Overworld {
    new KeyPressListener("Enter", () => {
      //há uma pessoa aqui para se conversar?
      this.map.checkForActionCutscene()
+   })
+   new KeyPressListener("Escape", () => {
+    if(!this.map.isCutscenePlaying){
+      this.map.startCutscene([
+        {type: "pause"}
+      ])
+    }
    })
  }
 
@@ -65,7 +74,7 @@ class Overworld {
  }
 
  init() {
-  this.startMap(window.OverworldMaps.Mapa2);
+  this.startMap(window.OverworldMaps.Mapa1);
 
 
   this.bindActionInput();

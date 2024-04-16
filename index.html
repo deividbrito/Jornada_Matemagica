@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
     <link href="styles/global.css" type="text/css" rel="stylesheet">
     <link href="styles/TextMessage.css" type="text/css" rel="stylesheet">
     <link href="styles/QuizTutorial.css" type="text/css" rel="stylesheet">
     <link href="styles/SceneTransition.css" type="text/css" rel="stylesheet">
+    <link href="styles/Menus.css" type="text/css" rel="stylesheet">
+    <link href="styles/KeyboardMenu.css" type="text/css" rel="stylesheet">
 
     <title>Jogo</title>
 </head>
@@ -15,7 +19,7 @@
         <canvas class="game-canvas" width="352" height="198"></canvas>
       </div>
 
-        <!-- scripts do jogo -->
+        <!-- Cenário/Mundo/Interações -->
         <script src="utils.js"></script>
         <script src="DirectionInput.js"></script>
         <script src="Overworld.js"></script>
@@ -24,11 +28,18 @@
         <script src="Sprite.js"></script>
         <script src="OverworldMap.js"></script>
         <script src="OverworldEvent.js"></script>
+        <script src="KeyPressListener.js"></script>
+        <script src="SceneTransition.js"></script>
+        <script src ="PlayerState.js"></script>
+
+        <!-- Diálogos/Quizzes/Menus -->
+        <script src="KeyboardMenu.js"></script>
         <script src="TextMessage.js"></script>
         <script src="QuizGame.js"></script>
-        <script src="KeyPressListener.js"></script>
         <script src="RevealingText.js"></script>
-        <script src="SceneTransition.js"></script>
+        <script src="PauseMenu.js"></script>
+
+        <!-- Inicializar jogo -->
         <script src="init.js"></script>
     </div>
 </body>

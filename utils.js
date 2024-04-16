@@ -36,6 +36,15 @@ const utils = {
     return "up"
   },
 
+  //auxiliar de espera
+  wait(ms) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, ms)
+    })
+  },
+
   //para auxiliar na criação de eventos para o jogo
   emitEvent(name, detail) {
     const event = new CustomEvent(name, {

@@ -12,6 +12,7 @@ class OverworldMap {
     this.upperImage.src = config.upperSrc;  //camadas altas, coisas que devem estar acima da cabeça de personagens/objetos
 
     this.isCutscenePlaying = false;
+    this.isPaused = false;
   }
 
   //construtor que desenha a camada baixa
@@ -73,7 +74,13 @@ class OverworldMap {
       return `${object.x},${object.y}` === `${nextCoords.x},${nextCoords.y}`
     });
     if (!this.isCutscenePlaying && match && match.talking.length) {
-      this.startCutscene(match.talking[0].events)
+
+      const relevantScenario = match.talking.find(scenario => {
+        return (scenario.required || []).every(sf => {
+          return playerState.storyFlags[sf]
+        })
+      })
+      relevantScenario && this.startCutscene(relevantScenario.events)
     }
   }
 
@@ -88,15 +95,31 @@ class OverworldMap {
   addWall(x,y) {
     this.walls[`${x},${y}`] = true;
   }
+
   removeWall(x,y) {
     delete this.walls[`${x},${y}`]
   }
+
   moveWall(wasX, wasY, direction) {
     this.removeWall(wasX, wasY);
     const {x,y} = utils.nextPosition(wasX, wasY, direction);
     this.addWall(x,y);
   }
+}
 
+//aleatorizar questões
+function generateRandomQuestion() {
+  const questions = [
+    { text: "Qual fração represente metade de um bolo?", options: ["1/3", "1/2", "1/4"], correctAnswer: 1 },
+    { text: "Quanto é 1 - 1/4?", options: ["1/3", "1/2", "3/4"], correctAnswer: 2 },
+    { text: "Quanto é 3 x 1/3?", options: ["3", "1", "1/9"], correctAnswer: 1 },
+    { text: "Se você tem 3 chocolates e come 1/3 deles, quantos sobraram?", options: ["2", "1", "Nenhum"], correctAnswer: 0 },
+    { text: "Qual fração equivale a 1/3?", options: ["1/9", "3/14", "2/6"], correctAnswer: 2 },
+    
+  ]
+  const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+  return randomQuestion;
 }
 
 window.OverworldMaps = {
@@ -144,6 +167,7 @@ window.OverworldMaps = {
           events: [
             {type: "textMessage", text:"Ufa! Mal via a hora dessa aula acabar! Estou morto de fome..", faceHero: "npcA"},
             {type: "textMessage", text: "O que você vai fazer agora que a aula acabou, Alice? Nós podíamos ir no shopping!"},
+            {type: "addStoryFlag", flag: "FALOU_COM_PEDRO"},
           ]
         }
       ]
@@ -159,9 +183,16 @@ window.OverworldMaps = {
         ],
         talking: [
           {
+            required: ["FALOU_COM_PEDRO"],
+            events:[
+            {type: "textMessage", text: "E aí, o que ele queria?"},
+            ]
+          },
+          {
           events: [
             {type: "textMessage", text:"Apresentou m-muito bem, Alice!", faceHero: "npcB"},
             {type: "textMessage", text: "E-eu tenho muita vergonha, tenho medo de apresentações só de ver alguém apresentando..."},
+            {type: "textMessage", text: "I-inclusive, o pedro parecia querer falar com você!"},
           ]
         }
       ]
@@ -515,9 +546,9 @@ window.OverworldMaps = {
             events: [
               {who: "vilao", type: "stand",  direction: "up" },
               { type: "textMessage", text: "Lupos: Está pronta para o desafio?", faceHero:"vilao" },
-              { type: "quizGame", text: "Lupos: Quanto é 1/2 + 1/2?", options: ["1/4", "1", "1/8"], correctAnswer: 1 },
-              { type: "quizGame", text: "Lupos: Quanto é 1/3 x 1/3?", options: ["1/9", "1/12", "1/15"], correctAnswer: 0 },
-              { type: "quizGame", text: "Lupos: Quanto é 1 + 1/2?", options: ["1", "3", "1.5"], correctAnswer: 2 },
+              { type: "quizGame", ...generateRandomQuestion() },
+              { type: "quizGame", ...generateRandomQuestion() },
+              { type: "quizGame", ...generateRandomQuestion() },
               { type: "textMessage", text: "Lupos: Hmpf. Parece que você estava mais preparada do que o imaginado.", faceHero:"vilao" },
               {type: "changeMap", map: "Mapa4"},
             ]
@@ -531,8 +562,8 @@ window.OverworldMaps = {
         talking: [
           {
             events: [
-              {type: "quizGame", text: "Este é um cenário de desafio! Aqui, você deverá acertar corretamente todas as perguntas propostas.", options: ["OK!"], correctAnswer: 0},
-              {type: "quizGame", text: "Caso deseje voltar para o cenário anterior, basta usar a porta!", options: ["OK!"], correctAnswer: 0},
+              {type: "textMessage", text: "Este é um cenário de desafio! Aqui, você deverá acertar corretamente todas as perguntas propostas."},
+              {type: "textMessage", text: "Caso deseje voltar para o cenário anterior, basta usar a porta!"},
             ]
           }
         ]
