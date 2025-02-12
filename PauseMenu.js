@@ -3,25 +3,35 @@ class PauseMenu{
         this.onComplete = onComplete;
     }
 
-    getOptions(pageKey){
-    if(pageKey === "root"){
-        return[
-            {
-                label: "Salvar",
-                description: "Salvar o progresso do jogo",
-                handler: () => {
-
+    getOptions(pageKey) {
+        if (pageKey === "root") {
+            return [
+                {
+                    label: "Salvar", 
+                    description: "Salvar o progresso do jogo", 
+                    handler: () => { 
+                        console.log("Progresso salvo!");
+                        this.close(); 
+                    }
+                },
+                {
+                    label: "Abrir Mapa", 
+                    description: "Abrir o mapa do jogo",
+                    handler: () => { 
+                        this.openMap(); 
+                        console.log("Abrindo mapa..");
+                        this.close(); 
+                    }
+                },
+                {
+                    label: "Fechar",
+                    description: "Fechar o menu de pausa",
+                    handler: () => { 
+                        this.close(); 
+                    }
                 }
-            },
-            {
-                label: "Fechar",
-                description: "Fechar o menu de pausa",
-                handler: () => {
-                    this.close();
-                }
-            }
-        ]
-    }
+            ];
+        }
         return [];
     }
 
@@ -32,6 +42,17 @@ class PauseMenu{
         <h2> Menu de Pausa </h2>
         `)
     }
+
+    openMap() {
+        const container = document.querySelector(".game-container");
+        const map = new ShowMap({
+            onComplete: () => {
+                console.log("Mapa fechado!");
+            }
+        });
+        map.init(container);
+    }
+
 
     close(){
         this.esc.unbind();

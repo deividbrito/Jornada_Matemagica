@@ -1,6 +1,6 @@
 class KeyboardMenu {
   constructor(config={}) {
-    this.options = []; //set by updater method
+    this.options = []; 
     this.up = null;
     this.down = null;
     this.prevFocus = null;
@@ -57,12 +57,9 @@ class KeyboardMenu {
   }
 
   end() {
-
-    //Remove menu element and description element
     this.element.remove();
     this.descriptionElement.remove();
 
-    //Clean up bindings
     this.up.unbind();
     this.down.unbind();
   }
