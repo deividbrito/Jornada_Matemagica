@@ -996,6 +996,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Teste."},
+              { type: "changeMap", map: "Desafio"}
             ]
           }
         ]
@@ -1408,6 +1409,36 @@ window.OverworldMaps = {
       ],
     }
   },
+  Desafio: {
+    id: "Desafio",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafio3.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Está pronta para o desafio?",},
+              { type: "quizGame", ...generateRandomQuestion() },
+              { type: "quizGame", ...generateRandomQuestion() },
+              { type: "quizGame", ...generateRandomQuestion() },
+              { type: "textMessage", text: "Lupos: Hmpf. Parece que você estava mais preparada do que o imaginado."},
+              { type: "changeMap", map: "Gremio"},
+            ]
+          }
+        ]
+      }),
+  },
+},
   /*
   Mapa1: {
     lowerSrc: "imagens/mapas/sala2.png",

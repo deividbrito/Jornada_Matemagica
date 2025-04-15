@@ -1,52 +1,52 @@
 .QuizTutorial {
-    position: absolute;
-    left: 60px;
-    right: 60px;
-    top: 20px;
-    height: 80;
-    padding: 4px;
-    background: var(--menu-background);
-    border-top: 1px solid var(--menu-border-color);
-    color: var(--menu-font-color);
-  }
-  .QuizTutorial_p {
-    margin: 0;
-    font-size: 12px;
-  }
-  .QuizTutorial span {
-    opacity: 0;
-  }
-  .QuizTutorial span.revealed {
-    opacity: 1;
-  }
-  
-  .QuizTutorial_button {
-    margin: 0;
-    font-size: 8px;  
-    padding:0;
-    -webkit-appearance: none;
-    background:none;
-    border:0;
-    font-family: inherit;
-    cursor: pointer;
-  
-    position: absolute;
-    right: 2px;
-    bottom: 0;
-  }
-  
-  .QuizTutorial_button2{
-    margin: 0;
-    font-size: 8px;  
-    padding:0;
-    -webkit-appearance: none;
-    background:none;
-    border:0;
-    font-family: inherit;
-    cursor: pointer;
-    margin-left: 30px;
-  
-    left: 15px;
-    right: 15px;
-    bottom: 0;
-  }
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  bottom: 20px;
+  height: 80;
+  padding: 4px;
+  background: var(--menu-background);
+  border-top: 1px solid var(--menu-border-color);
+  color: var(--menu-font-color);
+}
+.QuizTutorial_p {
+  margin: 0;
+  font-size: 12px;
+}
+.QuizTutorial span {
+  opacity: 0;
+}
+.QuizTutorial span.revealed {
+  opacity: 1;
+}
+
+.QuizTutorial_button {
+  margin: 0;
+  font-size: 8px;  
+  padding:0;
+  -webkit-appearance: none;
+  background:none;
+  border:0;
+  font-family: inherit;
+  cursor: pointer;
+
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+}
+
+.QuizTutorial_button2{
+  margin: 0;
+  font-size: 8px;  
+  padding:0;
+  -webkit-appearance: none;
+  background:none;
+  border:0;
+  font-family: inherit;
+  cursor: pointer;
+  margin-left: 30px;
+
+  left: 15px;
+  right: 15px;
+  bottom: 0;
+}
