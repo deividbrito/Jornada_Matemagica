@@ -61,21 +61,20 @@ class OverworldEvent {
   }
 
   quizGame(resolve) {
-
     if (this.event.faceHero) {
       const obj = this.map.gameObjects[this.event.faceHero];
       obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
     }
-
+  
     const quizGame = new QuizGame({
-      text: this.event.text,
-      options: this.event.options,
-      correctAnswer: this.event.correctAnswer,
-      onComplete: () => resolve()
-    })
-    quizGame.init( document.querySelector(".game-container") )
+      onComplete: () => resolve(),
+      idAssunto: this.event.idAssunto || null,
+      dificuldade: this.event.dificuldade || null 
+    });
+    quizGame.init(document.querySelector(".game-container"));
   }
-
+  
+  
   changeMap(resolve) {
 
     const sceneTransition = new SceneTransition();
