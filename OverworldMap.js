@@ -994,11 +994,28 @@ window.OverworldMaps = {
         src: "imagens/personagens/vilao4.png",
         talking: [
           {
+            required: ["DESAFIO1D3_COMPLETO"],
             events: [
-              { type: "textMessage", text: "Teste."},
-              { type: "changeMap", map: "Desafio"}
+              {type: "textMessage", text: "Mago: Você...me derrotou?"},
             ]
-          }
+          },
+          {
+            required: ["DESAFIO1D2_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio1d3"}
+            ]
+          },
+          {
+            required: ["DESAFIO1D1_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio1d2"}
+            ]
+          },
+          {
+            events: [
+              { type: "changeMap", map: "Desafio1d1"}
+            ]
+          },
         ]
       }),
     },
@@ -1409,8 +1426,8 @@ window.OverworldMaps = {
       ],
     }
   },
-  Desafio: {
-    id: "Desafio",
+  Desafio1d1: {
+    id: "Desafio1d1",
     upperSrc: "imagens/personagens/vazio.png",
     lowerSrc: "imagens/mapas/desafio3.png",
     gameObjects: {
@@ -1428,16 +1445,77 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Mago: Está pronta para o desafio?" },
-              { type: "quizGame", idAssunto: 1, dificuldade: "2" },
-              { type: "quizGame", idAssunto: 2, dificuldade: "1" },
-              { type: "quizGame", idAssunto: 3 },
-              { type: "quizGame", dificuldade: "3" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
+              {type: "addStoryFlag", flag: "DESAFIO1D1_COMPLETO"},
               { type: "changeMap", map: "Gremio" },
             ]
           }
         ]
-        
+    }),
+  },
+},
+  Desafio1d2: {
+    id: "Desafio1d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafio3.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Está pronta para um desafio maior?" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
+              {type: "addStoryFlag", flag: "DESAFIO1D2_COMPLETO"},
+              { type: "changeMap", map: "Gremio" },
+            ]
+          }
+        ]
+    }),
+  },
+},
+  Desafio1d3: {
+    id: "Desafio1d3",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafio3.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Este é o meu desafio supremo!" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
+              {type: "addStoryFlag", flag: "DESAFIO1D3_COMPLETO"},
+              { type: "changeMap", map: "Gremio" },
+            ]
+          }
+        ]
     }),
   },
 },
