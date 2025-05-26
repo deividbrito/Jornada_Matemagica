@@ -75,7 +75,7 @@ class Overworld {
   }
 
   init() {
-    this.startMap(window.OverworldMaps.Gremio);
+    this.startMap(window.OverworldMaps.DesafioFinal);
 
     this.bindActionInput();
     this.bindHeroPositionCheck();

@@ -107,21 +107,6 @@ class OverworldMap {
   }
 }
 
-//aleatorizar questões
-// function generateRandomQuestion() {
-//   const questions = [
-//     { text: "Qual fração represente metade de um bolo?", options: ["1/3", "1/2", "1/4"], correctAnswer: 1 },
-//     { text: "Quanto é 1 - 1/4?", options: ["1/3", "1/2", "3/4"], correctAnswer: 2 },
-//     { text: "Quanto é 3 x 1/3?", options: ["3", "1", "1/9"], correctAnswer: 1 },
-//     { text: "Se você tem 3 chocolates e come 1/3 deles, quantos sobraram?", options: ["2", "1", "Nenhum"], correctAnswer: 0 },
-//     { text: "Qual fração equivale a 1/3?", options: ["1/9", "3/14", "2/6"], correctAnswer: 2 },
-    
-//   ]
-//   const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-
-//   return randomQuestion;
-// }
-
 window.OverworldMaps = {
   Corredor: {
     id: "Corredor",
@@ -249,48 +234,48 @@ window.OverworldMaps = {
     },
 
     cutsceneSpaces: {
-      //acesso sala1
+      //acesso sala2
       [utils.asGridCoord(0,12)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala1" }
+            { type: "changeMap", map: "Sala2" }
           ]
         }
       ],
       [utils.asGridCoord(0,13)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala1" }
+            { type: "changeMap", map: "Sala2" }
           ]
         }
       ],
       [utils.asGridCoord(0,14)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala1" }
+            { type: "changeMap", map: "Sala2" }
           ]
         }
       ],
 
-      //acesso sala2
+      //acesso sala1
       [utils.asGridCoord(9,12)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala2" }
+            { type: "changeMap", map: "Sala1" }
           ]
         }
       ],
       [utils.asGridCoord(9,13)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala2" }
+            { type: "changeMap", map: "Sala1" }
           ]
         }
       ],
       [utils.asGridCoord(9,14)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala2" }
+            { type: "changeMap", map: "Sala1" }
           ]
         }
       ],
@@ -658,8 +643,8 @@ window.OverworldMaps = {
       ],
     }
   },
-  Sala1: { 
-    id: "Sala1",
+  Sala2: { 
+    id: "Sala2",
     lowerSrc: "imagens/mapas/sala1.png",
     upperSrc: "imagens/personagens/vazio.png",
     gameObjects: {
@@ -720,7 +705,7 @@ window.OverworldMaps = {
       [utils.asGridCoord(27,19)]: true, [utils.asGridCoord(28,19)]: true,
     },
     cutsceneSpaces: {
-      //acesso sala1
+      //acesso sala2
       [utils.asGridCoord(13,19)]: [
         {
           events: [
@@ -751,8 +736,8 @@ window.OverworldMaps = {
       ],
     }
   },
-  Sala2: {
-    id: "Sala2",
+  Sala1: {
+    id: "Sala1",
     lowerSrc: "imagens/mapas/sala2.png",
     upperSrc: "imagens/personagens/vazio.png",
     gameObjects: {
@@ -774,16 +759,34 @@ window.OverworldMaps = {
           }
         ]
       }),
-      vilao2: new Person({
+      vilao1: new Person({
         x: utils.withGrid(15),
         y: utils.withGrid(14),
-        src: "imagens/personagens/vilao2.png",
+        src: "imagens/personagens/vilao4.png",
         talking: [
           {
+            required: ["DESAFIO1D3_COMPLETO"],
             events: [
-              { type: "textMessage", text: "Teste."},
+              {type: "textMessage", text: "Mago: Você...me derrotou?"},
             ]
-          }
+          },
+          {
+            required: ["DESAFIO1D2_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio1d3"}
+            ]
+          },
+          {
+            required: ["DESAFIO1D1_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio1d2"}
+            ]
+          },
+          {
+            events: [
+              { type: "changeMap", map: "Desafio1d1"}
+            ]
+          },
         ]
       }),
     },
@@ -1426,10 +1429,13 @@ window.OverworldMaps = {
       ],
     }
   },
+
+// MAPAS DE DESAFIOS!!!
+
   Desafio1d1: {
     id: "Desafio1d1",
     upperSrc: "imagens/personagens/vazio.png",
-    lowerSrc: "imagens/mapas/desafio3.png",
+    lowerSrc: "imagens/mapas/desafios/desafio1.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -1450,17 +1456,21 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
               {type: "addStoryFlag", flag: "DESAFIO1D1_COMPLETO"},
-              { type: "changeMap", map: "Gremio" },
+              { type: "changeMap", map: "Sala1" },
             ]
           }
         ]
     }),
   },
+      walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
 },
   Desafio1d2: {
     id: "Desafio1d2",
     upperSrc: "imagens/personagens/vazio.png",
-    lowerSrc: "imagens/mapas/desafio3.png",
+    lowerSrc: "imagens/mapas/desafios/desafio1.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -1479,19 +1489,23 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
-              { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
+              { type: "textMessage", text: "Mago: ..." },
               {type: "addStoryFlag", flag: "DESAFIO1D2_COMPLETO"},
-              { type: "changeMap", map: "Gremio" },
+              { type: "changeMap", map: "Sala1" },
             ]
           }
         ]
     }),
   },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
 },
   Desafio1d3: {
     id: "Desafio1d3",
     upperSrc: "imagens/personagens/vazio.png",
-    lowerSrc: "imagens/mapas/desafio3.png",
+    lowerSrc: "imagens/mapas/desafios/desafio1.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
@@ -1512,11 +1526,689 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "3" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
               {type: "addStoryFlag", flag: "DESAFIO1D3_COMPLETO"},
-              { type: "changeMap", map: "Gremio" },
+              { type: "changeMap", map: "Sala1" },
             ]
           }
         ]
     }),
   },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+  Desafio2d1: {
+      id: "Desafio2d1",
+      upperSrc: "imagens/personagens/vazio.png",
+      lowerSrc: "imagens/mapas/desafios/desafio2.png",
+      gameObjects: {
+        hero: new Person({
+          isPlayerControlled: true,
+          x: utils.withGrid(8),
+          y: utils.withGrid(8),
+          src: "imagens/personagens/vazio.png",
+        }),
+        bancada: new Person({
+          x: utils.withGrid(8),
+          y: utils.withGrid(9),
+          src:"imagens/personagens/vazio.png",
+          talking: [
+            {
+              events: [
+                { type: "textMessage", text: "Mago: Prepare-se para o desafio!" },
+                { type: "quizGame", idAssunto: 2, dificuldade: "1" },
+                { type: "quizGame", idAssunto: 2, dificuldade: "1" },
+                { type: "quizGame", idAssunto: 2, dificuldade: "1" },
+                { type: "textMessage", text: "Mago: Não darei moleza da próxima vez!" },
+                {type: "addStoryFlag", flag: "DESAFIO2D1_COMPLETO"},
+                { type: "changeMap", map: "Sala2" },
+              ]
+            }
+          ]
+      }),
+    },
+    walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+  },
+  Desafio2d2: {
+    id: "Desafio2d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio2.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Prepare-se para um desafio maior!" },
+              { type: "quizGame", idAssunto: 2, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 2, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 2, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Como você conseguiu?!" },
+              {type: "addStoryFlag", flag: "DESAFIO2D2_COMPLETO"},
+              { type: "changeMap", map: "Sala2" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio2d3: {
+    id: "Desafio2d3",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio2.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Este é o meu maior desafio!" },
+              { type: "quizGame", idAssunto: 2, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 2, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 2, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: ...Impossível!" },
+              {type: "addStoryFlag", flag: "DESAFIO2D3_COMPLETO"},
+              { type: "changeMap", map: "Sala2" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio3d1: {
+    id: "Desafio3d1",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio3.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Prepare-se! Não pegarei leve!" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "1" },
+              { type: "textMessage", text: "Mago: Como você conseguiu?!" },
+              {type: "addStoryFlag", flag: "DESAFIO3D1_COMPLETO"},
+              { type: "changeMap", map: "SalaEstudos" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio3d2: {
+    id: "Desafio3d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio3.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Prepare-se para um desafio maior!" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Não pode ser!" },
+              {type: "addStoryFlag", flag: "DESAFIO3D2_COMPLETO"},
+              { type: "changeMap", map: "SalaEstudos" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio3d3: {
+    id: "Desafio3d3",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio3.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Você conseguirá enfrentar meu desafio final?" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 3, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: Que surpresa!" },
+              {type: "addStoryFlag", flag: "DESAFIO3D3_COMPLETO"},
+              { type: "changeMap", map: "SalaEstudos" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio4d1: {
+    id: "Desafio4d1",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio4.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Muita atenção! Não pegarei leve com você." },
+              { type: "quizGame", idAssunto: 4, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "1" },
+              { type: "textMessage", text: "Mago: Uau!" },
+              {type: "addStoryFlag", flag: "DESAFIO4D1_COMPLETO"},
+              { type: "changeMap", map: "CorredorBanheiro" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio4d2: {
+    id: "Desafio4d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio4.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Desta vez será mais difícil!" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Você é muito boa..." },
+              {type: "addStoryFlag", flag: "DESAFIO4D2_COMPLETO"},
+              { type: "changeMap", map: "CorredorBanheiro" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio4d3: {
+    id: "Desafio4d1",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio4.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Esse será meu desafio supremo!" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 4, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: ..." },
+              {type: "addStoryFlag", flag: "DESAFIO4D3_COMPLETO"},
+              { type: "changeMap", map: "CorredorBanheiro" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio5d1: {
+    id: "Desafio5d1",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio5.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Preste bastante atenção!" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "1" },
+              { type: "textMessage", text: "Mago: Impressionante!" },
+              {type: "addStoryFlag", flag: "DESAFIO5D1_COMPLETO"},
+              { type: "changeMap", map: "Biblioteca" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio5d2: {
+    id: "Desafio5d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio5.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Atenção! Desta vez não pegarei tão leve!" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Você é mesmo muito habilidosa!" },
+              {type: "addStoryFlag", flag: "DESAFIO5D2_COMPLETO"},
+              { type: "changeMap", map: "Biblioteca" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio5d3: {
+    id: "Desafio5d3",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio5.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Atenção redobrada! Este é meu último desafio!" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 5, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: Impressionantemente impressionante!" },
+              {type: "addStoryFlag", flag: "DESAFIO5D3_COMPLETO"},
+              { type: "changeMap", map: "Biblioteca" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio6d1: {
+    id: "Desafio6d1",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio6.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Vamos ver se sua reputação te precede!" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "1" },
+              { type: "textMessage", text: "Mago: Uau..." },
+              {type: "addStoryFlag", flag: "DESAFIO6D1_COMPLETO"},
+              { type: "changeMap", map: "Patio" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio6d2: {
+    id: "Desafio6d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio6.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Vamos aumentar a dificuldade!" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Incrível..." },
+              {type: "addStoryFlag", flag: "DESAFIO6D2_COMPLETO"},
+              { type: "changeMap", map: "Patio" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio6d3: {
+    id: "Desafio6d3",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio6.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Você provou ser capaz, mas será que consegue mais?" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 6, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: Você é ainda melhor do que me disseram!" },
+              {type: "addStoryFlag", flag: "DESAFIO6D3_COMPLETO"},
+              { type: "changeMap", map: "Patio" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio7d1: {
+    id: "Desafio7d1",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio7.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Enfrente-me!" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "1" },
+              { type: "textMessage", text: "Mago: ..." },
+              {type: "addStoryFlag", flag: "DESAFIO7D1_COMPLETO"},
+              { type: "changeMap", map: "Jardim" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio7d2: {
+    id: "Desafio7d2",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio7.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Dessa vez você não será moleza!" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "2" },
+              { type: "textMessage", text: "Mago: ..." },
+              {type: "addStoryFlag", flag: "DESAFIO7D2_COMPLETO"},
+              { type: "changeMap", map: "Jardim" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+Desafio7d3: {
+    id: "Desafio7d3",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafio7.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Ainda não dei tudo de mim!" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 7, dificuldade: "3" },
+              { type: "textMessage", text: "Mago: ...Você provou, Alice. Você é muito boa." },
+              {type: "addStoryFlag", flag: "DESAFIO7D3_COMPLETO"},
+              { type: "changeMap", map: "Jardim" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
+},
+DesafioFinal: {
+    id: "DesafioFinal",
+    upperSrc: "imagens/personagens/vazio.png",
+    lowerSrc: "imagens/mapas/desafios/desafioFINAL.png",
+    gameObjects: {
+      hero: new Person({
+        isPlayerControlled: true,
+        x: utils.withGrid(8),
+        y: utils.withGrid(8),
+        src: "imagens/personagens/vazio.png",
+      }),
+      bancada: new Person({
+        x: utils.withGrid(8),
+        y: utils.withGrid(9),
+        src:"imagens/personagens/vazio.png",
+        talking: [
+          {
+            events: [
+              { type: "textMessage", text: "Mago: Vamos ver do que você é capaz!" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "quizGame", dificuldade: "2" },
+              { type: "textMessage", text: "Mago: Impressionante... mas ainda não acabamos!" },
+              { type: "quizGame", dificuldade: "3" },
+              { type: "quizGame", dificuldade: "3" },
+              { type: "quizGame", dificuldade: "3" },
+              { type: "quizGame", dificuldade: "3" },
+              {type: "addStoryFlag", flag: "DESAFIOFINAL_COMPLETO"},
+              { type: "changeMap", map: "Jardim" },
+            ]
+          }
+        ]
+    }),
+  },
+  walls:{
+      [utils.asGridCoord(9,8)]: true, [utils.asGridCoord(8,9)]: true,
+      [utils.asGridCoord(7,8)]: true, [utils.asGridCoord(8,7)]: true,
+    },
 },
 }
