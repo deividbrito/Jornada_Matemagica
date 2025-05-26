@@ -75,7 +75,7 @@ class Overworld {
   }
 
   init() {
-    this.startMap(window.OverworldMaps.DesafioFinal);
+    this.startMap(window.OverworldMaps.Jardim);
 
     this.bindActionInput();
     this.bindHeroPositionCheck();

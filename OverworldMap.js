@@ -458,16 +458,34 @@ window.OverworldMaps = {
           }
         ]
       }),
-      vilao5: new Person({
+        vilao7: new Person({
         x: utils.withGrid(5),
-        y: utils.withGrid(10),
-        src: "imagens/personagens/vilao5.png",
+        y: utils.withGrid(6),
+        src: "imagens/personagens/vilao3.png",
         talking: [
           {
+            required: ["DESAFIO7D3_COMPLETO"],
             events: [
-              { type: "textMessage", text: "Teste."},
+              {type: "textMessage", text: "Mago: Você...me derrotou?"},
             ]
-          }
+          },
+          {
+            required: ["DESAFIO7D2_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio7d3"}
+            ]
+          },
+          {
+            required: ["DESAFIO7D1_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio7d2"}
+            ]
+          },
+          {
+            events: [
+              { type: "changeMap", map: "Desafio7d1"}
+            ]
+          },
         ]
       }),
       figurante1: new Person({
@@ -653,6 +671,36 @@ window.OverworldMaps = {
         x: utils.withGrid(15),
         y: utils.withGrid(18),
         src: "imagens/personagens/alice.png",
+      }),
+      vilao2: new Person({
+        x: utils.withGrid(15),
+        y: utils.withGrid(6),
+        src: "imagens/personagens/vilao2.png",
+        talking: [
+          {
+            required: ["DESAFIO2D3_COMPLETO"],
+            events: [
+              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+            ]
+          },
+          {
+            required: ["DESAFIO2D2_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio2d3"}
+            ]
+          },
+          {
+            required: ["DESAFIO2D1_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio2d2"}
+            ]
+          },
+          {
+            events: [
+              { type: "changeMap", map: "Desafio2d1"}
+            ]
+          },
+        ]
       }),
     },
     walls: {
@@ -987,36 +1035,36 @@ window.OverworldMaps = {
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
-        x: utils.withGrid(2),
-        y: utils.withGrid(4),
+        x: utils.withGrid(4),
+        y: utils.withGrid(8),
         src: "imagens/personagens/alice.png",
       }),
-      vilao4: new Person({
+        vilao3: new Person({
         x: utils.withGrid(1),
         y: utils.withGrid(3),
-        src: "imagens/personagens/vilao4.png",
+        src: "imagens/personagens/vilao.png",
         talking: [
           {
-            required: ["DESAFIO1D3_COMPLETO"],
+            required: ["DESAFIO3D3_COMPLETO"],
             events: [
               {type: "textMessage", text: "Mago: Você...me derrotou?"},
             ]
           },
           {
-            required: ["DESAFIO1D2_COMPLETO"],
+            required: ["DESAFIO3D2_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio1d3"}
+              { type: "changeMap", map: "Desafio3d3"}
             ]
           },
           {
-            required: ["DESAFIO1D1_COMPLETO"],
+            required: ["DESAFIO3D1_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio1d2"}
+              { type: "changeMap", map: "Desafio3d2"}
             ]
           },
           {
             events: [
-              { type: "changeMap", map: "Desafio1d1"}
+              { type: "changeMap", map: "Desafio3d1"}
             ]
           },
         ]
@@ -1076,16 +1124,34 @@ window.OverworldMaps = {
         y: utils.withGrid(18),
         src: "imagens/personagens/alice.png",
       }),
-      vilao3: new Person({
-        x: utils.withGrid(14),
-        y: utils.withGrid(14),
-        src: "imagens/personagens/vilao3.png",
+        vilao5: new Person({
+        x: utils.withGrid(15),
+        y: utils.withGrid(6),
+        src: "imagens/personagens/vilao7.png",
         talking: [
           {
+            required: ["DESAFIO5D3_COMPLETO"],
             events: [
-              { type: "textMessage", text: "Teste."},
+              {type: "textMessage", text: "Mago: Você...me derrotou?"},
             ]
-          }
+          },
+          {
+            required: ["DESAFIO5D2_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio5d3"}
+            ]
+          },
+          {
+            required: ["DESAFIO5D1_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio5d2"}
+            ]
+          },
+          {
+            events: [
+              { type: "changeMap", map: "Desafio5d1"}
+            ]
+          },
         ]
       }),
     },
@@ -1258,6 +1324,36 @@ window.OverworldMaps = {
         behaviorLoop: [
           { type: "stand",  direction: "left", time: 3200 },
         ],
+      }),
+        vilao6: new Person({
+        x: utils.withGrid(15),
+        y: utils.withGrid(6),
+        src: "imagens/personagens/vilao5.png",
+        talking: [
+          {
+            required: ["DESAFIO6D3_COMPLETO"],
+            events: [
+              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+            ]
+          },
+          {
+            required: ["DESAFIO6D2_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio6d3"}
+            ]
+          },
+          {
+            required: ["DESAFIO6D1_COMPLETO"],
+            events: [
+              { type: "changeMap", map: "Desafio6d2"}
+            ]
+          },
+          {
+            events: [
+              { type: "changeMap", map: "Desafio6d1"}
+            ]
+          },
+        ]
       }),
     },
     walls:{
@@ -2200,7 +2296,7 @@ DesafioFinal: {
               { type: "quizGame", dificuldade: "3" },
               { type: "quizGame", dificuldade: "3" },
               {type: "addStoryFlag", flag: "DESAFIOFINAL_COMPLETO"},
-              { type: "changeMap", map: "Jardim" },
+              { type: "changeMap", map: "Ginasio" },
             ]
           }
         ]
