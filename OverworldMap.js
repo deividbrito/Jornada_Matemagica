@@ -238,21 +238,36 @@ window.OverworldMaps = {
       [utils.asGridCoord(0,12)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala2" }
+            { type: "changeMap",  
+              map: "Sala2",
+              x: utils.withGrid(15),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(0,13)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala2" }
+            { type: "changeMap",  
+              map: "Sala2",
+              x: utils.withGrid(15),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(0,14)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala2" }
+            { type: "changeMap",  
+              map: "Sala2",
+              x: utils.withGrid(15),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
@@ -261,21 +276,36 @@ window.OverworldMaps = {
       [utils.asGridCoord(9,12)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala1" }
+            { type: "changeMap",  
+              map: "Sala1",
+              x: utils.withGrid(15),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(9,13)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala1" }
+            { type: "changeMap",  
+              map: "Sala1",
+              x: utils.withGrid(15),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(9,14)]: [
         {
           events: [
-            { type: "changeMap", map: "Sala1" }
+            { type: "changeMap",  
+              map: "Sala1",
+              x: utils.withGrid(15),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
@@ -284,21 +314,36 @@ window.OverworldMaps = {
       [utils.asGridCoord(0,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Gremio" }
+            { type: "changeMap", 
+              map: "Gremio",
+              x: utils.withGrid(4),
+              y: utils.withGrid(8), 
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(0,20)]: [
         {
           events: [
-            { type: "changeMap", map: "Gremio" }
+            { type: "changeMap", 
+              map: "Gremio",
+              x: utils.withGrid(4),
+              y: utils.withGrid(8), 
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(0,21)]: [
         {
           events: [
-            { type: "changeMap", map: "Gremio" }
+            { type: "changeMap", 
+              map: "Gremio",
+              x: utils.withGrid(4),
+              y: utils.withGrid(8), 
+              direction: "up"
+            }
           ]
         }
       ],
@@ -307,21 +352,36 @@ window.OverworldMaps = {
       [utils.asGridCoord(9,19)]: [
         {
           events: [
-            { type: "changeMap", map: "SalaEstudos" }
+            { type: "changeMap", 
+              map: "SalaEstudos",
+              x: utils.withGrid(2),
+              y: utils.withGrid(4),
+              direction: "up"
+             }
           ]
         }
       ],
       [utils.asGridCoord(9,20)]: [
         {
           events: [
-            { type: "changeMap", map: "SalaEstudos" }
+            { type: "changeMap", 
+              map: "SalaEstudos",
+              x: utils.withGrid(2),
+              y: utils.withGrid(4),
+              direction: "up"
+             }
           ]
         }
       ],
       [utils.asGridCoord(9,21)]: [
         {
           events: [
-            { type: "changeMap", map: "SalaEstudos" }
+            { type: "changeMap", 
+              map: "SalaEstudos",
+              x: utils.withGrid(2),
+              y: utils.withGrid(4),
+              direction: "up"
+             }
           ]
         }
       ],
@@ -330,21 +390,21 @@ window.OverworldMaps = {
       [utils.asGridCoord(0,27)]: [
         {
           events: [
-            { type: "changeMap", map: "Banheiro" }
+            { }
           ]
         }
       ],
       [utils.asGridCoord(0,28)]: [
         {
           events: [
-            { type: "changeMap", map: "Banheiro" }
+            {}
           ]
         }
       ],
       [utils.asGridCoord(0,29)]: [
         {
           events: [
-            { type: "changeMap", map: "Banheiro" }
+            { }
           ]
         }
       ],
@@ -353,21 +413,36 @@ window.OverworldMaps = {
       [utils.asGridCoord(9,27)]: [
         {
           events: [
-            { type: "changeMap", map: "Biblioteca" }
+            { type: "changeMap", 
+              map: "Biblioteca",
+              x: utils.withGrid(14),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(9,28)]: [
         {
           events: [
-            { type: "changeMap", map: "Biblioteca" }
+            { type: "changeMap", 
+              map: "Biblioteca",
+              x: utils.withGrid(14),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(9,29)]: [
         {
           events: [
-            { type: "changeMap", map: "Biblioteca" }
+            { type: "changeMap", 
+              map: "Biblioteca",
+              x: utils.withGrid(14),
+              y: utils.withGrid(18),
+              direction: "up"
+            }
           ]
         }
       ],
@@ -570,97 +645,6 @@ window.OverworldMaps = {
       ],
     }
   },
-  Banheiro: {
-    id: "Banheiro",
-    lowerSrc: "imagens/mapas/banheiro.png",
-    upperSrc: "imagens/personagens/vazio.png",
-    gameObjects: {
-      hero: new Person({
-        isPlayerControlled: true,
-        x: utils.withGrid(4),
-        y: utils.withGrid(4),
-        src: "imagens/personagens/alice.png",
-      }),
-      vilao: new Person({
-        x: utils.withGrid(6),
-        y: utils.withGrid(4),
-        src: "imagens/personagens/vilao.png",
-        behaviorLoop: [
-          { type: "stand",  direction: "left", time: 800 },
-          { type: "stand",  direction: "down", time: 3200 },
-        ],
-        talking: [
-          {
-            required: ["RESOLVEU_DESAFIO_3"],
-            events:[
-            {type: "textMessage", text: "Mago: Bom, você venceu! Mas só desta vez!"},
-            ]
-          },
-          {
-            required: ["RESOLVEU_DESAFIO_2"],
-            events:[
-            {type: "textMessage", text: "Mago: Você é muito boa, mas não é nada impressionante!", faceHero: "vilao"},
-            {type: "textMessage", text: "Mago: Hora de um desafio ainda maior!"},
-            {type: "textMessage", text: "[Terceiro desafio ocorre aqui]"},
-            {type: "addStoryFlag", flag: "RESOLVEU_DESAFIO_3"}
-            ]
-          },
-          {
-            required: ["RESOLVEU_DESAFIO_1"],
-            events:[
-            {type: "textMessage", text: "Mago: Eu ainda nem usei todo o potencial da mágica dos banheiros!", faceHero: "vilao"},
-            {type: "textMessage", text: "Mago: Pereça perante a mágica das privadas!"},
-            {type: "textMessage", text: "[Segundo desafio ocorre aqui]"},
-            {type: "addStoryFlag", flag: "RESOLVEU_DESAFIO_2"}
-            ]
-          },
-          {
-            events: [
-              { type: "textMessage", text: "Mago: Ahá! Você me encontrou! Eu sou Decimalicus, o Sábio do Sanitário!", faceHero: "vilao" },
-              { type: "textMessage", text: "Alice: Você... está se escondendo? E isso é um desentupidor?"},
-              { type: "textMessage", text: "Mago: Não subestime meu cetro! Este é o Desentopex do Conhecimento! Agora pereça diante meus desafios!"},
-              { type: "textMessage", text: "[Primeiro desafio ocorre aqui]"},
-              {type: "addStoryFlag", flag: "RESOLVEU_DESAFIO_1"},
-            ]
-          }
-        ]
-      }),
-    },
-    walls : {
-      //parede superior
-      [utils.asGridCoord(1,2)]: true, [utils.asGridCoord(2,2)]: true,
-      [utils.asGridCoord(3,2)]: true, [utils.asGridCoord(4,2)]: true,
-      [utils.asGridCoord(5,2)]: true, [utils.asGridCoord(6,2)]: true,
-
-      //parede esquerda
-      [utils.asGridCoord(0,3)]: true, [utils.asGridCoord(0,4)]: true,
-      [utils.asGridCoord(0,5)]: true, [utils.asGridCoord(0,6)]: true,
-
-      //parede inferior
-      [utils.asGridCoord(1,7)]: true, [utils.asGridCoord(2,7)]: true,
-      [utils.asGridCoord(5,7)]: true, [utils.asGridCoord(6,7)]: true,
-
-      //parede direita
-      [utils.asGridCoord(7,3)]: true, [utils.asGridCoord(7,4)]: true,
-      [utils.asGridCoord(7,5)]: true, [utils.asGridCoord(7,6)]: true,
-    },
-    cutsceneSpaces: {
-      [utils.asGridCoord(3,7)]: [
-        {
-          events: [
-            { type: "changeMap", map: "Corredor" }
-          ]
-        }
-      ],
-      [utils.asGridCoord(4,7)]: [
-        {
-          events: [
-            { type: "changeMap", map: "Corredor" }
-          ]
-        }
-      ],
-    }
-  },
   Sala2: { 
     id: "Sala2",
     lowerSrc: "imagens/mapas/sala1.png",
@@ -757,28 +741,48 @@ window.OverworldMaps = {
       [utils.asGridCoord(13,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+             { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(1),
+              y: utils.withGrid(13),
+              direction: "right"
+            }
           ]
         }
       ],
       [utils.asGridCoord(14,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+             { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(1),
+              y: utils.withGrid(13),
+              direction: "right"
+            }
           ]
         }
       ],
       [utils.asGridCoord(15,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+             { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(1),
+              y: utils.withGrid(13),
+              direction: "right"
+            }
           ]
         }
       ],
       [utils.asGridCoord(16,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(1),
+              y: utils.withGrid(13),
+              direction: "right"
+            }
           ]
         }
       ],
@@ -894,28 +898,48 @@ window.OverworldMaps = {
       [utils.asGridCoord(13,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(13),
+              direction: "left"
+            }
           ]
         }
       ],
       [utils.asGridCoord(14,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(13),
+              direction: "left"
+            }
           ]
         }
       ],
       [utils.asGridCoord(15,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(13),
+              direction: "left"
+            }
           ]
         }
       ],
       [utils.asGridCoord(16,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap",  
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(13),
+              direction: "left"
+            }
           ]
         }
       ],
@@ -991,8 +1015,13 @@ window.OverworldMaps = {
         talking: [
           {
             events: [
-              { type: "changeMap", map: "Corredor"},
-            ]
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(20),
+              direction: "left"
+             }
+          ]
           }
         ]
       }),
@@ -1100,14 +1129,24 @@ window.OverworldMaps = {
       [utils.asGridCoord(4,9)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(1),
+              y: utils.withGrid(20), 
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(5,9)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(1),
+              y: utils.withGrid(20), 
+              direction: "up"
+            }
           ]
         }
       ],
@@ -1257,14 +1296,24 @@ window.OverworldMaps = {
       [utils.asGridCoord(14,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(28), 
+              direction: "up"
+            }
           ]
         }
       ],
       [utils.asGridCoord(15,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(8),
+              y: utils.withGrid(28), 
+              direction: "up"
+            }
           ]
         }
       ],
@@ -1273,7 +1322,7 @@ window.OverworldMaps = {
   Patio: { 
     id: "Patio",
     lowerSrc: "imagens/mapas/patio2.png",
-    upperSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/patio2Upper.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,

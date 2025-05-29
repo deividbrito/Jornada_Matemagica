@@ -4,7 +4,6 @@ class Overworld {
     this.canvas = this.element.querySelector(".game-canvas");
     this.ctx = this.canvas.getContext("2d");
     this.map = null;
-    this.currentMap = null; // Adicionando uma propriedade para armazenar o mapa atual
   }
 
   startGameLoop() {
@@ -63,19 +62,45 @@ class Overworld {
     });
   }
 
-  startMap(mapConfig) {
-    this.map = new OverworldMap(mapConfig);
-    this.map.overworld = this;
-    this.currentMap = mapConfig.id; // Armazenando o nome do mapa atual
-    this.map.mountObjects();
+  startMap(mapConfig, heroInitialState=null) {
+  this.map = new OverworldMap(mapConfig);
+  this.map.overworld = this;
+  this.map.mountObjects();
+
+  if (heroInitialState) {
+    const {hero} = this.map.gameObjects;
+    this.map.removeWall(hero.x, hero.y);
+    hero.x = heroInitialState.x;
+    hero.y = heroInitialState.y;
+    hero.direction = heroInitialState.direction;
+    this.map.addWall(hero.x, hero.y);
   }
 
-  getCurrentMapName() {
-    return this.currentMap || "Desconhecido"; // Retorna o nome do mapa atual
-  }
+  this.progress.mapId = mapConfig.id;
+  this.progress.startingHeroX = this.map.gameObjects.hero.x;
+  this.progress.startingHeroY = this.map.gameObjects.hero.y;
+  this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+
+  console.log(this.map.walls)
+
+ }
 
   init() {
-    this.startMap(window.OverworldMaps.Jardim);
+
+    this.progress = new Progress();
+
+    let initialHeroState = null;
+    const saveFile = this.progress.getSaveFile();
+    if (saveFile) {
+      this.progress.load();
+      initialHeroState = {
+        x: this.progress.startingHeroX,
+        y: this.progress.startingHeroY,
+        direction: this.progress.startingHeroDirection,
+      }
+    }
+
+    this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
 
     this.bindActionInput();
     this.bindHeroPositionCheck();
