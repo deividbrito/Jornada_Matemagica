@@ -78,7 +78,7 @@ class OverworldEvent {
   const doChangeMap = () => {
     const sceneTransition = new SceneTransition();
     sceneTransition.init(document.querySelector(".game-container"), () => {
-      this.map.overworld.startMap( window.OverworldMaps[this.event.map], {
+      this.map.overworld.startMap(window.OverworldMaps[this.event.map], {
         x: this.event.x,
         y: this.event.y,
         direction: this.event.direction,
@@ -88,7 +88,24 @@ class OverworldEvent {
     });
   };
 
-  if (this.event.transitionMessage) {
+  if (this.event.requireConfirmation) {
+    const confirmationText = this.event.confirmationText || "Deseja mudar de cenário?";
+    const choice = new ChoiceMessage({
+      text: confirmationText,
+      choices: [
+        { label: "Sim", value: "yes" },
+        { label: "Não", value: "no" }
+      ],
+      onComplete: (selection) => {
+        if (selection === "yes") {
+          doChangeMap();
+        } else {
+          resolve(); // cancela a troca de cenário
+        }
+      }
+    });
+    choice.init(document.querySelector(".game-container"));
+  } else if (this.event.transitionMessage) {
     const message = new TextMessage({
       text: this.event.transitionMessage,
       onComplete: () => {
@@ -100,7 +117,6 @@ class OverworldEvent {
     doChangeMap();
   }
 }
-
 
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;

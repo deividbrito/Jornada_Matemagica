@@ -146,7 +146,8 @@ window.OverworldMaps = {
                 x: utils.withGrid(9),
                 y: utils.withGrid(17),
                 direction: "up",
-                transitionMessage: "Você está indo até o pátio..."
+                requireConfirmation: true,
+                confirmationText: "Deseja ir até o pátio? O mago X te aguarda lá!"
               },
             ]
           }
