@@ -145,7 +145,8 @@ window.OverworldMaps = {
                 map: "Patio",
                 x: utils.withGrid(9),
                 y: utils.withGrid(17),
-                direction: "up"
+                direction: "up",
+                transitionMessage: "Você está indo até o pátio..."
               },
             ]
           }

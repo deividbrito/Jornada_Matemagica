@@ -74,19 +74,33 @@ class OverworldEvent {
     quizGame.init(document.querySelector(".game-container"));
   }
   
-  
   changeMap(resolve) {
+  const doChangeMap = () => {
     const sceneTransition = new SceneTransition();
     sceneTransition.init(document.querySelector(".game-container"), () => {
       this.map.overworld.startMap( window.OverworldMaps[this.event.map], {
-        x:this.event.x,
-        y:this.event.y,
-        direction:this.event.direction,
-      } );
+        x: this.event.x,
+        y: this.event.y,
+        direction: this.event.direction,
+      });
       resolve();
       sceneTransition.fadeOut();
-    })
+    });
+  };
+
+  if (this.event.transitionMessage) {
+    const message = new TextMessage({
+      text: this.event.transitionMessage,
+      onComplete: () => {
+        doChangeMap();
+      }
+    });
+    message.init(document.querySelector(".game-container"));
+  } else {
+    doChangeMap();
   }
+}
+
 
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;
