@@ -1,0 +1,67 @@
+.TitleScreen {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+  font-family: 'Georgia', serif;
+}
+
+.TitleScreen_logo {
+  width: 256px;
+  border: 3px solid #fff;
+  box-shadow: 0 0 16px #fff8;
+  border-radius: 12px;
+  image-rendering: pixelated;
+  display: block;
+  margin-bottom: 40px;
+}
+
+.TitleScreen .KeyboardMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+  margin-top: 100px;
+}
+
+.TitleScreen button {
+  background: rgba(30, 144, 255, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+  min-width: 240px;
+  text-shadow: 1px 1px 2px #000;
+  transition: all 0.3s ease;
+}
+
+.TitleScreen button:hover {
+  background: rgba(70, 130, 180, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.TitleScreen .DescriptionBox {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  color: #f2f2f2;
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 0;
+  font-family: 'Georgia', serif;
+  border-top: 1px solid #555;
+  box-shadow: 0 -2px 6px rgba(255, 255, 255, 0.05);
+}

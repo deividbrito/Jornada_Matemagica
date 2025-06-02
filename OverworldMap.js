@@ -141,7 +141,12 @@ window.OverworldMaps = {
         talking: [
           {
             events: [
-              { type: "changeMap", map: "Patio"},
+              { type: "changeMap", 
+                map: "Patio",
+                x: utils.withGrid(9),
+                y: utils.withGrid(17),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -670,18 +675,33 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO2D2_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio2d3"}
+              { type: "changeMap", 
+                map: "Desafio2d3",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             required: ["DESAFIO2D1_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio2d2"}
+              { type: "changeMap", 
+                map: "Desafio2d2",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             events: [
-              { type: "changeMap", map: "Desafio2d1"}
+              { type: "changeMap", 
+                map: "Desafio2d1",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
         ]
@@ -825,18 +845,33 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO1D2_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio1d3"}
+              { type: "changeMap", 
+                map: "Desafio1d3",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             required: ["DESAFIO1D1_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio1d2"}
+              { type: "changeMap", 
+                map: "Desafio1d2",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             events: [
-              { type: "changeMap", map: "Desafio1d1"}
+              { type: "changeMap", 
+                map: "Desafio1d1",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
         ]
@@ -1082,18 +1117,33 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO3D2_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio3d3"}
+              { type: "changeMap", 
+                map: "Desafio3d3",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             required: ["DESAFIO3D1_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio3d2"}
+              { type: "changeMap", 
+                map: "Desafio3d2",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             events: [
-              { type: "changeMap", map: "Desafio3d1"}
+              { type: "changeMap", 
+                map: "Desafio3d1",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
         ]
@@ -1177,18 +1227,33 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO5D2_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio5d3"}
+              { type: "changeMap", 
+                map: "Desafio5d3",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             required: ["DESAFIO5D1_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio5d2"}
+              { type: "changeMap", 
+                map: "Desafio5d2",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             events: [
-              { type: "changeMap", map: "Desafio5d1"}
+              { type: "changeMap", 
+                map: "Desafio5d1",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
         ]
@@ -1388,18 +1453,33 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO6D2_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio6d3"}
+              { type: "changeMap", 
+                map: "Desafio6d3",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             required: ["DESAFIO6D1_COMPLETO"],
             events: [
-              { type: "changeMap", map: "Desafio6d2"}
+              { type: "changeMap", 
+                map: "Desafio6d2",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
           {
             events: [
-              { type: "changeMap", map: "Desafio6d1"}
+              { type: "changeMap", 
+                map: "Desafio6d1",
+                x: utils.withGrid(8),
+                y: utils.withGrid(8),
+                direction: "down"
+              }
             ]
           },
         ]
@@ -1505,70 +1585,120 @@ window.OverworldMaps = {
       [utils.asGridCoord(5,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(6,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(7,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(8,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(9,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ]
       ,[utils.asGridCoord(10,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(11,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(12,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(13, 19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(14,19)]: [
         {
           events: [
-            { type: "changeMap", map: "Corredor" }
+            { type: "changeMap", 
+              map: "Corredor",
+              x: utils.withGrid(4),
+              y: utils.withGrid(3),
+              direction: "down"
+             }
           ]
         }
       ],
@@ -1601,7 +1731,12 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
               {type: "addStoryFlag", flag: "DESAFIO1D1_COMPLETO"},
-              { type: "changeMap", map: "Sala1" },
+              { type: "changeMap",  
+                map: "Sala1",
+                x: utils.withGrid(15),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1636,7 +1771,12 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
               { type: "textMessage", text: "Mago: ..." },
               {type: "addStoryFlag", flag: "DESAFIO1D2_COMPLETO"},
-              { type: "changeMap", map: "Sala1" },
+              { type: "changeMap",  
+                map: "Sala1",
+                x: utils.withGrid(15),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1671,7 +1811,12 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "3" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
               {type: "addStoryFlag", flag: "DESAFIO1D3_COMPLETO"},
-              { type: "changeMap", map: "Sala1" },
+              { type: "changeMap",  
+                map: "Sala1",
+                x: utils.withGrid(15),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1706,7 +1851,12 @@ window.OverworldMaps = {
                 { type: "quizGame", idAssunto: 2, dificuldade: "1" },
                 { type: "textMessage", text: "Mago: Não darei moleza da próxima vez!" },
                 {type: "addStoryFlag", flag: "DESAFIO2D1_COMPLETO"},
-                { type: "changeMap", map: "Sala2" },
+                { type: "changeMap",  
+                  map: "Sala2",
+                  x: utils.withGrid(15),
+                  y: utils.withGrid(18),
+                  direction: "up"
+                },
               ]
             }
           ]
@@ -1741,7 +1891,12 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 2, dificuldade: "2" },
               { type: "textMessage", text: "Mago: Como você conseguiu?!" },
               {type: "addStoryFlag", flag: "DESAFIO2D2_COMPLETO"},
-              { type: "changeMap", map: "Sala2" },
+              { type: "changeMap",  
+                map: "Sala2",
+                x: utils.withGrid(15),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1776,7 +1931,12 @@ Desafio2d3: {
               { type: "quizGame", idAssunto: 2, dificuldade: "3" },
               { type: "textMessage", text: "Mago: ...Impossível!" },
               {type: "addStoryFlag", flag: "DESAFIO2D3_COMPLETO"},
-              { type: "changeMap", map: "Sala2" },
+              { type: "changeMap",  
+                map: "Sala2",
+                x: utils.withGrid(15),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1811,7 +1971,12 @@ Desafio3d1: {
               { type: "quizGame", idAssunto: 3, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Como você conseguiu?!" },
               {type: "addStoryFlag", flag: "DESAFIO3D1_COMPLETO"},
-              { type: "changeMap", map: "SalaEstudos" },
+              { type: "changeMap", 
+                map: "SalaEstudos",
+                x: utils.withGrid(2),
+                y: utils.withGrid(4),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1846,7 +2011,12 @@ Desafio3d2: {
               { type: "quizGame", idAssunto: 3, dificuldade: "2" },
               { type: "textMessage", text: "Mago: Não pode ser!" },
               {type: "addStoryFlag", flag: "DESAFIO3D2_COMPLETO"},
-              { type: "changeMap", map: "SalaEstudos" },
+               { type: "changeMap", 
+                map: "SalaEstudos",
+                x: utils.withGrid(2),
+                y: utils.withGrid(4),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -1881,7 +2051,12 @@ Desafio3d3: {
               { type: "quizGame", idAssunto: 3, dificuldade: "3" },
               { type: "textMessage", text: "Mago: Que surpresa!" },
               {type: "addStoryFlag", flag: "DESAFIO3D3_COMPLETO"},
-              { type: "changeMap", map: "SalaEstudos" },
+               { type: "changeMap", 
+                map: "SalaEstudos",
+                x: utils.withGrid(2),
+                y: utils.withGrid(4),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -2021,7 +2196,12 @@ Desafio5d1: {
               { type: "quizGame", idAssunto: 5, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Impressionante!" },
               {type: "addStoryFlag", flag: "DESAFIO5D1_COMPLETO"},
-              { type: "changeMap", map: "Biblioteca" },
+              { type: "changeMap", 
+                map: "Biblioteca",
+                x: utils.withGrid(14),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -2056,7 +2236,12 @@ Desafio5d2: {
               { type: "quizGame", idAssunto: 5, dificuldade: "2" },
               { type: "textMessage", text: "Mago: Você é mesmo muito habilidosa!" },
               {type: "addStoryFlag", flag: "DESAFIO5D2_COMPLETO"},
-              { type: "changeMap", map: "Biblioteca" },
+              { type: "changeMap", 
+                map: "Biblioteca",
+                x: utils.withGrid(14),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -2090,8 +2275,13 @@ Desafio5d3: {
               { type: "quizGame", idAssunto: 5, dificuldade: "3" },
               { type: "quizGame", idAssunto: 5, dificuldade: "3" },
               { type: "textMessage", text: "Mago: Impressionantemente impressionante!" },
-              {type: "addStoryFlag", flag: "DESAFIO5D3_COMPLETO"},
-              { type: "changeMap", map: "Biblioteca" },
+              { type: "addStoryFlag", flag: "DESAFIO5D3_COMPLETO"},
+              { type: "changeMap", 
+                map: "Biblioteca",
+                x: utils.withGrid(14),
+                y: utils.withGrid(18),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -2126,7 +2316,12 @@ Desafio6d1: {
               { type: "quizGame", idAssunto: 6, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Uau..." },
               {type: "addStoryFlag", flag: "DESAFIO6D1_COMPLETO"},
-              { type: "changeMap", map: "Patio" },
+              { type: "changeMap", 
+                map: "Patio",
+                x: utils.withGrid(9),
+                y: utils.withGrid(17),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -2161,7 +2356,12 @@ Desafio6d2: {
               { type: "quizGame", idAssunto: 6, dificuldade: "2" },
               { type: "textMessage", text: "Mago: Incrível..." },
               {type: "addStoryFlag", flag: "DESAFIO6D2_COMPLETO"},
-              { type: "changeMap", map: "Patio" },
+              { type: "changeMap", 
+                map: "Patio",
+                x: utils.withGrid(9),
+                y: utils.withGrid(17),
+                direction: "up"
+              },
             ]
           }
         ]
@@ -2196,7 +2396,12 @@ Desafio6d3: {
               { type: "quizGame", idAssunto: 6, dificuldade: "3" },
               { type: "textMessage", text: "Mago: Você é ainda melhor do que me disseram!" },
               {type: "addStoryFlag", flag: "DESAFIO6D3_COMPLETO"},
-              { type: "changeMap", map: "Patio" },
+              { type: "changeMap", 
+                map: "Patio",
+                x: utils.withGrid(9),
+                y: utils.withGrid(17),
+                direction: "up"
+              },
             ]
           }
         ]
