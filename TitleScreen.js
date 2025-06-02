@@ -6,6 +6,20 @@ class TitleScreen {
   getOptions(resolve) {
     const safeFile = this.progress.getSaveFile();
     return [
+      {
+      label: "Entrar",
+      description: "Faça login ou crie uma conta!",
+      handler: () => {
+        this.close();
+        new LoginForm({
+          onComplete: (dadosSessao) => {
+            // salvar dados no progress
+            this.progress.setSessao(dadosSessao);
+            resolve(dadosSessao);
+          }
+        }).init(document.body);
+      }
+    },
       { 
         label: "Novo jogo",
         description: "Comece uma nova aventura!",

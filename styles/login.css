@@ -1,0 +1,74 @@
+.LoginOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  font-family: 'Georgia', serif;
+}
+
+.LoginForm {
+  background: #111;
+  border: 2px solid #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  border-radius: 12px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.LoginForm h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.LoginForm input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #222;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.LoginForm input:focus {
+  border-color: dodgerblue;
+  box-shadow: 0 0 6px dodgerblue;
+}
+
+.LoginForm .buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.LoginForm button {
+  flex: 1;
+  padding: 10px 12px;
+  background: rgba(30, 144, 255, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.LoginForm button:hover {
+  background: rgba(70, 130, 180, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
