@@ -147,4 +147,17 @@ class Progress {
       });
     }
   }
+
+  reset() {
+  this.mapId = "Corredor";
+  this.startingHeroX = 4;
+  this.startingHeroY = 3;
+  this.startingHeroDirection = "down";
+
+  // resetar também flags da história
+  if (typeof playerState !== "undefined") {
+    playerState.storyFlags = {};
+  }
+  }
+
 }

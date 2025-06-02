@@ -86,33 +86,39 @@ class Overworld {
  }
 
   async init() {
-    const container = document.querySelector(".game-container");
+  const container = document.querySelector(".game-container");
 
-    this.progress = new Progress();
+  this.progress = new Progress();
 
-    this.titleScreen = new TitleScreen ({
-      progress: this.progress
-    })
-    const useSaveFile = await this.titleScreen.init(container);
+  this.titleScreen = new TitleScreen({
+    progress: this.progress
+  });
 
-    let initialHeroState = null;
-    if (useSaveFile) {
-      this.progress.load();
-      initialHeroState = {
-        x: this.progress.startingHeroX,
-        y: this.progress.startingHeroY,
-        direction: this.progress.startingHeroDirection,
-      }
-    }
+  const useSaveFile = await this.titleScreen.init(container);
 
-    this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+  let initialHeroState = null;
 
-    this.bindActionInput();
-    this.bindHeroPositionCheck();
+  if (useSaveFile === true) {
+    await this.progress.load();
 
-    this.directionInput = new DirectionInput();
-    this.directionInput.init();
-
-    this.startGameLoop();
+    initialHeroState = {
+      x: this.progress.startingHeroX,
+      y: this.progress.startingHeroY,
+      direction: this.progress.startingHeroDirection,
+    };
+  } else {
+    this.progress.reset();
   }
+
+  this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+
+  this.bindActionInput();
+  this.bindHeroPositionCheck();
+
+  this.directionInput = new DirectionInput();
+  this.directionInput.init();
+
+  this.startGameLoop();
+}
+
 }

@@ -15,24 +15,34 @@ class LoginForm {
           <button type="button" class="login-button">Entrar</button>
           <button type="button" class="register-button">Cadastrar</button>
         </div>
+        <div class="guest">
+          <button type="button" class="guest-button">Jogar como convidado</button>
+        </div>
       </div>
     `;
   }
 
-  init(container) {
-    this.element = document.createElement("div");
-    this.element.classList.add("LoginOverlay");
-    this.element.innerHTML = this.createFormHtml();
-    container.appendChild(this.element);
 
-    this.element.querySelector(".login-button").addEventListener("click", () => {
-      this.handleLogin();
-    });
+  init() {
+  this.element = document.createElement("div");
+  this.element.classList.add("LoginOverlay");
+  this.element.innerHTML = this.createFormHtml();
+  document.body.appendChild(this.element); 
 
-    this.element.querySelector(".register-button").addEventListener("click", () => {
-      this.handleRegister();
-    });
-  }
+  this.element.querySelector(".login-button").addEventListener("click", () => {
+    this.handleLogin();
+  });
+
+  this.element.querySelector(".register-button").addEventListener("click", () => {
+    this.handleRegister();
+  });
+
+  this.element.querySelector(".guest-button").addEventListener("click", () => {
+    this.close();
+    this.onComplete(null); // Jogar como convidado
+  });
+}
+
 
   async handleLogin() {
     const email = this.element.querySelector("input[name='email']").value;

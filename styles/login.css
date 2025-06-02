@@ -72,3 +72,27 @@
   transform: scale(1.05);
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }
+
+.LoginForm .guest {
+  margin-top: 10px;
+}
+
+.LoginForm .guest-button {
+  width: 100%;
+  padding: 10px;
+  background: rgba(34, 139, 34, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.LoginForm .guest-button:hover {
+  background: rgba(34, 139, 34, 0.35);
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
