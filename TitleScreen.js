@@ -17,9 +17,9 @@ class TitleScreen {
     }
   }
 
-  getOptions(resolve) {
+  async getOptions(resolve) {
     const safeFile = this.progress.getSaveFile();
-    const hasRemoteSave = this.progress.hasRemoteSession();
+    const hasRemoteSave = await this.progress.hasRemoteSaveData();
 
     return [
       {
@@ -65,13 +65,15 @@ class TitleScreen {
   async init(container) {
     await this.showLogin(container);
 
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       this.createElement();
       container.appendChild(this.element);
 
       this.keyboardMenu = new KeyboardMenu();
       this.keyboardMenu.init(this.element);
-      this.keyboardMenu.setOptions(this.getOptions(resolve));
+
+      const options = await this.getOptions(resolve);
+      this.keyboardMenu.setOptions(options);
     });
   }
 }

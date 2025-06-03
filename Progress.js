@@ -148,6 +148,24 @@ class Progress {
     }
   }
 
+  //  verifica se o progresso remoto realmente tem conteúdo salvo.
+  async hasRemoteSaveData() {
+    if (!this.hasRemoteSession()) return false;
+
+    try {
+      const progressoId = this.sessaoData.sessao.id_progresso_jogo;
+      const res = await fetch(`http://localhost:3000/api/progressos/${progressoId}`);
+      if (res.ok) {
+        const json = await res.json();
+        return !!json.ponto_de_salvamento;
+      }
+    } catch (err) {
+      console.error("Erro ao verificar progresso remoto:", err);
+    }
+
+    return false;
+  }
+  
   reset() {
   this.mapId = "Corredor";
   this.startingHeroX = 4;
