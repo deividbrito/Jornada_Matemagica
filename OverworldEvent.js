@@ -74,7 +74,7 @@ class OverworldEvent {
     quizGame.init(document.querySelector(".game-container"));
   }
   
-  changeMap(resolve) {
+changeMap(resolve) {
   const doChangeMap = () => {
     const sceneTransition = new SceneTransition();
     sceneTransition.init(document.querySelector(".game-container"), () => {
@@ -87,24 +87,19 @@ class OverworldEvent {
       sceneTransition.fadeOut();
     });
   };
-
   if (this.event.requireConfirmation) {
     const confirmationText = this.event.confirmationText || "Deseja mudar de cenário?";
-    const choice = new ChoiceMessage({
+    const decision = new DecisionMessage({
       text: confirmationText,
-      choices: [
-        { label: "Sim", value: "yes" },
-        { label: "Não", value: "no" }
-      ],
       onComplete: (selection) => {
         if (selection === "yes") {
           doChangeMap();
         } else {
-          resolve(); // cancela a troca de cenário
+          resolve(); 
         }
       }
     });
-    choice.init(document.querySelector(".game-container"));
+    decision.init(document.querySelector(".game-container"));
   } else if (this.event.transitionMessage) {
     const message = new TextMessage({
       text: this.event.transitionMessage,
@@ -117,6 +112,22 @@ class OverworldEvent {
     doChangeMap();
   }
 }
+
+choiceMessage(resolve) {
+  const choiceMessage = new ChoiceMessage({
+    text: this.event.text,
+    choices: this.event.options,
+    onComplete: (chosenEvents) => {
+      const eventChain = new OverworldEventRunner({
+        map: this.map,
+        events: chosenEvents
+      });
+      eventChain.init().then(() => resolve());
+    }
+  });
+  choiceMessage.init(document.querySelector(".game-container"));
+}
+
 
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;

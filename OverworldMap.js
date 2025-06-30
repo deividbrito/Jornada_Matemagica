@@ -147,7 +147,7 @@ window.OverworldMaps = {
                 y: utils.withGrid(17),
                 direction: "up",
                 requireConfirmation: true,
-                confirmationText: "Deseja ir até o pátio? O mago X te aguarda lá!"
+                confirmationText: "Deseja ir até o pátio? O mago Potencialus Decimus te aguarda lá, com desafios de aproximação de números a potências de 10!"
               },
             ]
           }
@@ -249,7 +249,9 @@ window.OverworldMaps = {
               map: "Sala2",
               x: utils.withGrid(15),
               y: utils.withGrid(18),
-              direction: "up"
+              direction: "up",
+              requireConfirmation: true,
+              confirmationText: "Deseja ir até a sala 2? O mago Fulano te desafiará com operações de números naturais!"
             }
           ]
         }
@@ -261,7 +263,9 @@ window.OverworldMaps = {
               map: "Sala2",
               x: utils.withGrid(15),
               y: utils.withGrid(18),
-              direction: "up"
+              direction: "up",
+              requireConfirmation: true,
+              confirmationText: "Deseja ir até a sala 2? O mago Operanis Naturalis te desafiará com operações de números naturais!"
             }
           ]
         }
@@ -273,7 +277,9 @@ window.OverworldMaps = {
               map: "Sala2",
               x: utils.withGrid(15),
               y: utils.withGrid(18),
-              direction: "up"
+              direction: "up",
+              requireConfirmation: true,
+              confirmationText: "Deseja ir até a sala 2? O mago Operanis Naturalis te desafiará com operações de números naturais!"
             }
           ]
         }
@@ -287,7 +293,11 @@ window.OverworldMaps = {
               map: "Sala1",
               x: utils.withGrid(15),
               y: utils.withGrid(18),
-              direction: "up"
+              direction: "up",
+              requireConfirmation: true,
+              confirmationText: `
+              <b style="font-family: 'Courier New', monospace;">Mago Decimalus:</b><br>
+              Deseja ser desafiada nos números decimais?`
             }
           ]
         }
@@ -299,7 +309,11 @@ window.OverworldMaps = {
               map: "Sala1",
               x: utils.withGrid(15),
               y: utils.withGrid(18),
-              direction: "up"
+              direction: "up",
+              requireConfirmation: true,
+              confirmationText: `
+              <b style="font-family: 'Courier New', monospace;">Mago Decimalus:</b><br>
+              Deseja ser desafiada nos números decimais?`
             }
           ]
         }
@@ -311,7 +325,11 @@ window.OverworldMaps = {
               map: "Sala1",
               x: utils.withGrid(15),
               y: utils.withGrid(18),
-              direction: "up"
+              direction: "up",
+              requireConfirmation: true,
+              confirmationText: `
+              <b style="font-family: 'Courier New', monospace;">Mago Decimalus:</b><br>
+              Deseja ser desafiada nos números decimais?`
             }
           ]
         }
@@ -1731,14 +1749,31 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "1" },
               { type: "quizGame", idAssunto: 1, dificuldade: "1" },
               { type: "quizGame", idAssunto: 1, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "1" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "1" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
-              {type: "addStoryFlag", flag: "DESAFIO1D1_COMPLETO"},
-              { type: "changeMap",  
-                map: "Sala1",
-                x: utils.withGrid(15),
-                y: utils.withGrid(18),
-                direction: "up"
-              },
+              {
+              type: "choiceMessage",
+              text: "Você completou os desafios de nível 1! Deseja prosseguir para o próximo desafio?",
+              options: [
+                {
+                  label: "Sim",
+                  value: "yes",
+                  events: [
+                    { type: "addStoryFlag", flag: "DESAFIO1D1_COMPLETO" },
+                    { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
+                  ]
+                },
+                {
+                  label: "Não",
+                  value: "no",
+                  events: [
+                    { type: "textMessage", text: "Mago: Tudo bem, volte quando estiver pronta." },
+                    { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
+                  ]
+                }
+              ]
+            },
             ]
           }
         ]
@@ -1771,14 +1806,31 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
               { type: "quizGame", idAssunto: 1, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "2" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "2" },
               { type: "textMessage", text: "Mago: ..." },
-              {type: "addStoryFlag", flag: "DESAFIO1D2_COMPLETO"},
-              { type: "changeMap",  
-                map: "Sala1",
-                x: utils.withGrid(15),
-                y: utils.withGrid(18),
-                direction: "up"
-              },
+              {
+              type: "choiceMessage",
+              text: "Você completou os desafios de nível 2! Deseja prosseguir para o próximo nível?",
+              options: [
+                {
+                  label: "Sim",
+                  value: "yes",
+                  events: [
+                    { type: "addStoryFlag", flag: "DESAFIO1D2_COMPLETO" },
+                    { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
+                  ]
+                },
+                {
+                  label: "Não",
+                  value: "no",
+                  events: [
+                    { type: "textMessage", text: "Mago: Tudo bem, volte quando estiver pronta." },
+                    { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
+                  ]
+                }
+              ]
+            },
             ]
           }
         ]
@@ -1811,14 +1863,31 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1, dificuldade: "3" },
               { type: "quizGame", idAssunto: 1, dificuldade: "3" },
               { type: "quizGame", idAssunto: 1, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "3" },
+              { type: "quizGame", idAssunto: 1, dificuldade: "3" },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
-              {type: "addStoryFlag", flag: "DESAFIO1D3_COMPLETO"},
-              { type: "changeMap",  
-                map: "Sala1",
-                x: utils.withGrid(15),
-                y: utils.withGrid(18),
-                direction: "up"
-              },
+              {
+              type: "choiceMessage",
+              text: "Você completou todos os desafios! Quer seguir em frente ou ainda deseja enfrentar desafios de nível 3?",
+              options: [
+                {
+                  label: "Seguir em frente!",
+                  value: "yes",
+                  events: [
+                    { type: "addStoryFlag", flag: "DESAFIO1D3_COMPLETO" },
+                    { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
+                  ]
+                },
+                {
+                  label: "Ainda não quero seguir em frente.",
+                  value: "no",
+                  events: [
+                    { type: "textMessage", text: "Mago: Tudo bem, volte quando quiser." },
+                    { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
+                  ]
+                }
+              ]
+            },
             ]
           }
         ]

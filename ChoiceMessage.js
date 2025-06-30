@@ -1,7 +1,7 @@
 class ChoiceMessage {
   constructor({ text, choices, onComplete }) {
     this.text = text;
-    this.choices = choices;
+    this.choices = choices; 
     this.onComplete = onComplete;
     this.element = null;
   }
@@ -29,8 +29,9 @@ class ChoiceMessage {
   }
 
   done(selectedValue) {
+    const selected = this.choices.find(c => c.value === selectedValue);
     this.element.remove();
-    this.onComplete(selectedValue);
+    this.onComplete(selected?.events || []);
   }
 
   init(container) {
