@@ -60,19 +60,33 @@ class OverworldEvent {
     message.init( document.querySelector(".game-container") )
   }
 
-  quizGame(resolve) {
-    if (this.event.faceHero) {
-      const obj = this.map.gameObjects[this.event.faceHero];
-      obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
-    }
-  
-    const quizGame = new QuizGame({
-      onComplete: () => resolve(),
-      idAssunto: this.event.idAssunto || null,
-      dificuldade: this.event.dificuldade || null 
-    });
-    quizGame.init(document.querySelector(".game-container"));
+quizGame(resolve) {
+  if (this.event.faceHero) {
+    const obj = this.map.gameObjects[this.event.faceHero];
+    obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
   }
+
+  const assunto = this.event.idAssunto || null;
+
+  // se evento define uma dificuldade fixa, use-a; senão, pergunte ao playerState
+  let dificuldadeSolicitada = this.event.dificuldade || window.playerState.getDifficultyForAssunto(assunto);
+
+  const quizGame = new QuizGame({
+    onComplete: (result) => {
+      // result: { isCorrect, idAssunto, dificuldade }
+      if (result && typeof result.isCorrect === "boolean") {
+        // atualiza playerState com base no resultado
+        window.playerState.adjustSkill(result.idAssunto, result.isCorrect, result.dificuldade);
+      }
+      resolve();
+    },
+    idAssunto: assunto,
+    dificuldade: dificuldadeSolicitada
+  });
+
+  quizGame.init(document.querySelector(".game-container"));
+}
+
   
 changeMap(resolve) {
   const doChangeMap = () => {
