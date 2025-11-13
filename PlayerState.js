@@ -1,18 +1,34 @@
+// matriz de ajuste da habilidade
+const SKILL_ADJUSTMENT_MATRIX = {
+  true: {
+    "1": { "1": 7, "2": 10, "3": 15 }, 
+    "2": { "1": 4, "2": 8,  "3": 12 }, 
+    "3": { "1": 1, "2": 5,  "3": 9 }  
+  },
+  false: { 
+    "1": { "1": -8, "2": -5, "3": -2 },
+    "2": { "1": -12, "2": -7, "3": -4 },
+    "3": { "1": -15, "2": -9, "3": -6 }  
+  }
+};
+
+
 class PlayerState {
   constructor() {
     this.storyFlags = {};
-    // skills: map { idAssunto: { score: Number(0..100), attempts: Number, correct: Number } }
+    // skills: map { idAssunto: { score: Number, attempts: Number, correct: Number, streak: Number } }
     this.skills = {};
-    this.load(); // carrega do localStorage se existir
+    this.load();
   }
 
   ensureAssunto(idAssunto) {
     if (!idAssunto) idAssunto = "global";
     if (!this.skills[idAssunto]) {
       this.skills[idAssunto] = {
-        score: 50,    // valor neutro inicial (pode ajustar)
+        score: 50,    // começa em 50 (neutro)
         attempts: 0,
-        correct: 0
+        correct: 0,
+        streak: 0
       };
     }
     return this.skills[idAssunto];
@@ -28,40 +44,57 @@ class PlayerState {
     return s.correct / s.attempts;
   }
 
-  // decide a dificuldade textual ("1","2","3") com base no score.
-  
+  // decide a dificuldade ("1","2","3") com base no score.
   getDifficultyForAssunto(idAssunto) {
     const score = this.getSkillScore(idAssunto);
-    if (score < 40) return "1";
-    if (score < 70) return "2";
+    if (score < 34) return "1";
+    if (score < 67) return "2";
     return "3";
   }
 
-  // ajusta skill após uma tentativa.
-  // - idAssunto: id do assunto (pode ser null -> "global")
-  // - isCorrect: boolean
-  // - questionDifficulty: "1"/"2"/"3" (string) — dificuldade da questão respondida
-  adjustSkill(idAssunto, isCorrect, questionDifficulty) {
+  // ajusta a habilidade após uma tentativa
+  adjustSkill(idAssunto, isCorrect, questionDifficulty, timeTaken = null) {
     const stat = this.ensureAssunto(idAssunto);
     stat.attempts = (stat.attempts || 0) + 1;
     if (isCorrect) stat.correct = (stat.correct || 0) + 1;
 
-    // parâmetros de ajuste (tuneáveis)
-    const baseGain = 8;    // ganho base ao acertar
-    const baseLoss = 6;    // perda base ao errar
+    // determina tiers
+    const playerTier = this.getDifficultyForAssunto(idAssunto); // habilidade ANTES do ajuste
+    const questionTier = String(questionDifficulty);
 
-    // multiplicador conforme dificuldade da questão (quem gerou a questão deveria também fornecer)
-    const diffMultiplier = questionDifficulty === "1" ? 0.8 :
-                           questionDifficulty === "2" ? 1.0 : 1.2;
+    // busca o delta base na matriz
+    let baseDelta = SKILL_ADJUSTMENT_MATRIX[String(isCorrect)][playerTier][questionTier] || 0;
+    
+    let finalDelta = baseDelta;
 
-    const delta = Math.round((isCorrect ? baseGain : -baseLoss) * diffMultiplier);
+    // bonus e penalidades
+    if (isCorrect) {
+      stat.streak = (stat.streak || 0) + 1;
 
-    stat.score = Math.max(0, Math.min(100, stat.score + delta));
+      // bônus de Sequência (ex: +1 a cada 3 acertos, máx +3)
+      const streakBonus = Math.min(Math.floor(stat.streak / 3), 3);
+      finalDelta += streakBonus;
+
+      //considerar função de simulado - implementar funcionalidades de tempo lá
+      // bônus de Tempo (só para acertos)
+      if (timeTaken !== null) {
+        if (timeTaken < 10000) { // menos de 10s
+          finalDelta += 2;
+        } else if (timeTaken < 20000) { // menos de 20s
+          finalDelta += 1;
+        }
+      }
+
+    } else {
+      // zera a sequência de acertos se errar
+      stat.streak = 0;
+    }
+    stat.score = Math.max(0, Math.min(100, stat.score + finalDelta));
 
     this.save();
   }
 
-  // persistência simples em localStorage --> trabalhar implementação com API depois!!!
+  // persistência em localStorage
   save() {
     try {
       const payload = {

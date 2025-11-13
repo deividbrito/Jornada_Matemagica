@@ -5,39 +5,38 @@ class Progress {
     this.startingHeroY = 3;
     this.startingHeroDirection = "down";
     this.saveFileKey = "JornadaMatemagica_SaveFile1";
-
-    // Nova propriedade: dados de sessão (preenchidos via setSessao)
-    // Esperamos receber algo como:
-    // {
-    //   jogador: { id, nome, email },
-    //   sessao: { id, id_usuario, id_progresso_jogo, id_desempenho_jogo }
-    // }
     this.sessaoData = null;
   }
 
   /**
    * Define os dados da sessão após login.
-   * @param {{ jogador: Object, sessao: { id, id_usuario, id_progresso_jogo, id_desempenho_jogo } }} dadosSessao
+   * @param {{ jogador: Object, sessao: { id, id_usuario } }} dadosSessao
    */
   setSessao(dadosSessao) {
+    // --- ATUALIZADO: O objeto sessao é mais simples ---
+    // {
+    //   jogador: { id, nome, email },
+    //   sessao: { id, id_usuario }
+    // }
     this.sessaoData = dadosSessao;
   }
 
   /**
-   * Verifica se há sessão autenticada com progresso remoto.
+   * Verifica se há sessão autenticada.
    * @returns {boolean}
    */
   hasRemoteSession() {
+    // --- ATUALIZADO: Apenas checa se a sessão existe ---
     return (
       this.sessaoData !== null &&
       this.sessaoData.sessao &&
-      this.sessaoData.sessao.id_progresso_jogo
+      this.sessaoData.sessao.id
     );
   }
 
   /**
    * Salva o progresso:
-   * - Se há sessão autenticada, faz PUT em /api/progressos/:id_progresso
+   * - Se há sessão autenticada, faz POST em /api/progressos/:id_sessao
    * - Caso contrário, salva no localStorage
    */
   async save() {
@@ -47,49 +46,41 @@ class Progress {
       startingHeroY: this.startingHeroY,
       startingHeroDirection: this.startingHeroDirection,
       playerState: {
-        storyFlags: playerState.storyFlags
+        storyFlags: window.playerState.storyFlags // Referencia correta
       }
     };
 
     if (this.hasRemoteSession()) {
-      // Salvar no backend
-      const progressoId = this.sessaoData.sessao.id_progresso_jogo;
+      // --- ATUALIZAÇÃO COMPLETA DA LÓGICA DE SALVAR ---
+      const sessaoId = this.sessaoData.sessao.id;
       try {
         const res = await fetch(
-          `http://localhost:3000/api/progressos/${progressoId}`,
+          `http://localhost:3000/api/progressos/${sessaoId}`, // Rota usa :id_sessao
           {
-            method: "PUT",
+            method: "POST", // Rota é POST (UPSERT)
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              // No banco, campo ponto_de_salvamento é VARCHAR ou TEXT.
-              // Armazenamos o JSON completo como string.
-              ponto_de_salvamento: JSON.stringify(payload)
+              ponto_de_salvamento: payload // Envia o OBJETO JSON diretamente
             })
           }
         );
 
         if (!res.ok) {
           console.error("Erro ao salvar progresso remoto:", await res.text());
-          // Se der erro no backend, podemos salvar em localStorage como fallback
           window.localStorage.setItem(this.saveFileKey, JSON.stringify(payload));
         }
       } catch (err) {
         console.error("Falha na requisição de salvar remoto:", err);
-        // Fallback para localStorage
         window.localStorage.setItem(this.saveFileKey, JSON.stringify(payload));
       }
+      // --- FIM DA ATUALIZAÇÃO ---
     } else {
-      // Sem sessão: salva localmente
       window.localStorage.setItem(this.saveFileKey, JSON.stringify(payload));
     }
   }
 
-  /**
-   * Retorna o progresso do localStorage (de forma bruta).
-   * Usado pelo TitleScreen para determinar se há "Continuar jogo".
-   */
   getSaveFile() {
     const file = window.localStorage.getItem(this.saveFileKey);
     return file ? JSON.parse(file) : null;
@@ -102,26 +93,27 @@ class Progress {
    */
   async load() {
     if (this.hasRemoteSession()) {
-      // Buscar progresso remoto
-      const progressoId = this.sessaoData.sessao.id_progresso_jogo;
+      // --- ATUALIZAÇÃO COMPLETA DA LÓGICA DE CARREGAR ---
+      const sessaoId = this.sessaoData.sessao.id;
       try {
         const res = await fetch(
-          `http://localhost:3000/api/progressos/${progressoId}`
+          `http://localhost:3000/api/progressos/${sessaoId}` // Rota usa :id_sessao
         );
         if (res.ok) {
           const json = await res.json();
-          // Esperamos que a API retorne algo como { ponto_de_salvamento: "<JSON string>" }
-          const savedString = json.ponto_de_salvamento;
-          if (savedString) {
-            const file = JSON.parse(savedString);
+          
+          // O 'ponto_de_salvamento' agora VEM como JSON, não string
+          const file = json.ponto_de_salvamento; 
+          
+          if (file && Object.keys(file).length > 0) { // Verifica se o JSON não está vazio
             this.mapId = file.mapId;
             this.startingHeroX = file.startingHeroX;
             this.startingHeroY = file.startingHeroY;
             this.startingHeroDirection = file.startingHeroDirection;
             Object.keys(file.playerState).forEach((key) => {
-              playerState[key] = file.playerState[key];
+              window.playerState[key] = file.playerState[key]; // Referencia correta
             });
-            return; // terminou o carregamento remoto com sucesso
+            return; 
           }
         } else {
           console.warn(
@@ -132,10 +124,9 @@ class Progress {
       } catch (err) {
         console.error("Falha ao buscar progresso remoto:", err);
       }
-      // Em caso de falha, cai no carregamento local abaixo
+      // --- FIM DA ATUALIZAÇÃO ---
     }
 
-    // Sem sessão ou erro: carrega do localStorage
     const file = this.getSaveFile();
     if (file) {
       this.mapId = file.mapId;
@@ -143,39 +134,44 @@ class Progress {
       this.startingHeroY = file.startingHeroY;
       this.startingHeroDirection = file.startingHeroDirection;
       Object.keys(file.playerState).forEach((key) => {
-        playerState[key] = file.playerState[key];
+        window.playerState[key] = file.playerState[key]; // Referencia correta
       });
     }
   }
 
-  //  verifica se o progresso remoto realmente tem conteúdo salvo.
   async hasRemoteSaveData() {
     if (!this.hasRemoteSession()) return false;
 
     try {
-      const progressoId = this.sessaoData.sessao.id_progresso_jogo;
-      const res = await fetch(`http://localhost:3000/api/progressos/${progressoId}`);
+      // --- ATUALIZADO: Rota e lógica de verificação ---
+      const sessaoId = this.sessaoData.sessao.id;
+      const res = await fetch(`http://localhost:3000/api/progressos/${sessaoId}`);
       if (res.ok) {
         const json = await res.json();
-        return !!json.ponto_de_salvamento;
+        // Verifica se o 'ponto_de_salvamento' existe e não é um objeto vazio '{}'
+        return (
+          json.ponto_de_salvamento &&
+          Object.keys(json.ponto_de_salvamento).length > 0
+        );
       }
+      // --- FIM DA ATUALIZAÇÃO ---
     } catch (err) {
       console.error("Erro ao verificar progresso remoto:", err);
     }
-
     return false;
   }
   
   reset() {
-  this.mapId = "Corredor";
-  this.startingHeroX = 4;
-  this.startingHeroY = 3;
-  this.startingHeroDirection = "down";
+    this.mapId = "Corredor";
+    this.startingHeroX = 4;
+    this.startingHeroY = 3;
+    this.startingHeroDirection = "down";
 
-  // resetar também flags da história
-  if (typeof playerState !== "undefined") {
-    playerState.storyFlags = {};
+    if (typeof window.playerState !== "undefined") {
+      window.playerState.storyFlags = {};
+    }
   }
-  }
-
 }
+
+// --- Importante: Garantir que o 'progress' esteja na window ---
+window.progress = new Progress();

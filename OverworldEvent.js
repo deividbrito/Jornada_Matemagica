@@ -73,10 +73,15 @@ quizGame(resolve) {
 
   const quizGame = new QuizGame({
     onComplete: (result) => {
-      // result: { isCorrect, idAssunto, dificuldade }
+      // result: { isCorrect, idAssunto, dificuldade, timeTaken }
       if (result && typeof result.isCorrect === "boolean") {
-        // atualiza playerState com base no resultado
-        window.playerState.adjustSkill(result.idAssunto, result.isCorrect, result.dificuldade);
+        
+        window.playerState.adjustSkill(
+          result.idAssunto, 
+          result.isCorrect, 
+          result.dificuldade,
+          result.timeTaken
+        );
       }
       resolve();
     },

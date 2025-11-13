@@ -1556,49 +1556,84 @@ window.OverworldMaps = {
       [utils.asGridCoord(0,6)]: [
         {
           events: [
-            { type: "changeMap", map: "Jardim" }
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(0,7)]: [
         {
           events: [
-            { type: "changeMap", map: "Jardim" }
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(0,8)]: [
         {
           events: [
-            { type: "changeMap", map: "Jardim" }
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(0,9)]: [
         {
           events: [
-            { type: "changeMap", map: "Jardim" }
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(0,10)]: [
         {
           events: [
-            { type: "changeMap", map: "Jardim" }
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(0,11)]: [
         {
-          events: [
-            { type: "changeMap", map: "Jardim" }
+           events: [
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
       [utils.asGridCoord(0,12)]: [
         {
           events: [
-            { type: "changeMap", map: "Jardim" }
+            { type: "changeMap", 
+              map: "Jardim",
+              x: utils.withGrid(14),
+              y: utils.withGrid(7),
+              direction: "down"
+             }
           ]
         }
       ],
@@ -1752,6 +1787,7 @@ window.OverworldMaps = {
               { type: "quizGame", idAssunto: 1 },
               { type: "quizGame", idAssunto: 1 },
               { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
+              { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" },
               /*
               {
               type: "choiceMessage",
