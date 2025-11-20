@@ -40,7 +40,6 @@ class Overworld {
 
   bindActionInput() {
     new KeyPressListener("Enter", () => {
-      // Verifica se há uma pessoa para se conversar
       this.map.checkForActionCutscene();
     });
 
@@ -51,74 +50,115 @@ class Overworld {
         ]);
       }
     });
+
+    // Listener para tecla F (Fullscreen)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "f" || e.key === "F") {
+        this.toggleFullscreen();
+      }
+    });
+
+    // Listener para redimensionamento da janela
+    window.addEventListener("resize", () => {
+      this.checkResponsive();
+    });
   }
 
   bindHeroPositionCheck() {
     document.addEventListener("PersonWalkingComplete", e => {
       if (e.detail.whoId === "hero") {
-        // A posição do player mudou
         this.map.checkForFootstepCutscene();
       }
     });
   }
 
   startMap(mapConfig, heroInitialState=null) {
-  this.map = new OverworldMap(mapConfig);
-  this.map.overworld = this;
-  this.map.mountObjects();
+    this.map = new OverworldMap(mapConfig);
+    this.map.overworld = this;
+    this.map.mountObjects();
 
-  if (heroInitialState) {
-    const {hero} = this.map.gameObjects;
-    this.map.removeWall(hero.x, hero.y);
-    hero.x = heroInitialState.x;
-    hero.y = heroInitialState.y;
-    hero.direction = heroInitialState.direction;
-    this.map.addWall(hero.x, hero.y);
+    if (heroInitialState) {
+      const {hero} = this.map.gameObjects;
+      this.map.removeWall(hero.x, hero.y);
+      hero.x = heroInitialState.x;
+      hero.y = heroInitialState.y;
+      hero.direction = heroInitialState.direction;
+      this.map.addWall(hero.x, hero.y);
+    }
+
+    this.progress.mapId = mapConfig.id;
+    this.progress.startingHeroX = this.map.gameObjects.hero.x;
+    this.progress.startingHeroY = this.map.gameObjects.hero.y;
+    this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
   }
 
-  this.progress.mapId = mapConfig.id;
-  this.progress.startingHeroX = this.map.gameObjects.hero.x;
-  this.progress.startingHeroY = this.map.gameObjects.hero.y;
-  this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+  checkResponsive() {
+    if (document.fullscreenElement) {
+      const widthBase = 352;
+      const heightBase = 198;
+      
+      const scaleX = window.innerWidth / widthBase;
+      const scaleY = window.innerHeight / heightBase;
+      
+      const scale = Math.min(scaleX, scaleY);
 
-  console.log(this.map.walls)
+      this.element.style.transform = `scale(${scale})`;
+      
+    } else {
+      this.element.style.transform = null;
+    }
+  }
 
- }
+  toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.body.requestFullscreen().then(() => {
+        this.checkResponsive();
+      }).catch(err => {
+        console.error(`Erro Fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        this.checkResponsive();
+      });
+    }
+  }
 
   async init() {
-  const container = document.querySelector(".game-container");
+    const container = document.querySelector(".game-container");
 
-  this.progress = new Progress();
+    this.progress = new Progress();
 
-  this.titleScreen = new TitleScreen({
-    progress: this.progress
-  });
+    this.titleScreen = new TitleScreen({
+      progress: this.progress
+    });
 
-  const useSaveFile = await this.titleScreen.init(container);
+    const useSaveFile = await this.titleScreen.init(container);
 
-  let initialHeroState = null;
+    let initialHeroState = null;
 
-  if (useSaveFile === true) {
-    await this.progress.load();
+    if (useSaveFile === true) {
+      await this.progress.load();
 
-    initialHeroState = {
-      x: this.progress.startingHeroX,
-      y: this.progress.startingHeroY,
-      direction: this.progress.startingHeroDirection,
-    };
-  } else {
-    this.progress.reset();
+      initialHeroState = {
+        x: this.progress.startingHeroX,
+        y: this.progress.startingHeroY,
+        direction: this.progress.startingHeroDirection,
+      };
+    } else {
+      this.progress.reset();
+    }
+
+    this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+
+    this.bindActionInput();
+    this.bindHeroPositionCheck();
+
+    this.directionInput = new DirectionInput();
+    this.directionInput.init();
+
+    this.startGameLoop();
+    
+    // Chama uma vez ao iniciar para garantir o tamanho certo (2x)
+    this.checkResponsive();
   }
-
-  this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
-
-  this.bindActionInput();
-  this.bindHeroPositionCheck();
-
-  this.directionInput = new DirectionInput();
-  this.directionInput.init();
-
-  this.startGameLoop();
-}
-
 }
