@@ -51,14 +51,12 @@ class Overworld {
       }
     });
 
-    // Listener para tecla F (Fullscreen)
     document.addEventListener("keydown", (e) => {
       if (e.key === "f" || e.key === "F") {
         this.toggleFullscreen();
       }
     });
 
-    // Listener para redimensionamento da janela
     window.addEventListener("resize", () => {
       this.checkResponsive();
     });
@@ -93,20 +91,22 @@ class Overworld {
   }
 
   checkResponsive() {
-    if (document.fullscreenElement) {
-      const widthBase = 352;
-      const heightBase = 198;
-      
-      const scaleX = window.innerWidth / widthBase;
-      const scaleY = window.innerHeight / heightBase;
-      
-      const scale = Math.min(scaleX, scaleY);
+    const widthBase = 352;
+    const heightBase = 198;
+    
+    const availableWidth = window.innerWidth;
+    const availableHeight = window.innerHeight;
 
-      this.element.style.transform = `scale(${scale})`;
-      
-    } else {
-      this.element.style.transform = null;
-    }
+    const margin = document.fullscreenElement ? 0 : 30;
+    
+    const scaleX = (availableWidth - margin) / widthBase;
+    const scaleY = (availableHeight - margin) / heightBase;
+
+    let scale = Math.min(scaleX, scaleY);
+
+    scale = Math.max(1, scale);
+
+    this.element.style.transform = `scale(${scale})`;
   }
 
   toggleFullscreen() {
@@ -158,7 +158,6 @@ class Overworld {
 
     this.startGameLoop();
     
-    // Chama uma vez ao iniciar para garantir o tamanho certo (2x)
     this.checkResponsive();
   }
 }

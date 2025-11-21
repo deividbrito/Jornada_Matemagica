@@ -1,5 +1,5 @@
-:root{
-    --border-color:#291D4D;
+:root {
+    --border-color: #291D4D;
     --dialog-background: #FFF3B4;
     --menu-background: #FFE8D2;
     --menu-border-color: #A48465;
@@ -7,47 +7,49 @@
     --menu-selected-background: #7FC2FF;
 }
 
-*{
+* {
     box-sizing: border-box;
 }
 
-body{
+body {
     background: #333;
-    padding: 0;
     margin: 0;
-    overflow: hidden;
+    padding: 0;
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
+    
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .game-container {
     width: 352px;
     height: 198px;
+    
     position: relative;
-    
     outline: 2px solid white;
-    
-    transform: scale(2); 
-    transform-origin: center center;
+    background: #000;
+    overflow: hidden;
 
+    transform: scale(3.5); 
+    
+    transform-origin: center center;
+    
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
 }
-
 .game-container canvas {
-    width: 352px; 
+    width: 352px;
     height: 198px;
-    
     image-rendering: pixelated;
 }
 
 body:fullscreen {
-    background: #111;
+    background: #000;
 }
 
 .game-container:fullscreen {
