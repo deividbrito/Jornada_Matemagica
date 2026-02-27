@@ -159,5 +159,10 @@ class Overworld {
     this.startGameLoop();
     
     this.checkResponsive();
+
+    this.touchControls = new TouchControls({
+      directionInput: this.directionInput
+    });
+    this.touchControls.init(container);
   }
 }

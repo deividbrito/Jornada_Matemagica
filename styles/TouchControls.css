@@ -1,0 +1,106 @@
+/* TouchControls.css - Versão Compacta */
+
+/* 1. Root Container agora ocupa a tela inteira (mas não pega cliques) */
+.TouchControls {
+  position: absolute;
+  inset: 0; /* Preenche toda a tela */
+  pointer-events: none; /* Deixa os cliques passarem */
+  z-index: 100; /* Fica acima do jogo, mas abaixo dos menus pretos */
+}
+
+/* Base para todos os botões virtuais */
+.TouchControls button {
+  pointer-events: auto; /* Os botões capturam o toque */
+  color: white;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  border: none;
+  background: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6; /* Levemente translúcido por padrão */
+  transition: opacity 0.1s;
+}
+
+/* Efeito ao tocar */
+.TouchControls button.active {
+  opacity: 1;
+  transform: scale(0.95);
+}
+
+/* --- D-PAD (Estilo Cruzeta Clássica) --- */
+.d-pad {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  width: 90px; 
+  height: 90px;
+  /* Um fundo sutil por trás da cruzeta inteira */
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+}
+
+.d-pad-btn {
+  position: absolute;
+  width: 30px; 
+  height: 30px;
+  background: rgba(40, 40, 40, 0.7); /* Cor escura sólida */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: #ccc;
+  border-radius: 0; /* Tiramos o arredondamento padrão */
+}
+
+/* Arredondando apenas as pontas externas para formar a cruz */
+.d-pad-btn.up    { top: 0; left: 30px; border-radius: 8px 8px 0 0; }
+.d-pad-btn.down  { bottom: 0; left: 30px; border-radius: 0 0 8px 8px; }
+.d-pad-btn.left  { top: 30px; left: 0; border-radius: 8px 0 0 8px; }
+.d-pad-btn.right { top: 30px; right: 0; border-radius: 0 8px 8px 0; }
+
+/* Adiciona um "miolo" escuro no centro da cruz */
+.d-pad::after {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 30px;
+  height: 30px;
+  background: rgba(40, 40, 40, 0.7);
+}
+
+/* Botão A (Confirmar/Interagir) - Mantido embaixo, mas menor */
+.a-btn {
+  position: absolute;
+  bottom: 25px; /* Alinhado com o centro do D-Pad */
+  right: 25px;
+  /* Reduzido de 50px para 40px */
+  width: 40px;
+  height: 40px;
+  background: rgba(50, 205, 50, 0.4); /* Verde translúcido */
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Botão MENU/OPÇÕES (Substituindo o "B" grande) - Movido para o TOPO DIREITO */
+.menu-btn {
+  position: absolute;
+  top: 15px; /* No topo da tela */
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  /* Visual mais sutil para o menu */
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  font-size: 22px; /* Aumentado para o ícone */
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .TouchControls {
+    display: none !important;
+  }
+}

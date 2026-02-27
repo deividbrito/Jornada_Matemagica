@@ -32,7 +32,21 @@ class DirectionInput {
         this.heldDirections.splice(index, 1);
       }
     })
+  }
 
+  // adiciona a direcao quando o botao virtual eh tocado
+  addDirection(dir) {
+    if (dir && this.heldDirections.indexOf(dir) === -1) {
+      this.heldDirections.unshift(dir);
+    }
+  }
+
+  // remove a direcao quando o botao virtual eh solto
+  removeDirection(dir) {
+    const index = this.heldDirections.indexOf(dir);
+    if (index > -1) {
+      this.heldDirections.splice(index, 1);
+    }
   }
 
 }
