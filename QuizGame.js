@@ -182,6 +182,33 @@ class QuizGame {
       text: `${symbol} ${randomMessage}${this.feedback}` // Usa o feedback da API
     });
     this.revealingText.init();
+
+    // === INÍCIO DAS NOVIDADES ===
+
+    // 1. Criar o indicador visual de "Continuar"
+    const continueBtn = document.createElement("div");
+    continueBtn.classList.add("QuizTutorial_continue");
+    continueBtn.innerText = "Continuar ▼";
+    this.element.appendChild(continueBtn);
+
+    // 2. Permitir que tocar/clicar em qualquer lugar da caixa avance o diálogo (Ideal para Mobile)
+    const handleAdvance = (e) => {
+      e.preventDefault(); // Evita cliques duplos fantasma no mobile
+      this.done();
+    };
+    this.element.addEventListener("touchstart", handleAdvance, { passive: false });
+    this.element.addEventListener("mousedown", handleAdvance);
+
+    // 3. Garantir que a tecla "Enter" chame a função done()
+    // Removemos qualquer listener antigo por segurança e criamos um novo
+    if (this.actionListener) {
+      this.actionListener.unbind();
+    }
+    this.actionListener = new KeyPressListener("Enter", () => {
+      this.done();
+    });
+    
+    // === FIM DAS NOVIDADES ===
   }
   // --- FIM DA REESCRITA ---
 

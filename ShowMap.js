@@ -12,7 +12,7 @@ class ShowMap {
 
     createElement() {
         this.element = document.createElement("div");
-        this.element.classList.add("PauseMenu");
+        this.element.classList.add("ShowMap");
         this.element.innerHTML = `
             <h2>Mapa</h2>
             <div class="map-container">
@@ -20,36 +20,8 @@ class ShowMap {
                     <img src="imagens/map/mapa.png" alt="Mapa do jogo" class="map-image">
                 </div>
             </div>
+            <div class="map-footer">Aperte B ou ESC para fechar</div>
         `;
-
-        const style = document.createElement("style");
-        style.innerHTML = `
-            .map-container {
-                width: 128px;
-                height: 128px;
-                overflow: hidden;
-                position: relative;
-                border: 1px solid var(--menu-border-color);
-                background: var(--menu-background);
-                cursor: grab;
-            }
-
-            .map-wrapper {
-                position: absolute;
-                top: 0;
-                left: 0;
-                transform-origin: center;
-            }
-
-            .map-image {
-                width: 256px;
-                height: 256px;
-                user-drag: none;
-                user-select: none;
-                pointer-events: none;
-            }
-        `;
-        this.element.appendChild(style);
 
         this.addDragFunctionality();
         this.addZoomFunctionality();
@@ -59,24 +31,43 @@ class ShowMap {
         const mapWrapper = this.element.querySelector(".map-wrapper");
         const mapContainer = this.element.querySelector(".map-container");
 
-        mapContainer.addEventListener("mousedown", (event) => {
+        const startDrag = (e) => {
             this.isDragging = true;
-            this.startX = event.clientX - this.offsetX;
-            this.startY = event.clientY - this.offsetY;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            this.startX = clientX - this.offsetX;
+            this.startY = clientY - this.offsetY;
             mapContainer.style.cursor = "grabbing";
-        });
+        };
 
-        document.addEventListener("mousemove", (event) => {
+        const doDrag = (e) => {
             if (!this.isDragging) return;
-            this.offsetX = event.clientX - this.startX;
-            this.offsetY = event.clientY - this.startY;
+            
+            // ESSA LINHA É CRUCIAL NO MOBILE: impede a tela de rolar enquanto você olha o mapa
+            if (e.touches) e.preventDefault(); 
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            this.offsetX = clientX - this.startX;
+            this.offsetY = clientY - this.startY;
             mapWrapper.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.scale})`;
-        });
+        };
 
-        document.addEventListener("mouseup", () => {
+        const stopDrag = () => {
             this.isDragging = false;
             mapContainer.style.cursor = "grab";
-        });
+        };
+
+        mapContainer.addEventListener("mousedown", startDrag);
+        document.addEventListener("mousemove", doDrag);
+        document.addEventListener("mouseup", stopDrag);
+
+        // ATENÇÃO AQUI: passive precisa ser false para o preventDefault funcionar
+        mapContainer.addEventListener("touchstart", startDrag, {passive: false});
+        document.addEventListener("touchmove", doDrag, {passive: false});
+        document.addEventListener("touchend", stopDrag);
     }
 
     addZoomFunctionality() {
