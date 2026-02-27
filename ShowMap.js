@@ -12,12 +12,38 @@ class ShowMap {
 
     createElement() {
         this.element = document.createElement("div");
-        this.element.classList.add("ShowMap");
+        this.element.classList.add("ShowMap"); // Certifique-se de usar a classe correta
+
+        // Dicionário de coordenadas (left, top) para a imagem de 396x396
+        const mapCoordinates = {
+            "Jardim": { left: 140, top: 60 },
+            "Patio": { left: 250, top: 110 },
+            "SalaEstudos": { left: 80, top: 200 }, 
+            "Sala2": { left: 80, top: 260 },       
+            "Gremio": { left: 80, top: 320 },      
+            "Sala1": { left: 310, top: 200 },      
+            "Biblioteca": { left: 310, top: 260 }, 
+            "Corredor": { left: 198, top: 280 },   
+            "Desafio1d1": { left: 310, top: 200 }, 
+        };
+
+        // Puxa da nossa variável global. Se não existir (ex: acabou de abrir o jogo), usa o fallback.
+        const currentMapId = window.currentMapName || window.progress?.mapId || "Corredor";
+        
+        console.log("A abrir o mapa. O jogador está no cenário:", currentMapId);
+
+        const coords = mapCoordinates[currentMapId] || mapCoordinates["Corredor"];
+
         this.element.innerHTML = `
             <h2>Mapa</h2>
             <div class="map-container">
                 <div class="map-wrapper">
                     <img src="imagens/map/mapa.png" alt="Mapa do jogo" class="map-image">
+                    
+                    <div class="player-marker" style="left: ${coords.left}px; top: ${coords.top}px;">
+                        📍
+                    </div>
+
                 </div>
             </div>
             <div class="map-footer">Aperte B ou ESC para fechar</div>

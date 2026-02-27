@@ -94,43 +94,23 @@ quizGame(resolve) {
 
   
 changeMap(resolve) {
-  const doChangeMap = () => {
-    const sceneTransition = new SceneTransition();
-    sceneTransition.init(document.querySelector(".game-container"), () => {
-      this.map.overworld.startMap(window.OverworldMaps[this.event.map], {
-        x: this.event.x,
-        y: this.event.y,
-        direction: this.event.direction,
-      });
-      resolve();
-      sceneTransition.fadeOut();
-    });
-  };
-  if (this.event.requireConfirmation) {
-    const confirmationText = this.event.confirmationText || "Deseja mudar de cenário?";
-    const decision = new DecisionMessage({
-      text: confirmationText,
-      onComplete: (selection) => {
-        if (selection === "yes") {
-          doChangeMap();
-        } else {
-          resolve(); 
-        }
-      }
-    });
-    decision.init(document.querySelector(".game-container"));
-  } else if (this.event.transitionMessage) {
-    const message = new TextMessage({
-      text: this.event.transitionMessage,
-      onComplete: () => {
-        doChangeMap();
-      }
-    });
-    message.init(document.querySelector(".game-container"));
-  } else {
-    doChangeMap();
-  }
-}
+        const sceneTransition = new SceneTransition();
+        sceneTransition.init(document.querySelector(".game-container"), () => {
+            
+            // --- NOVA GARANTIA ABSOLUTA ---
+            // Guarda o nome exato do novo mapa na memória global do jogo
+            window.currentMapName = this.event.map;
+
+            this.map.overworld.startMap( window.OverworldMaps[this.event.map], {
+                x: this.event.x,
+                y: this.event.y,
+                direction: this.event.direction,
+            });
+
+            resolve();
+            sceneTransition.fadeOut();
+        });
+    }
 
 choiceMessage(resolve) {
   const choiceMessage = new ChoiceMessage({

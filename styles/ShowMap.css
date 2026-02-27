@@ -61,3 +61,24 @@
     border-top: 1px solid var(--border-color);
     background: rgba(0,0,0,0.1);
 }
+
+/* Estilo do Marcador de Posição */
+.player-marker {
+    position: absolute;
+    font-size: 20px;
+    /* Centraliza o eixo X e ergue o eixo Y para a base do emoji ser a coordenada */
+    transform: translate(-50%, -100%); 
+    pointer-events: none; /* Para não atrapalhar o arrastar do mapa */
+    z-index: 10;
+    
+    /* Sombra para destacar no mapa claro */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    
+    /* Animação de flutuação */
+    animation: bounce-marker 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes bounce-marker {
+    from { transform: translate(-50%, -100%); }
+    to { transform: translate(-50%, -125%); }
+}
