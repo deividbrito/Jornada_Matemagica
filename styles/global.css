@@ -1,10 +1,29 @@
 :root {
-    --border-color: #291D4D;
-    --dialog-background: #FFF3B4;
-    --menu-background: #FFE8D2;
-    --menu-border-color: #A48465;
-    --menu-font-color: #3A160D;
-    --menu-selected-background: #7FC2FF;
+    --dialog-background: #1a3622; /* Verde lousa escuro */
+    --menu-background: #1a3622;
+    --border-color: #d1d5db; /* Cor de giz/cinza claro */
+    --menu-border-color: #8b5a2b; /* Cor de madeira para a moldura da lousa */
+    --menu-font-color: #f3f4f6; /* Branco giz */
+    --menu-selected-background: #275234; /* Verde um pouco mais claro */
+    --font-retro: 'VT323', monospace;
+}
+
+/* Aplicando a fonte e a borda estilo quadro de madeira */
+.TextMessage, .KeyboardMenu, .PauseMenu, .ChoiceMessage, .DecisionMessage, .QuizTutorial {
+    font-family: var(--font-retro);
+    font-size: 20px;
+    letter-spacing: 1px;
+    
+    /* Borda imitando moldura de quadro negro */
+    border: 4px solid var(--menu-border-color) !important;
+    box-shadow: 
+      inset 0 0 0 2px #000,
+      4px 4px 0px rgba(0,0,0,0.5); /* Sombra dura de pixel art */
+}
+
+.KeyboardMenu button, .ChoiceMessage_button, .DecisionMessage_button, .QuizTutorial_button2 {
+    color: var(--menu-font-color);
+    font-family: var(--font-retro);
 }
 
 * {
