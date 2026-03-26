@@ -51,6 +51,20 @@ const utils = {
       detail
     });
     document.dispatchEvent(event);
+  },
+
+  // Resolve o ID do mapa baseado na campanha atual.
+  // Se a campanha for "medio", tenta usar a variante _M do mapa.
+  // Se não existir variante, usa o mapa original (compartilhado).
+  resolveMapId(mapId) {
+    const campanha = window.progress?.campanha || "fundamental";
+    if (campanha === "medio") {
+      const medioId = mapId + "_M";
+      if (window.OverworldMaps && window.OverworldMaps[medioId]) {
+        return medioId;
+      }
+    }
+    return mapId;
   }
-  
+
 }

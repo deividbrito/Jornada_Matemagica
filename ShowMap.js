@@ -32,7 +32,9 @@ class ShowMap {
         
         console.log("A abrir o mapa. O jogador está no cenário:", currentMapId);
 
-        const coords = mapCoordinates[currentMapId] || mapCoordinates["Corredor"];
+        // Remove sufixo _M para encontrar coordenadas corretas no mapa visual
+        const baseMapId = currentMapId.replace(/_M$/, "");
+        const coords = mapCoordinates[baseMapId] || mapCoordinates["Corredor"];
 
         this.element.innerHTML = `
             <h2>Mapa</h2>

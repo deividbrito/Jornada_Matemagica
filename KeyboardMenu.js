@@ -7,6 +7,7 @@ class KeyboardMenu {
     this.descriptionContainer = config.descriptionContainer || null;
   }
 
+// --- DENTRO DE KeyboardMenu.js ---
   setOptions(options) {
     this.options = options;
     this.element.innerHTML = this.options.map((option, index) => {
@@ -24,13 +25,24 @@ class KeyboardMenu {
     this.element.querySelectorAll("button").forEach(button => {
 
       button.addEventListener("click", () => {
+        // TOCA O SOM DE SELEÇÃO/CONFIRMAÇÃO AO CLICAR
+        if (window.audioManager) window.audioManager.playSfx("click");
+        
         const chosenOption = this.options[ Number(button.dataset.button) ];
         chosenOption.handler();
       })
+      
       button.addEventListener("mouseenter", () => {
         button.focus();
       })
+      
       button.addEventListener("focus", () => {
+        // TOCA UM SOM SUTIL (Pode ser o "click" ou você pode criar um "hover.mp3" no AudioManager)
+        if (window.audioManager && this.prevFocus !== button) {
+            // Reutilizando o click por enquanto. O ideal é ter um som "hover" mais suave.
+            window.audioManager.playSfx("click"); 
+        }
+        
         this.prevFocus = button;
         this.descriptionElementText.innerText = button.dataset.description;
       })
@@ -39,10 +51,6 @@ class KeyboardMenu {
     setTimeout(() => {
       this.element.querySelector("button[data-button]:not([disabled])").focus();
     }, 10)
-
-    
-
-
   }
 
   createElement() {

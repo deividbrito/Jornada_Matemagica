@@ -60,72 +60,78 @@ class OverworldEvent {
     message.init( document.querySelector(".game-container") )
   }
 
-quizGame(resolve) {
-  if (this.event.faceHero) {
-    const obj = this.map.gameObjects[this.event.faceHero];
-    obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
+  quizGame(resolve) {
+    if (this.event.faceHero) {
+      const obj = this.map.gameObjects[this.event.faceHero];
+      obj.direction = utils.oppositeDirection(this.map.gameObjects["hero"].direction);
+    }
+
+    const assunto = this.event.idAssunto || null;
+
+    // se evento define uma dificuldade fixa, use-a; senão, pergunte ao playerState
+    let dificuldadeSolicitada = this.event.dificuldade || window.playerState.getDifficultyForAssunto(assunto);
+
+    // NOVO: lê a campanha do progresso global (definida na tela de título)
+    const campanha = window.progress?.campanha || "fundamental";
+    console.log("[DEBUG] campanha no progress:", window.progress?.campanha);
+    console.log("[DEBUG] campanha que vai pro QuizGame:", campanha);
+
+    const quizGame = new QuizGame({
+      onComplete: (result) => {
+        // result: { isCorrect, idAssunto, dificuldade, timeTaken }
+        if (result && typeof result.isCorrect === "boolean") {
+          
+          window.playerState.adjustSkill(
+            result.idAssunto, 
+            result.isCorrect, 
+            result.dificuldade,
+            result.timeTaken
+          );
+        }
+        resolve();
+      },
+      idAssunto: assunto,
+      dificuldade: dificuldadeSolicitada,
+      campanha, // NOVO
+    });
+
+    quizGame.init(document.querySelector(".game-container"));
   }
 
-  const assunto = this.event.idAssunto || null;
-
-  // se evento define uma dificuldade fixa, use-a; senão, pergunte ao playerState
-  let dificuldadeSolicitada = this.event.dificuldade || window.playerState.getDifficultyForAssunto(assunto);
-
-  const quizGame = new QuizGame({
-    onComplete: (result) => {
-      // result: { isCorrect, idAssunto, dificuldade, timeTaken }
-      if (result && typeof result.isCorrect === "boolean") {
-        
-        window.playerState.adjustSkill(
-          result.idAssunto, 
-          result.isCorrect, 
-          result.dificuldade,
-          result.timeTaken
-        );
-      }
-      resolve();
-    },
-    idAssunto: assunto,
-    dificuldade: dificuldadeSolicitada
-  });
-
-  quizGame.init(document.querySelector(".game-container"));
-}
-
   
-changeMap(resolve) {
-        const sceneTransition = new SceneTransition();
-        sceneTransition.init(document.querySelector(".game-container"), () => {
-            
-            // --- NOVA GARANTIA ABSOLUTA ---
-            // Guarda o nome exato do novo mapa na memória global do jogo
-            window.currentMapName = this.event.map;
+  changeMap(resolve) {
+    const sceneTransition = new SceneTransition();
+    sceneTransition.init(document.querySelector(".game-container"), () => {
+        
+        // Resolve o mapa correto de acordo com a campanha (fundamental/medio)
+        const resolvedMapId = utils.resolveMapId(this.event.map);
+        window.currentMapName = resolvedMapId;
 
-            this.map.overworld.startMap( window.OverworldMaps[this.event.map], {
-                x: this.event.x,
-                y: this.event.y,
-                direction: this.event.direction,
-            });
-
-            resolve();
-            sceneTransition.fadeOut();
+        this.map.overworld.startMap( window.OverworldMaps[resolvedMapId], {
+            x: this.event.x,
+            y: this.event.y,
+            direction: this.event.direction,
         });
-    }
 
-choiceMessage(resolve) {
-  const choiceMessage = new ChoiceMessage({
-    text: this.event.text,
-    choices: this.event.options,
-    onComplete: (chosenEvents) => {
-      const eventChain = new OverworldEventRunner({
-        map: this.map,
-        events: chosenEvents
-      });
-      eventChain.init().then(() => resolve());
-    }
-  });
-  choiceMessage.init(document.querySelector(".game-container"));
-}
+        resolve();
+        sceneTransition.fadeOut();
+    });
+  }
+
+  choiceMessage(resolve) {
+    const choiceMessage = new ChoiceMessage({
+      text: this.event.text,
+      choices: this.event.options,
+      onComplete: (chosenEvents) => {
+        const eventChain = new OverworldEventRunner({
+          map: this.map,
+          events: chosenEvents
+        });
+        eventChain.init().then(() => resolve());
+      }
+    });
+    choiceMessage.init(document.querySelector(".game-container"));
+  }
 
 
   addStoryFlag(resolve) {

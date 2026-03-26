@@ -4,6 +4,7 @@ class Progress {
     this.startingHeroX = 4;
     this.startingHeroY = 3;
     this.startingHeroDirection = "down";
+    this.campanha = "fundamental"; // NOVO: campanha selecionada pelo jogador
     this.saveFileKey = "JornadaMatemagica_SaveFile1";
     this.sessaoData = null;
   }
@@ -45,6 +46,7 @@ class Progress {
       startingHeroX: this.startingHeroX,
       startingHeroY: this.startingHeroY,
       startingHeroDirection: this.startingHeroDirection,
+      campanha: this.campanha, // NOVO
       playerState: {
         storyFlags: window.playerState.storyFlags // Referencia correta
       }
@@ -110,6 +112,7 @@ class Progress {
             this.startingHeroX = file.startingHeroX;
             this.startingHeroY = file.startingHeroY;
             this.startingHeroDirection = file.startingHeroDirection;
+            this.campanha = file.campanha || "fundamental"; // NOVO
             Object.keys(file.playerState).forEach((key) => {
               window.playerState[key] = file.playerState[key]; // Referencia correta
             });
@@ -133,6 +136,7 @@ class Progress {
       this.startingHeroX = file.startingHeroX;
       this.startingHeroY = file.startingHeroY;
       this.startingHeroDirection = file.startingHeroDirection;
+      this.campanha = file.campanha || "fundamental"; // NOVO
       Object.keys(file.playerState).forEach((key) => {
         window.playerState[key] = file.playerState[key]; // Referencia correta
       });
@@ -166,6 +170,10 @@ class Progress {
     this.startingHeroX = 4;
     this.startingHeroY = 3;
     this.startingHeroDirection = "down";
+    console.log("[DEBUG] reset() chamado — campanha preservada:", this.campanha);
+    // ATENÇÃO: campanha NÃO é resetada aqui.
+    // Ela é definida pelo TitleScreen antes do Overworld chamar reset(),
+    // então sobrescrever aqui apagaria a escolha do jogador.
 
     if (typeof window.playerState !== "undefined") {
       window.playerState.storyFlags = {};

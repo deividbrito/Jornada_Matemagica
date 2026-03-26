@@ -128,6 +128,11 @@ class Overworld {
 
     this.progress = new Progress();
 
+    // CORREÇÃO: garante que window.progress aponta para o mesmo objeto
+    // que o TitleScreen vai modificar. Sem isso, OverworldEvent leria
+    // o objeto antigo criado pelo Progress.js no carregamento da página.
+    window.progress = this.progress;
+
     this.titleScreen = new TitleScreen({
       progress: this.progress
     });
@@ -148,7 +153,7 @@ class Overworld {
       this.progress.reset();
     }
 
-    this.startMap(window.OverworldMaps[this.progress.mapId], initialHeroState);
+    this.startMap(window.OverworldMaps[utils.resolveMapId(this.progress.mapId)], initialHeroState);
 
     this.bindActionInput();
     this.bindHeroPositionCheck();
