@@ -80,10 +80,16 @@ class OverworldEvent {
       onComplete: (result) => {
         // result: { isCorrect, idAssunto, dificuldade, timeTaken }
         if (result && typeof result.isCorrect === "boolean") {
-          
+          // Rastreia acertos/erros na sessão arcade
+          if (window.progress?.campanha === "medio") {
+            window.arcadeStats = window.arcadeStats || { total: 0, correct: 0 };
+            window.arcadeStats.total++;
+            if (result.isCorrect) window.arcadeStats.correct++;
+          }
+
           window.playerState.adjustSkill(
-            result.idAssunto, 
-            result.isCorrect, 
+            result.idAssunto,
+            result.isCorrect,
             result.dificuldade,
             result.timeTaken
           );
@@ -134,9 +140,121 @@ class OverworldEvent {
   }
 
 
+  popup(resolve) {
+    const popup = new PopupWindow({
+      title: this.event.title || "",
+      text: this.event.text || "",
+      onComplete: () => resolve(),
+    });
+    popup.init(document.querySelector(".game-container"));
+  }
+
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;
     resolve();
+  }
+
+  changeSprite(resolve) {
+    const who = this.map.gameObjects[this.event.who];
+    if (who) {
+      who.sprite.image.src = this.event.src;
+    }
+    resolve();
+  }
+
+  arcadeStart(resolve) {
+    window.arcadeStats = { total: 0, correct: 0, startTime: Date.now() };
+
+    // Cria o HUD do timer
+    let timerEl = document.querySelector(".ArcadeTimer");
+    if (!timerEl) {
+      timerEl = document.createElement("div");
+      timerEl.classList.add("ArcadeTimer");
+      document.querySelector(".game-container").appendChild(timerEl);
+    }
+    timerEl.textContent = "0:00";
+
+    // Atualiza a cada segundo
+    clearInterval(window.arcadeTimerInterval);
+    window.arcadeTimerInterval = setInterval(() => {
+      const elapsed = Date.now() - window.arcadeStats.startTime;
+      const m = Math.floor(elapsed / 60000);
+      const s = Math.floor((elapsed % 60000) / 1000);
+      timerEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+    }, 1000);
+
+    resolve();
+  }
+
+  arcadeComplete(resolve) {
+    const flags = [
+      "ARCADE_FUNCOES_COMPLETO",
+      "ARCADE_TRIGONOMETRIA_COMPLETO",
+      "ARCADE_LOGARITMOS_COMPLETO",
+      "ARCADE_GEOMETRIA_COMPLETO",
+      "ARCADE_PROBABILIDADE_COMPLETO",
+      "ARCADE_MATRIZES_COMPLETO",
+    ];
+    const allDone = flags.every(f => window.playerState.storyFlags[f]);
+    if (!allDone) {
+      resolve();
+      return;
+    }
+
+    const stats = window.arcadeStats || { total: 0, correct: 0, startTime: Date.now() };
+    const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+
+    // Para o timer da interface
+    clearInterval(window.arcadeTimerInterval);
+
+    // Calcula tempo decorrido
+    const elapsedMs = Date.now() - (stats.startTime || Date.now());
+    const minutes = Math.floor(elapsedMs / 60000);
+    const seconds = Math.floor((elapsedMs % 60000) / 1000);
+    const timeStr = `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+
+    // Salva sessão no histórico
+    const historyKey = "JornadaMatemagica_ArcadeHistory";
+    const history = JSON.parse(localStorage.getItem(historyKey) || "[]");
+    history.push({
+      date: new Date().toLocaleString("pt-BR"),
+      correct: stats.correct,
+      total: stats.total,
+      pct,
+      time: timeStr,
+      elapsedMs,
+    });
+    localStorage.setItem(historyKey, JSON.stringify(history));
+
+    const popup = new PopupWindow({
+      title: "Parabéns!",
+      text: `Você derrotou todos os magos do Ginásio!<br><br>`
+        + `<b>Acertos:</b> ${stats.correct}/${stats.total} (${pct}%)<br>`
+        + `<b>Tempo:</b> ${timeStr}<br><br>`
+        + `O que deseja fazer?`,
+      buttons: [
+        { label: "Jogar novamente", value: "replay" },
+        { label: "Voltar ao menu", value: "menu" },
+      ],
+      onComplete: (value) => {
+        if (value === "replay") {
+          // Reseta flags e stats do arcade
+          flags.forEach(f => delete window.playerState.storyFlags[f]);
+          window.arcadeStats = { total: 0, correct: 0, startTime: Date.now() };
+          const oldTimer = document.querySelector(".ArcadeTimer");
+          if (oldTimer) oldTimer.remove();
+          // Recarrega o mapa
+          this.map.overworld.startMap(
+            window.OverworldMaps["Corredor_M"]
+          );
+          this.map.overworld.startGameLoop();
+          resolve();
+        } else {
+          location.reload();
+        }
+      },
+    });
+    popup.init(document.querySelector(".game-container"));
   }
 
   pause(resolve){

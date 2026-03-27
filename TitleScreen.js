@@ -83,8 +83,53 @@ class TitleScreen {
           }
           resolve(true); // continuar jogo — campanha já vem salva no progresso
         }
+      },
+      this.hasArcadeHistory() && {
+        label: "Histórico Arcade",
+        description: "Veja seu desempenho nas sessões do Ensino Médio",
+        handler: () => {
+          this.showArcadeHistory(container);
+        }
       }
     ].filter(Boolean);
+  }
+
+  hasArcadeHistory() {
+    const history = JSON.parse(localStorage.getItem("JornadaMatemagica_ArcadeHistory") || "[]");
+    return history.length > 0;
+  }
+
+  showArcadeHistory(container) {
+    const history = JSON.parse(localStorage.getItem("JornadaMatemagica_ArcadeHistory") || "[]");
+    const last10 = history.slice(-10).reverse();
+
+    const rows = last10.map((s, i) =>
+      `<tr>
+        <td>${last10.length - i}</td>
+        <td>${s.date}</td>
+        <td>${s.correct}/${s.total}</td>
+        <td>${s.pct}%</td>
+        <td>${s.time || "--"}</td>
+      </tr>`
+    ).join("");
+
+    const tableHtml = `
+      <table style="width:100%; border-collapse:collapse; font-size:10px; text-align:center;">
+        <tr style="border-bottom:1px solid var(--menu-border-color);">
+          <th>#</th><th>Data</th><th>Acertos</th><th>Taxa</th><th>Tempo</th>
+        </tr>
+        ${rows}
+      </table>
+    `;
+
+    const popup = new PopupWindow({
+      title: "Histórico Arcade",
+      text: history.length === 0
+        ? "Nenhuma sessão registrada ainda."
+        : tableHtml,
+      onComplete: () => {},
+    });
+    popup.init(container);
   }
 
   createElement() {

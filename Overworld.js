@@ -88,6 +88,16 @@ class Overworld {
     this.progress.startingHeroX = this.map.gameObjects.hero.x;
     this.progress.startingHeroY = this.map.gameObjects.hero.y;
     this.progress.startingHeroDirection = this.map.gameObjects.hero.direction;
+
+    // Dispara cutscenes de entrada do mapa (se houver)
+    if (mapConfig.entryCutscene) {
+      const shouldPlay = (mapConfig.entryCutscene.required || []).every(
+        sf => playerState.storyFlags[sf]
+      );
+      if (shouldPlay) {
+        this.map.startCutscene(mapConfig.entryCutscene.events);
+      }
+    }
   }
 
   checkResponsive() {
