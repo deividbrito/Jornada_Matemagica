@@ -45,8 +45,8 @@ class TitleScreen {
           }
         },
         {
-          label: "Ensino Médio",
-          description: "Questões do 1º ao 3º ano do EM",
+          label: "Modo ENEM",
+          description: "Desafios no estilo ENEM — modo arcade!",
           handler: () => {
             menu.end();
             screen.remove();
@@ -86,7 +86,7 @@ class TitleScreen {
       },
       this.hasArcadeHistory() && {
         label: "Histórico Arcade",
-        description: "Veja seu desempenho nas sessões do Ensino Médio",
+        description: "Veja seu desempenho nas sessões do Modo ENEM",
         handler: () => {
           this.showArcadeHistory(container);
         }

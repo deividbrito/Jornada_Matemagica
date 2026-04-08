@@ -163,27 +163,96 @@ class OverworldEvent {
   }
 
   arcadeStart(resolve) {
-    window.arcadeStats = { total: 0, correct: 0, startTime: Date.now() };
+    // Popup para escolher quantidade de questões por mago
+    const popup = new PopupWindow({
+      title: "Configuração",
+      text: "Quantas questões por mago?",
+      buttons: [
+        { label: "3", value: "3" },
+        { label: "5", value: "5" },
+        { label: "7", value: "7" },
+        { label: "10", value: "10" },
+      ],
+      onComplete: (value) => {
+        const count = parseInt(value) || 5;
+        window.arcadeStats = {
+          total: 0, correct: 0,
+          startTime: Date.now(),
+          questionsPerMage: count,
+        };
 
-    // Cria o HUD do timer
-    let timerEl = document.querySelector(".ArcadeTimer");
-    if (!timerEl) {
-      timerEl = document.createElement("div");
-      timerEl.classList.add("ArcadeTimer");
-      document.querySelector(".game-container").appendChild(timerEl);
-    }
-    timerEl.textContent = "0:00";
+        // Música ambiente do arcade
+        window.audioManager.playBgm("audio/bgm/arcade.mp3");
 
-    // Atualiza a cada segundo
-    clearInterval(window.arcadeTimerInterval);
-    window.arcadeTimerInterval = setInterval(() => {
-      const elapsed = Date.now() - window.arcadeStats.startTime;
-      const m = Math.floor(elapsed / 60000);
-      const s = Math.floor((elapsed % 60000) / 1000);
-      timerEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
-    }, 1000);
+        // Cria o HUD do timer
+        let timerEl = document.querySelector(".ArcadeTimer");
+        if (!timerEl) {
+          timerEl = document.createElement("div");
+          timerEl.classList.add("ArcadeTimer");
+          document.querySelector(".game-container").appendChild(timerEl);
+        }
+        timerEl.textContent = "0:00";
 
-    resolve();
+        // Atualiza a cada segundo
+        clearInterval(window.arcadeTimerInterval);
+        window.arcadeTimerInterval = setInterval(() => {
+          const elapsed = Date.now() - window.arcadeStats.startTime;
+          const m = Math.floor(elapsed / 60000);
+          const s = Math.floor((elapsed % 60000) / 1000);
+          timerEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+        }, 1000);
+
+        resolve();
+      },
+    });
+    popup.init(document.querySelector(".game-container"));
+  }
+
+  arcadeQuiz(resolve) {
+    const count = (window.arcadeStats && window.arcadeStats.questionsPerMage) || 5;
+    const idAssunto = this.event.idAssunto || null;
+    let completed = 0;
+
+    // Troca para música de batalha
+    window.audioManager.playBgm("audio/bgm/battle.mp3");
+
+    const runNext = () => {
+      if (completed >= count) {
+        // Volta para música ambiente
+        window.audioManager.playBgm("audio/bgm/arcade.mp3");
+        resolve();
+        return;
+      }
+
+      const dificuldade = this.event.dificuldade || window.playerState.getDifficultyForAssunto(idAssunto);
+      const campanha = window.progress?.campanha || "fundamental";
+
+      const quizGame = new QuizGame({
+        onComplete: (result) => {
+          if (result && typeof result.isCorrect === "boolean") {
+            if (window.progress?.campanha === "medio") {
+              window.arcadeStats = window.arcadeStats || { total: 0, correct: 0 };
+              window.arcadeStats.total++;
+              if (result.isCorrect) window.arcadeStats.correct++;
+            }
+            window.playerState.adjustSkill(
+              result.idAssunto,
+              result.isCorrect,
+              result.dificuldade,
+              result.timeTaken
+            );
+          }
+          completed++;
+          runNext();
+        },
+        idAssunto,
+        dificuldade,
+        campanha,
+      });
+      quizGame.init(document.querySelector(".game-container"));
+    };
+
+    runNext();
   }
 
   arcadeComplete(resolve) {
@@ -204,8 +273,9 @@ class OverworldEvent {
     const stats = window.arcadeStats || { total: 0, correct: 0, startTime: Date.now() };
     const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
 
-    // Para o timer da interface
+    // Para o timer e a música
     clearInterval(window.arcadeTimerInterval);
+    window.audioManager.stopBgm();
 
     // Calcula tempo decorrido
     const elapsedMs = Date.now() - (stats.startTime || Date.now());
@@ -223,6 +293,7 @@ class OverworldEvent {
       pct,
       time: timeStr,
       elapsedMs,
+      questionsPerMage: stats.questionsPerMage || 5,
     });
     localStorage.setItem(historyKey, JSON.stringify(history));
 

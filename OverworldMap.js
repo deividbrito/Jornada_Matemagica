@@ -1876,11 +1876,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Mago Funcionalus: Vamos ver se você domina o mundo das funções!" },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
+              { type: "arcadeQuiz", idAssunto: 2 },
               { type: "textMessage", text: "Mago Funcionalus: Impossível... você resolveu todas!" },
               { type: "changeSprite", who: "mago1", src: "imagens/personagens/vilao4_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_FUNCOES_COMPLETO" },
@@ -1909,11 +1905,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Mago Trigonalis: Prepare-se para os desafios da trigonometria!" },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
+              { type: "arcadeQuiz", idAssunto: 2 },
               { type: "textMessage", text: "Mago Trigonalis: Impressionante... você me derrotou!" },
               { type: "changeSprite", who: "mago2", src: "imagens/personagens/vilao2_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_TRIGONOMETRIA_COMPLETO" },
@@ -1943,11 +1935,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Mago Logarithmicus: Vou te testar com o poder dos logaritmos!" },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
+              { type: "arcadeQuiz", idAssunto: 2 },
               { type: "textMessage", text: "Mago Logarithmicus: Como...?! Você venceu!" },
               { type: "changeSprite", who: "mago3", src: "imagens/personagens/vilao_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_LOGARITMOS_COMPLETO" },
@@ -1977,11 +1965,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Maga Geometrix: A geometria analítica será sua ruína!" },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
+              { type: "arcadeQuiz", idAssunto: 2 },
               { type: "textMessage", text: "Maga Geometrix: Não é possível... você decifrou tudo!" },
               { type: "changeSprite", who: "mago4", src: "imagens/personagens/vilao7_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_GEOMETRIA_COMPLETO" },
@@ -2011,11 +1995,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Mago Probabilius: Qual a probabilidade de você me vencer? Zero!" },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
+              { type: "arcadeQuiz", idAssunto: 2 },
               { type: "textMessage", text: "Mago Probabilius: Estatisticamente... impossível! Mas você conseguiu!" },
               { type: "changeSprite", who: "mago5", src: "imagens/personagens/vilao5_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_PROBABILIDADE_COMPLETO" },
@@ -2045,11 +2025,7 @@ window.OverworldMaps = {
           {
             events: [
               { type: "textMessage", text: "Mago Matricius: Matrizes e determinantes vão te confundir!" },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
-              { type: "quizGame", idAssunto: 2 },
+              { type: "arcadeQuiz", idAssunto: 2 },
               { type: "textMessage", text: "Mago Matricius: Derrotado... suas respostas foram precisas!" },
               { type: "changeSprite", who: "mago6", src: "imagens/personagens/vilao3_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_MATRIZES_COMPLETO" },
@@ -2077,7 +2053,7 @@ window.OverworldMaps = {
         { type: "arcadeStart" },
         { type: "popup",
           title: "Modo Arcade",
-          text: "Bem-vinda ao Ginásio dos Magos!<br><br>Aqui você enfrentará <b>6 magos</b>, cada um mestre em um tema da matemática do Ensino Médio.<br><br>Ande até um mago e interaja com <b>Enter</b> para iniciar o desafio. Responda corretamente para derrotá-lo!<br><br>Boa sorte!"
+          text: "Bem-vinda ao Ginásio dos Magos!<br><br>Aqui você enfrentará <b>6 magos</b>, cada um mestre em um tema cobrado no <b>ENEM</b>.<br><br>Ande até um mago e interaja com <b>Enter</b> para iniciar o desafio. Responda corretamente para derrotá-lo!<br><br>Boa sorte!"
         },
       ]
     },

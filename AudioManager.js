@@ -1,7 +1,7 @@
 class AudioManager {
   constructor() {
-    this.sfxVolume = 0.5;
-    this.bgmVolume = 0.3;
+    this.sfxVolume = 0.25;
+    this.bgmVolume = 0.15;
     this.currentBgm = null;
     
     // Dicionário de efeitos sonoros pré-carregados
@@ -23,7 +23,22 @@ class AudioManager {
   }
 
   playBgm(bgmSrc) {
-    // Lógica para parar a música atual e tocar a nova em loop
+    if (this.currentBgm && this.currentBgm.src.includes(bgmSrc)) {
+      return; // já está tocando essa música
+    }
+    this.stopBgm();
+    this.currentBgm = new Audio(bgmSrc);
+    this.currentBgm.volume = this.bgmVolume;
+    this.currentBgm.loop = true;
+    this.currentBgm.play().catch(() => {});
+  }
+
+  stopBgm() {
+    if (this.currentBgm) {
+      this.currentBgm.pause();
+      this.currentBgm.currentTime = 0;
+      this.currentBgm = null;
+    }
   }
 }
 
