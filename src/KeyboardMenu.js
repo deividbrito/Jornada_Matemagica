@@ -1,0 +1,119 @@
+class KeyboardMenu {
+  constructor(config={}) {
+    this.options = []; 
+    this.up = null;
+    this.down = null;
+    this.prevFocus = null;
+    this.descriptionContainer = config.descriptionContainer || null;
+  }
+
+// --- DENTRO DE KeyboardMenu.js ---
+  setOptions(options) {
+    this.options = options;
+    this.element.innerHTML = this.options.map((option, index) => {
+      const disabledAttr = option.disabled ? "disabled" : "";
+      return (`
+        <div class="option">
+          <button ${disabledAttr} data-button="${index}" data-description="${option.description}">
+            ${option.label}
+          </button>
+          <span class="right">${option.right ? option.right() : ""}</span>
+        </div>
+      `)
+    }).join("");
+
+    this.element.querySelectorAll("button").forEach(button => {
+
+      button.addEventListener("click", () => {
+        // TOCA O SOM DE SELEÇÃO/CONFIRMAÇÃO AO CLICAR
+        if (window.audioManager) window.audioManager.playSfx("click");
+        
+        const chosenOption = this.options[ Number(button.dataset.button) ];
+        chosenOption.handler();
+      })
+      
+      button.addEventListener("mouseenter", () => {
+        button.focus();
+      })
+      
+      button.addEventListener("focus", () => {
+        // TOCA UM SOM SUTIL (Pode ser o "click" ou você pode criar um "hover.mp3" no AudioManager)
+        if (window.audioManager && this.prevFocus !== button) {
+            // Reutilizando o click por enquanto. O ideal é ter um som "hover" mais suave.
+            window.audioManager.playSfx("click"); 
+        }
+        
+        this.prevFocus = button;
+        this.descriptionElementText.innerText = button.dataset.description;
+      })
+    })
+
+    setTimeout(() => {
+      this.element.querySelector("button[data-button]:not([disabled])").focus();
+    }, 10)
+  }
+
+  createElement() {
+    this.element = document.createElement("div");
+    this.element.classList.add("KeyboardMenu");
+
+    //Description box element
+    this.descriptionElement = document.createElement("div");
+    this.descriptionElement.classList.add("DescriptionBox");
+    this.descriptionElement.innerHTML = (`<p>I will provide information!</p>`);
+    this.descriptionElementText = this.descriptionElement.querySelector("p");
+  }
+
+  end() {
+    this.element.remove();
+    this.descriptionElement.remove();
+    this._unbindKeys();
+  }
+
+  _unbindKeys() {
+    if (this.up)   { this.up.unbind();   this.up = null; }
+    if (this.down) { this.down.unbind(); this.down = null; }
+  }
+
+  _bindKeys() {
+    if (this.up || this.down) return;
+    this.up = new window.KeyPressListener("ArrowUp", () => {
+      if (!this.prevFocus) return;
+      const current = Number(this.prevFocus.getAttribute("data-button"));
+      const buttons = Array.from(this.element.querySelectorAll("button[data-button]:not([disabled])"));
+      const reversed = buttons.slice().reverse();
+      const prev = reversed.find(el => Number(el.dataset.button) < current);
+      (prev || reversed[0])?.focus();
+    });
+    this.down = new window.KeyPressListener("ArrowDown", () => {
+      if (!this.prevFocus) return;
+      const current = Number(this.prevFocus.getAttribute("data-button"));
+      const buttons = Array.from(this.element.querySelectorAll("button[data-button]:not([disabled])"));
+      const next = buttons.find(el => Number(el.dataset.button) > current);
+      (next || buttons[0])?.focus();
+    });
+  }
+
+  // Temporariamente desativa o teclado do menu (mantém DOM visível).
+  pause() {
+    this._unbindKeys();
+  }
+
+  // Reativa o teclado do menu e recupera o foco onde estava.
+  resume() {
+    this._bindKeys();
+    if (this.prevFocus) {
+      setTimeout(() => this.prevFocus.focus(), 10);
+    }
+  }
+
+  init(container) {
+    this.createElement();
+    (this.descriptionContainer || container).appendChild(this.descriptionElement);
+    container.appendChild(this.element);
+    this._bindKeys();
+  }
+
+}
+// Expor para o escopo global (compat com modo legacy de scripts soltos)
+window.KeyboardMenu = KeyboardMenu;

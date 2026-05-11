@@ -1,0 +1,26 @@
+# Dependencies (em uso a partir da Onda 3 com Vite)
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Tooling
+.eslintcache
+*.tsbuildinfo
