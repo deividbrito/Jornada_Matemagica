@@ -1,5 +1,6 @@
 class QuizGame {
-  constructor({ onComplete, idAssunto = null, dificuldade = null, campanha = null }) {
+  constructor({ onComplete, idAssunto = null, dificuldade = null, campanha = null, useFiftyFifty = false }) {
+    this.useFiftyFifty = useFiftyFifty;
     this.text = "Carregando pergunta...";
     this.options = [];
     this.feedback = "";
@@ -26,14 +27,25 @@ class QuizGame {
       if (this.idAssunto !== null && this.idAssunto !== undefined) {
         params.append("id_assunto", this.idAssunto);
       }
-      if (this.dificuldade) params.append("dificuldade", this.dificuldade);
+      // ENEM (medio) tem pool com dificuldade única, então não filtramos por nível.
+      // Só fundamental envia dificuldade adaptativa.
+      if (this.dificuldade && this.campanha !== "medio") {
+        params.append("dificuldade", this.dificuldade);
+      }
       params.append("campanha", this.campanha);
+      if (this.useFiftyFifty) params.append("fiftyFifty", "true");
 
       const url = `http://localhost:3000/api/quizzes/random?${params.toString()}`;
+      if (this.useFiftyFifty) console.log("[50/50] Request URL:", url);
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = await response.json();
+      if (this.useFiftyFifty) {
+        console.log("[50/50] Response options:", data.options);
+        const hiddenCount = (data.options || []).filter(o => o.hidden).length;
+        console.log("[50/50] Hidden count from server:", hiddenCount);
+      }
 
       this.quizId = data.id;
       this.text = data.pergunta ?? "Pergunta indisponível.";
@@ -118,12 +130,31 @@ class QuizGame {
 
     this.element.appendChild(optionsContainer);
 
-    // RevealingText só no parágrafo de texto
-    this.revealingText = new RevealingText({
-      element: p,
-      text: this.text
-    });
-    p.innerHTML = "";
+    // Buff 50/50 — o servidor marca 2 alternativas erradas como `hidden`.
+    // Cliente só aplica o visual nas que vieram marcadas.
+    if (this.useFiftyFifty) {
+      const btns = optionsContainer.querySelectorAll(".QuizTutorial_button2");
+      this.options.forEach((opt, i) => {
+        if (opt.hidden && btns[i]) {
+          btns[i].disabled = true;
+          btns[i].style.opacity = "0.25";
+          btns[i].style.textDecoration = "line-through";
+        }
+      });
+    }
+
+    // ENEM (médio): texto aparece completo de uma vez, sem animação.
+    // Fundamental: mantém o efeito de "escrita" letra-por-letra.
+    if (this.campanha === "medio") {
+      this.revealingText = null;
+      // p.innerHTML já tem this.text (seteado acima), nada a fazer.
+    } else {
+      this.revealingText = new RevealingText({
+        element: p,
+        text: this.text
+      });
+      p.innerHTML = "";
+    }
 
     setTimeout(() => {
       const firstBtn = this.element.querySelector(".QuizTutorial_button2");
@@ -192,7 +223,8 @@ class QuizGame {
     const imgContainer = this.element.querySelector(".QuizTutorial_images");
     if (imgContainer) imgContainer.remove();
 
-    this.element.querySelector(".QuizTutorial_p").innerHTML = "";
+    const pEl = this.element.querySelector(".QuizTutorial_p");
+    pEl.innerHTML = "";
 
     const successMessages = ["Muito bem! Você acertou! ", "Mandou super bem! ", "Ótimo trabalho!", "Que incrível! Você conseguiu! "];
     const errorMessages = ["Quase lá! Vamos entender juntos: ", "Não foi dessa vez! Veja só: ", "Boa tentativa! Agora veja: ", "Errar faz parte! Vamos aprender: "];
@@ -200,12 +232,18 @@ class QuizGame {
     const messageArray = isCorrect ? successMessages : errorMessages;
     const randomMessage = messageArray[Math.floor(Math.random() * messageArray.length)];
     const symbol = isCorrect ? "✅" : "❌";
+    const feedbackText = `${symbol} ${randomMessage}${this.feedback}`;
 
-    this.revealingText = new RevealingText({
-      element: this.element.querySelector(".QuizTutorial_p"),
-      text: `${symbol} ${randomMessage}${this.feedback}`
-    });
-    this.revealingText.init();
+    if (this.campanha === "medio") {
+      pEl.textContent = feedbackText;
+      this.revealingText = null;
+    } else {
+      this.revealingText = new RevealingText({
+        element: pEl,
+        text: feedbackText
+      });
+      this.revealingText.init();
+    }
   }
 
   done() {

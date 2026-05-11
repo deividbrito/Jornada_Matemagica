@@ -2,10 +2,11 @@ class RevealingText {
   constructor(config) {
     this.element = config.element;
     this.text = config.text || "";
-    this.speed = config.speed || 60;
+    this.speed = config.speed || 15;
 
     this.timeout = null;
     this.isDone = false;
+    this._clickHandler = null;
   }
 
   revealOneCharacter(list) {
@@ -18,6 +19,7 @@ class RevealingText {
       }, next.delayAfter);
     } else {
       this.isDone = true;
+      this._removeClickHandler();
     }
   }
 
@@ -27,6 +29,15 @@ class RevealingText {
     this.element.querySelectorAll("span").forEach(s => {
       s.classList.add("revealed");
     });
+    this._removeClickHandler();
+  }
+
+  _removeClickHandler() {
+    if (this._clickHandler) {
+      this.element.removeEventListener("click", this._clickHandler);
+      this.element.style.cursor = "";
+      this._clickHandler = null;
+    }
   }
 
   init() {
@@ -43,6 +54,11 @@ class RevealingText {
         delayAfter: character === " " ? 0 : this.speed
       });
     });
+
+    // Clicar no texto pula o reveal e mostra tudo de uma vez.
+    this._clickHandler = () => this.warpToDone();
+    this.element.addEventListener("click", this._clickHandler);
+    this.element.style.cursor = "pointer";
 
     this.revealOneCharacter(characters);
   }

@@ -54,7 +54,8 @@
 .PopupWindow_buttons {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .PopupWindow_button {
@@ -74,18 +75,21 @@
   color: #fff;
 }
 
-/* Timer do modo arcade */
+/* Timer do modo arcade — mesmo estilo das caixas do ArcadeHUD */
 .ArcadeTimer {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 6px;
+  right: 6px;
   z-index: 500;
   background: rgba(0, 0, 0, 0.6);
-  color: var(--menu-font-color);
-  font-family: var(--font-retro);
-  font-size: 10px;
-  padding: 2px 6px;
-  border: 1px solid var(--menu-border-color);
+  color: #ffeb3b;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 4px 6px;
+  border: 1px solid #555;
+  box-shadow: 0 0 0 1px #000;
   letter-spacing: 1px;
+  line-height: 1;
   pointer-events: none;
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 }

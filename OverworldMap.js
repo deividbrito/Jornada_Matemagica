@@ -163,7 +163,7 @@ window.OverworldMaps = {
                 y: utils.withGrid(17),
                 direction: "up",
                 requireConfirmation: true,
-                confirmationText: "Deseja ir até o pátio? O mago Potencialus Decimus te aguarda lá, com desafios de aproximação de números a potências de 10!"
+                confirmationText: "Deseja ir até o pátio? O Prof. Potencialus Decimus te aguarda lá, com desafios de aproximação de números a potências de 10!"
               },
             ]
           }
@@ -267,7 +267,7 @@ window.OverworldMaps = {
               y: utils.withGrid(18),
               direction: "up",
               requireConfirmation: true,
-              confirmationText: "Deseja ir até a sala 2? O mago Fulano te desafiará com operações de números naturais!"
+              confirmationText: "Deseja ir até a sala 2? O Prof. Fulano te aplicará uma prova sobre operações com números naturais!"
             }
           ]
         }
@@ -281,7 +281,7 @@ window.OverworldMaps = {
               y: utils.withGrid(18),
               direction: "up",
               requireConfirmation: true,
-              confirmationText: "Deseja ir até a sala 2? O mago Operanis Naturalis te desafiará com operações de números naturais!"
+              confirmationText: "Deseja ir até a sala 2? O Prof. Operanis Naturalis te aplicará uma prova sobre operações com números naturais!"
             }
           ]
         }
@@ -295,7 +295,7 @@ window.OverworldMaps = {
               y: utils.withGrid(18),
               direction: "up",
               requireConfirmation: true,
-              confirmationText: "Deseja ir até a sala 2? O mago Operanis Naturalis te desafiará com operações de números naturais!"
+              confirmationText: "Deseja ir até a sala 2? O Prof. Operanis Naturalis te aplicará uma prova sobre operações com números naturais!"
             }
           ]
         }
@@ -312,7 +312,7 @@ window.OverworldMaps = {
               direction: "up",
               requireConfirmation: true,
               confirmationText: `
-              <b style="font-family: 'Courier New', monospace;">Mago Decimalus:</b><br>
+              <b style="font-family: 'Courier New', monospace;">Prof. Decimalus:</b><br>
               Deseja ser desafiada nos números decimais?`
             }
           ]
@@ -328,7 +328,7 @@ window.OverworldMaps = {
               direction: "up",
               requireConfirmation: true,
               confirmationText: `
-              <b style="font-family: 'Courier New', monospace;">Mago Decimalus:</b><br>
+              <b style="font-family: 'Courier New', monospace;">Prof. Decimalus:</b><br>
               Deseja ser desafiada nos números decimais?`
             }
           ]
@@ -344,7 +344,7 @@ window.OverworldMaps = {
               direction: "up",
               requireConfirmation: true,
               confirmationText: `
-              <b style="font-family: 'Courier New', monospace;">Mago Decimalus:</b><br>
+              <b style="font-family: 'Courier New', monospace;">Prof. Decimalus:</b><br>
               Deseja ser desafiada nos números decimais?`
             }
           ]
@@ -582,7 +582,7 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO7D3_COMPLETO"],
             events: [
-              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
             ]
           },
           {
@@ -705,7 +705,7 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO2D3_COMPLETO"],
             events: [
-              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
             ]
           },
           {
@@ -875,7 +875,7 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO1D3_COMPLETO"],
             events: [
-              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
             ]
           },
           {
@@ -1039,14 +1039,14 @@ window.OverworldMaps = {
             required: ["FALOU_COM_PEDRO"],
             events:[
             {type: "textMessage", text: "Alice: Professora, o que aconteceu com o Pedro?"},
-            {type: "textMessage", text: "Professora: Ele foi atormentado por um dos magos e agora está amendrotado. Estou fazendo tudo que posso paara acalmá-lo."},
+            {type: "textMessage", text: "Professora: Ele foi abalado pelos desafios da prova e agora está amedrontado. Estou fazendo tudo que posso para acalmá-lo."},
             ]
           },
           {
             events: [
               { type: "textMessage", text: "Alice: Professora! O que está acontecendo?", faceHero: "professora" },
               { type: "textMessage", text: "Professora: Não sei ao certo, Alice... "},
-              { type: "textMessage", text: "Professora: Mas seja lá quem são estes magos... você deve enfrentá-los."},
+              { type: "textMessage", text: "Professora: Mas quais forem esses desafios... você precisa enfrentá-los."},
               { type: "textMessage", text: "Professora: Enfrente e vença seus desafios, para que este pesadelo acabe."},
               { type: "textMessage", text: "Alice: Como, professora? Como venço esses desafios?"},
               { type: "textMessage", text: "Professora: Jogue pelas regras deles e responda cada pergunta da forma correta."},
@@ -1147,7 +1147,7 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO3D3_COMPLETO"],
             events: [
-              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
             ]
           },
           {
@@ -1257,7 +1257,7 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO5D3_COMPLETO"],
             events: [
-              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
             ]
           },
           {
@@ -1483,7 +1483,7 @@ window.OverworldMaps = {
           {
             required: ["DESAFIO6D3_COMPLETO"],
             events: [
-              {type: "textMessage", text: "Mago: Você...me derrotou?"},
+              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
             ]
           },
           {
@@ -1796,13 +1796,13 @@ window.OverworldMaps = {
         talking: [
           {
             events: [
-              { type: "textMessage", text: "Mago: Está pronta para o desafio?" },
+              { type: "textMessage", text: "Prof.: Está pronta para o desafio?" },
               { type: "quizGame", idAssunto: 1 }, // sem dificuldade explícita
               { type: "quizGame", idAssunto: 1 },
               { type: "quizGame", idAssunto: 1 },
               { type: "quizGame", idAssunto: 1 },
               { type: "quizGame", idAssunto: 1 },
-              { type: "textMessage", text: "Mago: Hmpf. Parece que você estava mais preparada do que o imaginado." },
+              { type: "textMessage", text: "Prof.: Hmpf. Parece que você estava mais preparada do que eu imaginava." },
               { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" },
               /*
               {
@@ -1821,7 +1821,7 @@ window.OverworldMaps = {
                   label: "Não",
                   value: "no",
                   events: [
-                    { type: "textMessage", text: "Mago: Tudo bem, volte quando estiver pronta." },
+                    { type: "textMessage", text: "Prof.: Tudo bem, volte quando estiver pronta." },
                     { type: "changeMap", map: "Sala1", x: utils.withGrid(15), y: utils.withGrid(16), direction: "up" }
                   ]
                 }
@@ -1842,219 +1842,99 @@ window.OverworldMaps = {
 // MAPA ARCADE — ENSINO MÉDIO
 // =============================================
 
-  Corredor_M: {
-    id: "Corredor_M",
-    lowerSrc: "imagens/mapas/ginasio.png",
+  Auditorio_M: {
+    id: "Auditorio_M",
+    lowerSrc: "imagens/mapas/auditorio.png",
     upperSrc: "imagens/personagens/vazio.png",
     gameObjects: {
       hero: new Person({
         isPlayerControlled: true,
-        x: utils.withGrid(11),
-        y: utils.withGrid(11),
+        x: utils.withGrid(12),
+        y: utils.withGrid(14),
         src: "imagens/personagens/alice.png",
       }),
 
-      // === MAGOS DO ENSINO MÉDIO ===
+      // === PROF.-CHEFE NO PALCO DO AUDITÓRIO ===
 
       mago1: new Person({
-        x: utils.withGrid(3),
-        y: utils.withGrid(8),
-        src: "imagens/personagens/vilao4.png",
-        behaviorLoop: [
-          { type: "stand", direction: "down", time: 2000 },
-          { type: "stand", direction: "right", time: 1500 },
-          { type: "stand", direction: "down", time: 2500 },
-          { type: "stand", direction: "left", time: 1000 },
-        ],
-        talking: [
-          {
-            required: ["ARCADE_FUNCOES_COMPLETO"],
-            events: [
-              { type: "textMessage", text: "Mago Funcionalus: Você já dominou minhas funções..." },
-            ]
-          },
-          {
-            events: [
-              { type: "textMessage", text: "Mago Funcionalus: Vamos ver se você domina o mundo das funções!" },
-              { type: "arcadeQuiz", idAssunto: 2 },
-              { type: "textMessage", text: "Mago Funcionalus: Impossível... você resolveu todas!" },
-              { type: "changeSprite", who: "mago1", src: "imagens/personagens/vilao4_derrotado.png" },
-              { type: "addStoryFlag", flag: "ARCADE_FUNCOES_COMPLETO" },
-              { type: "arcadeComplete" },
-            ]
-          }
-        ]
-      }),
-
-      mago2: new Person({
-        x: utils.withGrid(10),
-        y: utils.withGrid(8),
-        src: "imagens/personagens/vilao2.png",
-        behaviorLoop: [
-          { type: "stand", direction: "left", time: 1800 },
-          { type: "stand", direction: "down", time: 2200 },
-          { type: "stand", direction: "right", time: 1800 },
-        ],
-        talking: [
-          {
-            required: ["ARCADE_TRIGONOMETRIA_COMPLETO"],
-            events: [
-              { type: "textMessage", text: "Mago Trigonalis: Seno, cosseno, tangente... nada foi suficiente!" },
-            ]
-          },
-          {
-            events: [
-              { type: "textMessage", text: "Mago Trigonalis: Prepare-se para os desafios da trigonometria!" },
-              { type: "arcadeQuiz", idAssunto: 2 },
-              { type: "textMessage", text: "Mago Trigonalis: Impressionante... você me derrotou!" },
-              { type: "changeSprite", who: "mago2", src: "imagens/personagens/vilao2_derrotado.png" },
-              { type: "addStoryFlag", flag: "ARCADE_TRIGONOMETRIA_COMPLETO" },
-              { type: "arcadeComplete" },
-            ]
-          }
-        ]
-      }),
-
-      mago3: new Person({
-        x: utils.withGrid(18),
-        y: utils.withGrid(8),
+        x: utils.withGrid(12),
+        y: utils.withGrid(7),
         src: "imagens/personagens/vilao.png",
         behaviorLoop: [
-          { type: "stand", direction: "down", time: 2400 },
-          { type: "stand", direction: "left", time: 1200 },
-          { type: "stand", direction: "down", time: 1800 },
-          { type: "stand", direction: "right", time: 1600 },
+          { type: "stand", direction: "down", time: 3000 },
         ],
         talking: [
           {
-            required: ["ARCADE_LOGARITMOS_COMPLETO"],
+            required: ["ARCADE_DUELO_COMPLETO"],
             events: [
-              { type: "textMessage", text: "Mago Logarithmicus: Meus logaritmos... todos neutralizados!" },
+              { type: "textMessage", text: "Prof.-chefe: Você já provou seu valor..." },
             ]
           },
           {
             events: [
-              { type: "textMessage", text: "Mago Logarithmicus: Vou te testar com o poder dos logaritmos!" },
-              { type: "arcadeQuiz", idAssunto: 2 },
-              { type: "textMessage", text: "Mago Logarithmicus: Como...?! Você venceu!" },
-              { type: "changeSprite", who: "mago3", src: "imagens/personagens/vilao_derrotado.png" },
-              { type: "addStoryFlag", flag: "ARCADE_LOGARITMOS_COMPLETO" },
-              { type: "arcadeComplete" },
+              { type: "textMessage", text: "Prof.-chefe: Encare meu desafio se for capaz!" },
+              { type: "arcadeBattle" },
+              { type: "textMessage", text: "Prof.-chefe: Impressionante... você foi aprovada com louvor!" },
+              { type: "changeSprite", who: "mago1", src: "imagens/personagens/vilao_derrotado.png" },
+              { type: "addStoryFlag", flag: "ARCADE_DUELO_COMPLETO" },
+              { type: "arcadeCheckEnd" },
             ]
           }
         ]
       }),
 
-      mago4: new Person({
-        x: utils.withGrid(5),
-        y: utils.withGrid(10),
-        src: "imagens/personagens/vilao7.png",
-        behaviorLoop: [
-          { type: "stand", direction: "right", time: 2000 },
-          { type: "stand", direction: "up", time: 1400 },
-          { type: "stand", direction: "left", time: 2000 },
-          { type: "stand", direction: "down", time: 1000 },
-        ],
-        talking: [
-          {
-            required: ["ARCADE_GEOMETRIA_COMPLETO"],
-            events: [
-              { type: "textMessage", text: "Maga Geometrix: Minhas coordenadas... meus planos cartesianos... destruídos!" },
-            ]
-          },
-          {
-            events: [
-              { type: "textMessage", text: "Maga Geometrix: A geometria analítica será sua ruína!" },
-              { type: "arcadeQuiz", idAssunto: 2 },
-              { type: "textMessage", text: "Maga Geometrix: Não é possível... você decifrou tudo!" },
-              { type: "changeSprite", who: "mago4", src: "imagens/personagens/vilao7_derrotado.png" },
-              { type: "addStoryFlag", flag: "ARCADE_GEOMETRIA_COMPLETO" },
-              { type: "arcadeComplete" },
-            ]
-          }
-        ]
-      }),
-
-      mago5: new Person({
-        x: utils.withGrid(13),
-        y: utils.withGrid(10),
-        src: "imagens/personagens/vilao5.png",
-        behaviorLoop: [
-          { type: "stand", direction: "up", time: 1600 },
-          { type: "stand", direction: "right", time: 2200 },
-          { type: "stand", direction: "up", time: 1800 },
-          { type: "stand", direction: "left", time: 1200 },
-        ],
-        talking: [
-          {
-            required: ["ARCADE_PROBABILIDADE_COMPLETO"],
-            events: [
-              { type: "textMessage", text: "Mago Probabilius: As probabilidades... estavam contra mim!" },
-            ]
-          },
-          {
-            events: [
-              { type: "textMessage", text: "Mago Probabilius: Qual a probabilidade de você me vencer? Zero!" },
-              { type: "arcadeQuiz", idAssunto: 2 },
-              { type: "textMessage", text: "Mago Probabilius: Estatisticamente... impossível! Mas você conseguiu!" },
-              { type: "changeSprite", who: "mago5", src: "imagens/personagens/vilao5_derrotado.png" },
-              { type: "addStoryFlag", flag: "ARCADE_PROBABILIDADE_COMPLETO" },
-              { type: "arcadeComplete" },
-            ]
-          }
-        ]
-      }),
-
-      mago6: new Person({
-        x: utils.withGrid(19),
-        y: utils.withGrid(10),
-        src: "imagens/personagens/vilao3.png",
-        behaviorLoop: [
-          { type: "stand", direction: "down", time: 1400 },
-          { type: "stand", direction: "left", time: 2000 },
-          { type: "stand", direction: "up", time: 1600 },
-          { type: "stand", direction: "right", time: 1800 },
-        ],
-        talking: [
-          {
-            required: ["ARCADE_MATRIZES_COMPLETO"],
-            events: [
-              { type: "textMessage", text: "Mago Matricius: Minhas matrizes... todas invertidas!" },
-            ]
-          },
-          {
-            events: [
-              { type: "textMessage", text: "Mago Matricius: Matrizes e determinantes vão te confundir!" },
-              { type: "arcadeQuiz", idAssunto: 2 },
-              { type: "textMessage", text: "Mago Matricius: Derrotado... suas respostas foram precisas!" },
-              { type: "changeSprite", who: "mago6", src: "imagens/personagens/vilao3_derrotado.png" },
-              { type: "addStoryFlag", flag: "ARCADE_MATRIZES_COMPLETO" },
-              { type: "arcadeComplete" },
-            ]
-          }
-        ]
-      }),
     },
 
+    // Mapa 24×16 tiles.
+    // Herói entra em (12, 15), sobe pelo aisle central e encontra o Prof.-chefe em (12, 7)
+    // — que fica EM FRENTE da mesa (mesa fica atrás dele, decorativa). Assim nem Prof nem
+    // herói sobem visualmente em cima da mesa.
     walls: generateWallRegion([
-      // Parede do prédio (limite superior da área jogável)
-      [0, 6, 21, 6],
-      // Limite inferior
-      [0, 12, 21, 12],
-      // Limite esquerdo
-      [-1, 7, -1, 11],
-      // Limite direito
-      [22, 7, 22, 11],
+      // Bordas externas do mapa
+      [-1, 0, -1, 15],
+      [24, 0, 24, 15],
+      [0, -1, 23, -1],
+      [0, 16, 23, 16],
+
+      // Rows 0-2 — parede de fundo do palco (portas, plantas, chalkboard). Tudo bloqueado.
+      [0, 0, 23, 2],
+
+      // Rows 3-7 — palco. Aisle estreito: só col 12 livre (por onde passa o Prof).
+      [0, 3, 11, 7],   // lado esquerdo do palco
+      [13, 3, 23, 7],  // lado direito do palco
+
+      // Rows 8-15 — audiência. Aisle mais largo (cols 10-13) pra dar espaço pro jogador caminhar.
+      [0, 8, 9, 15],   // audiência esquerda (cadeiras + degraus)
+      [14, 8, 23, 15], // audiência direita
     ]),
 
     entryCutscene: {
       required: [],
       events: [
-        { type: "arcadeStart" },
         { type: "popup",
-          title: "Modo Arcade",
-          text: "Bem-vinda ao Ginásio dos Magos!<br><br>Aqui você enfrentará <b>6 magos</b>, cada um mestre em um tema cobrado no <b>ENEM</b>.<br><br>Ande até um mago e interaja com <b>Enter</b> para iniciar o desafio. Responda corretamente para derrotá-lo!<br><br>Boa sorte!"
+          title: "📚 Gincana Acadêmica",
+          text:
+            "<b>Como funciona a gincana</b><br>" +
+            "Responda todas as questões para ser aprovada. Cada <b>acerto</b> soma pontos (multiplicados pelo seu streak). Cada <b>erro</b> consome uma <b>tentativa ◆</b>. Você começa com <b>3 ◆</b>, teto de <b>5 ◆</b>.<br><br>" +
+
+            "<b>🔥 Recompensas automáticas de streak</b><br>" +
+            "A cada <b>5 acertos seguidos</b>, o jogo te dá um bônus — sem você escolher. A prioridade é:<br>" +
+            "&nbsp;• <b>+1 ◆ tentativa</b> — se você já perdeu alguma, ela é reposta.<br>" +
+            "&nbsp;• <b>+1 ◆ tentativa máxima</b> — se o teto ainda não chegou a 5, sobe o teto.<br>" +
+            "&nbsp;• <b>+1 📘 revisão grátis</b> — se tudo já está cheio, você ganha uma revisão (seu próximo erro não consome tentativa).<br><br>" +
+
+            "<b>🎓 Altares de Apoio (checkpoints da gincana)</b><br>" +
+            "Ao longo da run surgem <b>altares</b> em checkpoints equilibrados. Em cada altar você escolhe <b>1 de 3 buffs</b> sorteados. Em média aparece <b>1 altar a cada 10 questões</b> — então uma gincana de 5-10 tem 1 altar, de 15-20 tem 2, e uma de 60 tem 6 altares ao longo do caminho.<br><br>" +
+
+            "Buffs possíveis no altar:<br>" +
+            "&nbsp;• <b>📘 Revisão</b> — seu próximo erro não consome tentativa.<br>" +
+            "&nbsp;• <b>✂ Dica 50/50</b> — a próxima questão já vem com 2 alternativas erradas eliminadas.<br>" +
+            "&nbsp;• <b>⏸ Concentração</b> — nas próximas 3 questões, o bônus de tempo vale em <b>dobro</b>.<br>" +
+            "&nbsp;• <b>✦ Nota Dupla</b> — seu próximo acerto vale o <b>dobro</b> de pontos.<br><br>" +
+
+            "Os buffs ativos aparecem no canto superior esquerdo do HUD. Boa sorte! ✏️"
         },
+        { type: "arcadeStart" },
       ]
     },
 

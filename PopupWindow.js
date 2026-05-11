@@ -32,19 +32,25 @@ class PopupWindow {
       });
     });
 
-    // Se só tem um botão, Enter fecha com o valor dele
+    // Se só tem um botão (ou nenhum = "Entendi" default), Enter e Esc fecham com o valor dele.
     if (!this.buttons || this.buttons.length === 1) {
       const defaultValue = this.buttons ? this.buttons[0].value : "ok";
-      this.actionListener = new KeyPressListener("Enter", () => {
-        this.close(defaultValue);
-      });
+      this.enterListener = new KeyPressListener("Enter", () => this.close(defaultValue));
+      this.escapeListener = new KeyPressListener("Escape", () => this.close(defaultValue));
     }
+
+    // Foca o primeiro botão pra capturar Enter e evitar que algo atrás capture.
+    setTimeout(() => {
+      const firstBtn = this.element.querySelector(".PopupWindow_button");
+      if (firstBtn) firstBtn.focus();
+    }, 10);
   }
 
   close(value) {
     if (this.element) {
       this.element.remove();
-      if (this.actionListener) this.actionListener.unbind();
+      if (this.enterListener) this.enterListener.unbind();
+      if (this.escapeListener) this.escapeListener.unbind();
       this.onComplete(value);
     }
   }

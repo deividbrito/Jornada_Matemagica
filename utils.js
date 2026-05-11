@@ -59,10 +59,19 @@ const utils = {
   resolveMapId(mapId) {
     const campanha = window.progress?.campanha || "fundamental";
     if (campanha === "medio") {
+      // Override explícito: a base "Corredor" na campanha médio vira o auditório.
+      const mediaOverride = { "Corredor": "Auditorio_M" };
+      if (mediaOverride[mapId] && window.OverworldMaps?.[mediaOverride[mapId]]) {
+        return mediaOverride[mapId];
+      }
       const medioId = mapId + "_M";
       if (window.OverworldMaps && window.OverworldMaps[medioId]) {
         return medioId;
       }
+    }
+    // Alias de compatibilidade: saves antigos guardaram "Corredor_M" antes da renomeação.
+    if (mapId === "Corredor_M" && window.OverworldMaps?.["Auditorio_M"]) {
+      return "Auditorio_M";
     }
     return mapId;
   }

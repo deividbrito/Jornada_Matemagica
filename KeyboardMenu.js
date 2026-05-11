@@ -67,31 +67,51 @@ class KeyboardMenu {
   end() {
     this.element.remove();
     this.descriptionElement.remove();
+    this._unbindKeys();
+  }
 
-    this.up.unbind();
-    this.down.unbind();
+  _unbindKeys() {
+    if (this.up)   { this.up.unbind();   this.up = null; }
+    if (this.down) { this.down.unbind(); this.down = null; }
+  }
+
+  _bindKeys() {
+    if (this.up || this.down) return;
+    this.up = new KeyPressListener("ArrowUp", () => {
+      if (!this.prevFocus) return;
+      const current = Number(this.prevFocus.getAttribute("data-button"));
+      const buttons = Array.from(this.element.querySelectorAll("button[data-button]:not([disabled])"));
+      const reversed = buttons.slice().reverse();
+      const prev = reversed.find(el => Number(el.dataset.button) < current);
+      (prev || reversed[0])?.focus();
+    });
+    this.down = new KeyPressListener("ArrowDown", () => {
+      if (!this.prevFocus) return;
+      const current = Number(this.prevFocus.getAttribute("data-button"));
+      const buttons = Array.from(this.element.querySelectorAll("button[data-button]:not([disabled])"));
+      const next = buttons.find(el => Number(el.dataset.button) > current);
+      (next || buttons[0])?.focus();
+    });
+  }
+
+  // Temporariamente desativa o teclado do menu (mantém DOM visível).
+  pause() {
+    this._unbindKeys();
+  }
+
+  // Reativa o teclado do menu e recupera o foco onde estava.
+  resume() {
+    this._bindKeys();
+    if (this.prevFocus) {
+      setTimeout(() => this.prevFocus.focus(), 10);
+    }
   }
 
   init(container) {
     this.createElement();
     (this.descriptionContainer || container).appendChild(this.descriptionElement);
     container.appendChild(this.element);
-
-    this.up = new KeyPressListener("ArrowUp", () => {
-      const current = Number(this.prevFocus.getAttribute("data-button"));
-      const prevButton = Array.from(this.element.querySelectorAll("button[data-button]")).reverse().find(el => {
-        return el.dataset.button < current && !el.disabled;
-      })
-      prevButton?.focus();
-    })
-    this.down = new KeyPressListener("ArrowDown", () => {
-      const current = Number(this.prevFocus.getAttribute("data-button"));
-      const nextButton = Array.from(this.element.querySelectorAll("button[data-button]")).find(el => {
-        return el.dataset.button > current && !el.disabled;
-      })
-      nextButton?.focus();
-    })
-
+    this._bindKeys();
   }
 
 }
