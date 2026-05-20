@@ -1,0 +1,204 @@
+/* =========================================================
+ * FaseSelector — overlay full-screen, MONTADO FORA do canvas.
+ * Texto em resolução nativa (não sofre o scale(3.5) do .game-container).
+ * ======================================================= */
+.FaseSelector {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 800;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  font-family: var(--font-retro);
+  color: var(--color-text);
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+/* Inner wrapper: caixa centralizada com largura máxima — fica visualmente
+ * coerente com a moldura dos diálogos do jogo, mas em escala nativa. */
+.FaseSelector_inner {
+  width: 100%;
+  max-width: 1100px;
+  background: var(--color-bg-dialog);
+  border: 6px solid var(--color-border-frame);
+  box-shadow: var(--shadow-frame);
+  padding: 26px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.FaseSelector_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--color-border-chalk);
+}
+
+.FaseSelector_header h2 {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--color-accent);
+  text-shadow: 2px 2px 0 #000;
+}
+
+.FaseSelector_close {
+  background: transparent;
+  border: 2px solid var(--color-border-chalk);
+  color: var(--color-text);
+  width: 44px;
+  height: 44px;
+  font-size: 26px;
+  font-family: var(--font-retro);
+  cursor: pointer;
+  transition: background-color 80ms ease-out, color 80ms ease-out;
+}
+
+.FaseSelector_close:hover,
+.FaseSelector_close:focus-visible {
+  background: var(--color-bg-menu-selected);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.FaseSelector_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 18px;
+}
+
+.FaseSelector_loading,
+.FaseSelector_empty,
+.FaseSelector_error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 24px;
+  font-size: 20px;
+  opacity: 0.85;
+}
+
+.FaseSelector_error {
+  color: var(--color-error);
+}
+
+/* ── Cards ─────────────────────────────────────────────── */
+.FaseSelector_card {
+  background: var(--color-bg-menu-selected);
+  border: 3px solid var(--color-border-frame);
+  border-radius: 0;
+  padding: 18px 18px 16px;
+  font-family: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 230px;
+  box-shadow: var(--shadow-pixel-down);
+  transition: transform 120ms ease-out, border-color 120ms ease-out;
+}
+
+.FaseSelector_card:hover:not(:disabled),
+.FaseSelector_card:focus-visible:not(:disabled) {
+  border-color: var(--color-accent);
+  transform: translateY(-3px);
+  outline: none;
+}
+
+.FaseSelector_card:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.FaseSelector_card:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.FaseSelector_cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.FaseSelector_cardOrdem {
+  background: var(--color-border-frame);
+  padding: 5px 12px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.FaseSelector_cardName {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--color-accent);
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+.FaseSelector_cardStars {
+  font-size: 28px;
+  color: var(--color-accent-soft);
+  letter-spacing: 4px;
+  line-height: 1;
+}
+
+.FaseSelector_cardStars[data-stars="0"] {
+  color: rgba(255, 213, 79, 0.3);
+}
+
+.FaseSelector_cardDesc {
+  font-size: 18px;
+  line-height: 1.45;
+  opacity: 0.9;
+  flex: 1;
+  letter-spacing: 0.3px;
+}
+
+.FaseSelector_cardReward {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--color-success-text);
+  text-transform: uppercase;
+}
+
+.FaseSelector_cardLock {
+  font-size: 15px;
+  color: var(--color-warn);
+  font-style: italic;
+}
+
+/* Variantes por status */
+.FaseSelector_card--concluida { border-color: var(--color-success); }
+.FaseSelector_card--em_progresso { border-color: var(--color-warn); }
+.FaseSelector_card--bloqueada { border-style: dashed; }
+
+/* Mobile: cards mais densos */
+@media (max-width: 500px) {
+  .FaseSelector {
+    padding: 12px 8px;
+  }
+  .FaseSelector_inner {
+    padding: 14px;
+  }
+  .FaseSelector_grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .FaseSelector_card {
+    min-height: 0;
+  }
+}

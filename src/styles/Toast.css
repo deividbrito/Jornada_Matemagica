@@ -1,0 +1,74 @@
+/* Toast — canto inferior direito, empilha verticalmente */
+.ToastContainer {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: none; /* o container não captura cliques; só os filhos */
+}
+
+.Toast {
+  pointer-events: auto;
+  min-width: 220px;
+  max-width: 340px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-family: var(--font-retro, monospace);
+  font-size: 13px;
+  line-height: 1.35;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 180ms ease-out, transform 180ms ease-out;
+  cursor: pointer;
+  word-wrap: break-word;
+  border-left: 4px solid transparent;
+  background: var(--color-bg-dialog);
+}
+
+.Toast--visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.Toast--leaving {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.Toast--success {
+  background: var(--color-bg-success);
+  border-left-color: var(--color-success);
+}
+
+.Toast--warn {
+  background: var(--color-bg-warn);
+  border-left-color: var(--color-warn);
+}
+
+.Toast--error {
+  background: var(--color-bg-error);
+  border-left-color: var(--color-error);
+}
+
+.Toast--info {
+  background: var(--color-bg-dialog);
+  border-left-color: var(--color-border-chalk);
+}
+
+@media (max-width: 500px) {
+  .ToastContainer {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+  .Toast {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 12px;
+  }
+}

@@ -48,7 +48,7 @@
   }
 
   // Fetch cru — devolve Response, não joga em status != 2xx.
-  // Aplica timeout via AbortController.
+  // Aplica timeout via AbortController; sinaliza erro de rede via Toast.
   async function fetchRaw(path, opts) {
     opts = opts || {};
     const url = path.startsWith("http") ? path : (BASE_URL + path);
@@ -56,6 +56,7 @@
     const timeoutMs = opts.timeoutMs || DEFAULT_TIMEOUT_MS;
     const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
+      // wrapped abaixo: pega TypeError de fetch (rede caiu) → Toast amigável
       const res = await fetch(url, {
         method: opts.method || "GET",
         headers: buildHeaders(opts),
@@ -64,9 +65,21 @@
       });
       // Token expirado/inválido → limpa para forçar novo login na próxima ação.
       if (res.status === 401) {
+        const hadToken = !!getToken();
         clearToken();
+        if (hadToken && window.toast) {
+          window.toast.warn("Sessão expirada. Faça login novamente.");
+        }
       }
       return res;
+    } catch (err) {
+      // AbortError = timeout; TypeError = sem rede / CORS / DNS
+      if (err.name === 'AbortError' && window.toast) {
+        window.toast.error("A API demorou demais para responder. Tente novamente.");
+      } else if (err.name === 'TypeError' && window.toast) {
+        window.toast.error("Sem conexão com o servidor. Verifique sua internet.");
+      }
+      throw err;
     } finally {
       clearTimeout(timer);
     }

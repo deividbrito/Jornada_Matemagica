@@ -6,7 +6,7 @@
   height: 100%;
   pointer-events: none;
   z-index: 600;
-  font-family: 'Press Start 2P', monospace;
+  font-family: var(--font-pixel);
   color: #fff;
   text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
 }
@@ -48,7 +48,7 @@
 .ArcadeHUD_lives {
   font-size: 10px;
   letter-spacing: 1px;
-  color: #66ddff;
+  color: var(--color-info);
 }
 
 .ArcadeHUD_livesPulse {
@@ -61,9 +61,9 @@
   100% { transform: scale(1);   filter: brightness(1); }
 }
 
-.ArcadeHUD_streak { color: #ffaa33; }
-.ArcadeHUD_mult   { color: #66ddff; }
-.ArcadeHUD_score  { color: #ffeb3b; }
+.ArcadeHUD_streak { color: var(--color-warn-strong); }
+.ArcadeHUD_mult   { color: var(--color-info); }
+.ArcadeHUD_score  { color: var(--color-accent); }
 
 .ArcadeHUD_streak > span,
 .ArcadeHUD_mult > span,
@@ -90,7 +90,7 @@
 .ArcadeHUD_etapaBar {
   width: 100%;
   height: 14px;
-  background: #1a1a2e;
+  background: var(--color-bg-arcade-dark);
   border: 1px solid #fff;
   position: relative;
 }
@@ -99,7 +99,7 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 0%;
-  background: linear-gradient(90deg, #66ddff, #88ff99);
+  background: linear-gradient(90deg, var(--color-info), var(--color-success-light));
   transition: width 350ms ease-out;
 }
 
@@ -121,8 +121,8 @@
   left: 50%;
   transform: translateX(-50%);
   background: rgba(20, 20, 40, 0.9);
-  border: 1px solid #ffeb3b;
-  color: #ffeb3b;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
   font-size: 8px;
   padding: 3px 6px;
   white-space: nowrap;
@@ -145,13 +145,13 @@
   font-size: 9px;
   margin: 8px 0;
 }
-.ArcadeRunEnd_grid b { color: #ffeb3b; }
+.ArcadeRunEnd_grid b { color: var(--color-accent); }
 
 .ArcadeRunEnd_xpBar {
   position: relative;
   width: 100%;
   height: 12px;
-  background: #1a1a2e;
+  background: var(--color-bg-arcade-dark);
   border: 1px solid #fff;
   margin: 6px 0;
 }
@@ -159,7 +159,7 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 0%;
-  background: linear-gradient(90deg, #66ddff, #88ff99);
+  background: linear-gradient(90deg, var(--color-info), var(--color-success-light));
   transition: width 1.2s ease-out;
 }
 .ArcadeRunEnd_xpLabel {
@@ -176,8 +176,8 @@
   flex-wrap: wrap;
 }
 .ArcadeAltar_card {
-  background: #1a1a2e;
-  border: 1px solid #66ddff;
+  background: var(--color-bg-arcade-dark);
+  border: 1px solid var(--color-info);
   padding: 6px 5px;
   width: 90px;
   text-align: center;
@@ -189,12 +189,12 @@
 }
 .ArcadeAltar_label {
   font-size: 8px;
-  color: #88ff99;
+  color: var(--color-success-light);
   margin-bottom: 3px;
 }
 .ArcadeAltar_desc {
   font-size: 7px;
-  color: #cce0ff;
+  color: var(--color-text-muted);
   line-height: 1.3;
 }
 
@@ -206,8 +206,8 @@
   font-size: 14px;
 }
 .ArcadeRunEnd_medal {
-  background: #2a2a4a;
-  border: 1px solid #ffeb3b;
+  background: var(--color-bg-arcade-medal);
+  border: 1px solid var(--color-accent);
   padding: 4px 6px;
   border-radius: 3px;
   font-size: 9px;

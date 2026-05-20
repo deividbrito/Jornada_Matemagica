@@ -66,7 +66,12 @@ class OverworldEvent {
     }
 
     const assunto = this.event.idAssunto || null;
-    let dificuldadeSolicitada = this.event.dificuldade || window.playerState.getDifficultyForAssunto(assunto);
+    // Prioridade: event.dificuldade (cutscene fixa) > escolha manual da fase > adaptativo.
+    const dificuldadeManual = window.progress?.faseRun?.dificuldadeManual || null;
+    let dificuldadeSolicitada =
+      this.event.dificuldade ||
+      dificuldadeManual ||
+      window.playerState.getDifficultyForAssunto(assunto);
     const campanha = window.progress?.campanha || "fundamental";
 
     const quizGame = new window.QuizGame({
@@ -83,6 +88,17 @@ class OverworldEvent {
             result.dificuldade,
             result.timeTaken
           );
+
+          // Fase ativa? Conta a resposta. NÃO finaliza aqui — quem decide
+          // quando rodar o popup é a própria cutscene da arena, via event
+          // `finalizarFase`. Isso permite intercalar falas de redenção do
+          // mago entre o último quiz e o popup.
+          if (window.progress?.faseRun) {
+            window.progress.recordFaseAnswer({
+              isCorrect: result.isCorrect,
+              scoreDelta: result.isCorrect ? 10 : 0,
+            });
+          }
         }
         resolve();
       },
@@ -137,6 +153,34 @@ class OverworldEvent {
     popup.init(document.querySelector(".game-container"));
   }
 
+  // Tela de encerramento — popup final com opção de voltar ao menu ou
+  // continuar explorando. Usado no fim do epílogo.
+  endGame(resolve) {
+    const popup = new window.PopupWindow({
+      title: "Fim de Capítulo",
+      text:
+        "<p>Você libertou a escola dos seis magos. O Sombrio fugiu — mas há de voltar.</p>" +
+        "<p>Outras escolas guardam magos parecidos. Outras Alices, em outras bibliotecas, ainda dormem esperando acordar.</p>" +
+        "<p style='margin-top:14px;opacity:0.85;font-style:italic;'>Obrigado por jogar Jornada Matemágica.</p>",
+      size: "large",
+      buttons: [
+        { label: "Voltar ao Menu", value: "menu" },
+        { label: "Continuar explorando", value: "continue" },
+      ],
+      onComplete: (value) => {
+        if (value === "menu") {
+          // Limpa flag de "skip title" pra reload mostrar TitleScreen.
+          try { window.sessionStorage.removeItem("jm_skip_title"); } catch (_) {}
+          window.location.reload();
+          return;
+        }
+        resolve();
+      },
+    });
+    // Monta em document.body — popup grande precisa de resolução nativa.
+    popup.init(document.body);
+  }
+
   addStoryFlag(resolve) {
     window.playerState.storyFlags[this.event.flag] = true;
     resolve();
@@ -150,86 +194,177 @@ class OverworldEvent {
     resolve();
   }
 
+  // Faz o NPC olhar para o hero (vira na direção oposta do hero).
+  // Use no início de cada cenário de talking pra garantir que o NPC
+  // "encara" o jogador antes de falar, independente de onde ele se aproxime.
+  faceHero(resolve) {
+    const obj = this.map.gameObjects[this.event.who];
+    if (obj) {
+      obj.direction = window.utils.oppositeDirection(
+        this.map.gameObjects["hero"].direction
+      );
+    }
+    resolve();
+  }
+
+  // Encerra a fase ativa: dispara POST /concluir, popup de resultado, reload.
+  // Chamado pela cutscene da arena DEPOIS de todos os quizzes + redenção.
+  // Não chama resolve() — FaseRunner.finalize faz reload, matando a cutscene.
+  finalizarFase(resolve) {
+    if (window.FaseRunner && window.progress?.faseRun) {
+      window.FaseRunner.finalize();
+      return;
+    }
+    resolve();
+  }
+
+  // Branching condicional: roda os events filhos APENAS se o jogador atingiu
+  // a meta de acertos na fase ativa. Usado pra rodar a redenção do mago só
+  // quando a fase foi de fato vencida.
+  async seAprovou(resolve) {
+    const run = window.progress && window.progress.faseRun;
+    const aprovou = run && run.correct >= run.metaAcertos;
+    if (!aprovou) { resolve(); return; }
+    const sub = new window.OverworldEventRunner({
+      map: this.map,
+      events: this.event.events || [],
+    });
+    await sub.init();
+    resolve();
+  }
+
+  // Inicia uma fase narrativa: busca metadata via /api/fases, popula
+  // progress.faseRun e teleporta pra arena. Usado nos cutscenes dos magos.
+  async startFase(resolve) {
+    const codigo = this.event.codigo;
+    if (!codigo) { resolve(); return; }
+    try {
+      const fases = await window.api.fetch(`/api/fases?campanha=fundamental`);
+      const fase = fases.find((f) => f.codigo === codigo);
+      if (!fase) throw new Error(`Fase ${codigo} não encontrada`);
+      if (fase.progresso.status === "bloqueada") {
+        if (window.toast) window.toast.warn("Conclua a fase anterior primeiro.");
+        resolve();
+        return;
+      }
+      // Pergunta a dificuldade ANTES de teleportar — popup sobre o overworld.
+      // null = automática (adaptativa via PlayerState).
+      const dificuldadeManual = await window.PopupWindow.askDifficulty({
+        title: `Duelo: ${fase.nome}`,
+        text: "Como você quer enfrentar este desafio?<br><span style='opacity:0.75;font-size:0.85em;'>(Automática se ajusta ao seu desempenho neste assunto.)</span>",
+      });
+      window.progress.startFase(fase, { dificuldadeManual });
+      // Teleporta pra arena via mesma mecânica de changeMap.
+      const sceneTransition = new window.SceneTransition();
+      sceneTransition.init(document.querySelector(".game-container"), () => {
+        const resolvedMapId = window.utils.resolveMapId(fase.mapId);
+        window.currentMapName = resolvedMapId;
+        this.map.overworld.startMap(window.OverworldMaps[resolvedMapId], {
+          x: window.utils.withGrid(8),
+          y: window.utils.withGrid(8),
+          direction: "up",
+        });
+        resolve();
+        sceneTransition.fadeOut();
+      });
+    } catch (err) {
+      console.error("Erro ao iniciar fase:", err);
+      if (window.toast) window.toast.error("Não foi possível iniciar a fase.");
+      resolve();
+    }
+  }
+
   // ====================================================================
   // MODO GINCANA ACADÊMICA — prova única com recompensas por streak
   // ====================================================================
 
-  arcadeStart(resolve) {
-    const popup = new window.PopupWindow({
-      title: "Gincana Acadêmica",
-      text: "Quantas questões deseja enfrentar?",
-      buttons: [
-        { label: "5",  value: "5"  },
-        { label: "10", value: "10" },
-        { label: "15", value: "15" },
-        { label: "20", value: "20" },
-        { label: "25", value: "25" },
-        { label: "30", value: "30" },
-        { label: "35", value: "35" },
-        { label: "40", value: "40" },
-        { label: "45", value: "45" },
-        { label: "50", value: "50" },
-        { label: "55", value: "55" },
-        { label: "60", value: "60" },
-      ],
-      onComplete: (value) => {
-        const count = parseInt(value) || 10;
-        const startTime = Date.now();
-
-        const numAltars = Math.ceil(count / 10);
-        const altarCheckpoints = [];
-        for (let i = 1; i <= numAltars; i++) {
-          altarCheckpoints.push(Math.floor((count * i) / (numAltars + 1)));
-        }
-
-        window.arcadeRun = {
-          lives: 3,
-          maxLives: 3,
-          score: 0,
-          streak: 0,
-          maxStreak: 0,
-          totalCorrect: 0,
-          totalWrong: 0,
-          totalTimeMs: 0,
-          totalQuestions: count,
-          questionsAnswered: 0,
-          freeAnswers: 0,
-          rewardsTriggered: 0,
-          altarsFired: 0,
-          altarCheckpoints,
-          nextFiftyFifty: false,
-          focusRemaining: 0,
-          nextDouble: false,
-          startTime,
-          ended: false,
-        };
-        window.arcadeStats = { total: 0, correct: 0, startTime, questionsPerMage: count };
-
-        window.audioManager.playBgm("audio/bgm/arcade.mp3");
-
-        let timerEl = document.querySelector(".ArcadeTimer");
-        if (!timerEl) {
-          timerEl = document.createElement("div");
-          timerEl.classList.add("ArcadeTimer");
-          document.querySelector(".game-container").appendChild(timerEl);
-        }
-        timerEl.textContent = "0:00";
-        clearInterval(window.arcadeTimerInterval);
-        window.arcadeTimerInterval = setInterval(() => {
-          const elapsed = Date.now() - window.arcadeRun.startTime;
-          const m = Math.floor(elapsed / 60000);
-          const s = Math.floor((elapsed % 60000) / 1000);
-          timerEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
-        }, 1000);
-
-        if (window.arcadeHUD) {
-          window.arcadeHUD.show(document.querySelector(".game-container"));
-        }
-
-        resolve();
-      },
+  async arcadeStart(resolve) {
+    // 1. Quantidade de questões
+    const count = await new Promise((res) => {
+      const popup = new window.PopupWindow({
+        title: "Gincana Acadêmica",
+        text: "Quantas questões deseja enfrentar?",
+        buttons: [
+          { label: "5",  value: "5"  },
+          { label: "10", value: "10" },
+          { label: "15", value: "15" },
+          { label: "20", value: "20" },
+          { label: "25", value: "25" },
+          { label: "30", value: "30" },
+          { label: "35", value: "35" },
+          { label: "40", value: "40" },
+          { label: "45", value: "45" },
+          { label: "50", value: "50" },
+          { label: "55", value: "55" },
+          { label: "60", value: "60" },
+        ],
+        onComplete: (value) => res(parseInt(value) || 10),
+      });
+      popup.init(document.querySelector(".game-container"));
     });
-    popup.init(document.querySelector(".game-container"));
+
+    // 2. Dificuldade da run (null = automática/adaptativa)
+    const dificuldadeManual = await window.PopupWindow.askDifficulty({
+      title: "Modo Gincana",
+      text: `Como você quer encarar a run de ${count} questões?<br><span style='opacity:0.75;font-size:0.85em;'>(Automática ajusta ao seu desempenho. Manual fixa o nível pela run inteira.)</span>`,
+    });
+
+    // 3. Setup da run
+    const startTime = Date.now();
+
+    const numAltars = Math.ceil(count / 10);
+    const altarCheckpoints = [];
+    for (let i = 1; i <= numAltars; i++) {
+      altarCheckpoints.push(Math.floor((count * i) / (numAltars + 1)));
+    }
+
+    window.arcadeRun = {
+      lives: 3,
+      maxLives: 3,
+      score: 0,
+      streak: 0,
+      maxStreak: 0,
+      totalCorrect: 0,
+      totalWrong: 0,
+      totalTimeMs: 0,
+      totalQuestions: count,
+      questionsAnswered: 0,
+      freeAnswers: 0,
+      rewardsTriggered: 0,
+      altarsFired: 0,
+      altarCheckpoints,
+      nextFiftyFifty: false,
+      focusRemaining: 0,
+      nextDouble: false,
+      startTime,
+      ended: false,
+      // null = adaptativo via PlayerState; "1"/"2"/"3" sobrescreve.
+      dificuldadeManual,
+    };
+    window.arcadeStats = { total: 0, correct: 0, startTime, questionsPerMage: count };
+
+    window.audioManager.playBgm("audio/bgm/arcade.mp3");
+
+    let timerEl = document.querySelector(".ArcadeTimer");
+    if (!timerEl) {
+      timerEl = document.createElement("div");
+      timerEl.classList.add("ArcadeTimer");
+      document.querySelector(".game-container").appendChild(timerEl);
+    }
+    timerEl.textContent = "0:00";
+    clearInterval(window.arcadeTimerInterval);
+    window.arcadeTimerInterval = setInterval(() => {
+      const elapsed = Date.now() - window.arcadeRun.startTime;
+      const m = Math.floor(elapsed / 60000);
+      const s = Math.floor((elapsed % 60000) / 1000);
+      timerEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+    }, 1000);
+
+    if (window.arcadeHUD) {
+      window.arcadeHUD.show(document.querySelector(".game-container"));
+    }
+
+    resolve();
   }
 
   _computePoints(dificuldade, timeMs) {
@@ -311,7 +446,11 @@ class OverworldEvent {
         return;
       }
 
-      const dificuldade = this.event.dificuldade || window.playerState.getDifficultyForAssunto(idAssunto);
+      // Prioridade: event.dificuldade > escolha manual da run arcade > adaptativo.
+      const dificuldade =
+        this.event.dificuldade ||
+        (run && run.dificuldadeManual) ||
+        window.playerState.getDifficultyForAssunto(idAssunto);
       const campanha = window.progress?.campanha || "fundamental";
 
       const useFifty = !!run.nextFiftyFifty;

@@ -5,18 +5,39 @@ class LoginForm {
   }
 
   createFormHtml() {
+    // Branding + 3 zonas: campos, ações primárias, modo convidado.
+    // Classes legacy (.login-button, .register-button, .guest-button, .buttons, .guest)
+    // preservadas pra compatibilidade; classes BEM novas para styling fino.
     return `
       <div class="LoginForm">
-        <h2>Entrar ou Cadastrar</h2>
-        <input type="text" name="nome" placeholder="Nome (para cadastro)" />
-        <input type="email" name="email" placeholder="Email" required />
-        <input type="password" name="senha" placeholder="Senha" required />
-        <div class="buttons">
-          <button type="button" class="login-button">Entrar</button>
-          <button type="button" class="register-button">Cadastrar</button>
+        <header class="LoginForm_brand">
+          <h1 class="LoginForm_title">Jornada Matemágica</h1>
+          <p class="LoginForm_subtitle">Entrar ou cadastrar</p>
+        </header>
+
+        <div class="LoginForm_fields">
+          <label class="LoginForm_field">
+            <span class="LoginForm_fieldLabel">Nome</span>
+            <input type="text" name="nome" placeholder="(apenas no cadastro)" autocomplete="name" />
+          </label>
+          <label class="LoginForm_field">
+            <span class="LoginForm_fieldLabel">Email</span>
+            <input type="email" name="email" placeholder="seu@email" autocomplete="email" required />
+          </label>
+          <label class="LoginForm_field">
+            <span class="LoginForm_fieldLabel">Senha</span>
+            <input type="password" name="senha" placeholder="mínimo 6 caracteres" autocomplete="current-password" required />
+          </label>
         </div>
-        <div class="guest">
-          <button type="button" class="guest-button">Jogar como convidado</button>
+
+        <div class="LoginForm_actions buttons">
+          <button type="button" class="LoginForm_primary login-button">Entrar</button>
+          <button type="button" class="LoginForm_secondary register-button">Cadastrar</button>
+        </div>
+
+        <div class="LoginForm_guest guest">
+          <button type="button" class="LoginForm_link guest-button">Jogar sem conta</button>
+          <p class="LoginForm_guestHint">O progresso não será salvo no servidor.</p>
         </div>
       </div>
     `;
@@ -31,12 +52,26 @@ class LoginForm {
     this.element.querySelector(".login-button").addEventListener("click", () => this.handleLogin());
     this.element.querySelector(".register-button").addEventListener("click", () => this.handleRegister());
     this.element.querySelector(".guest-button").addEventListener("click", () => {
-      // Modo convidado: sem token, sem sessaoData. Backend ainda libera o jogo
-      // (quizzes/random e histórico/responder aceitam guest), mas nada persiste.
+      // Modo convidado: sem token, sem sessaoData. Backend ainda libera quizzes
+      // e validação de resposta, mas nada persiste.
       window.api.clearToken();
       this.close();
       this.onComplete(null);
     });
+
+    // Enter no campo senha → Entrar
+    const senhaInput = this.element.querySelector("input[name='senha']");
+    if (senhaInput) {
+      senhaInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") this.handleLogin();
+      });
+    }
+
+    // Foco automático no email — login é o fluxo mais comum
+    setTimeout(() => {
+      const emailInput = this.element.querySelector("input[name='email']");
+      if (emailInput) emailInput.focus();
+    }, 50);
   }
 
   // Recebe o payload { token, jogador, sessao } do backend, persiste o token
@@ -72,7 +107,6 @@ class LoginForm {
         method: "POST",
         body: JSON.stringify({ nome, email, senha }),
       });
-      // O backend já retorna token + sessão prontos — entra direto no jogo.
       this._onAuthSuccess(data);
     } catch (err) {
       alert(err.message || "Erro no cadastro.");

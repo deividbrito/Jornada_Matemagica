@@ -71,15 +71,16 @@
   background: rgba(40, 40, 40, 0.7);
 }
 
-/* Botão A (Confirmar/Interagir) - Mantido embaixo, mas menor */
+/* Botão A (Confirmar/Interagir) — verde da paleta do jogo */
 .a-btn {
   position: absolute;
   bottom: 25px; /* Alinhado com o centro do D-Pad */
   right: 25px;
-  /* Reduzido de 50px para 40px */
   width: 40px;
   height: 40px;
-  background: rgba(50, 205, 50, 0.4); /* Verde translúcido */
+  background: rgba(39, 82, 52, 0.7); /* var(--color-bg-menu-selected) translúcido */
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
   border-radius: 50%;
   font-weight: bold;
   font-size: 18px;

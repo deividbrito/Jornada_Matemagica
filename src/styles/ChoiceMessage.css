@@ -1,48 +1,59 @@
+/* =========================================================
+ * ChoiceMessage — diálogo com escolhas inline.
+ * Mesma altura flexível do TextMessage; botões legíveis.
+ * ======================================================= */
 .ChoiceMessage {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 36px;
-  padding: 4px;
-  background: var(--menu-background);
-  border-top: 1px solid var(--menu-border-color);
-  color: var(--menu-font-color);
+  min-height: 40px;
+  max-height: 68px;
+  padding: 6px 8px;
+  background: var(--color-bg-dialog);
+  border-top: 2px solid var(--color-border-frame);
+  color: var(--color-text);
   font-family: inherit;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .ChoiceMessage_p {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.35;
+  flex: 1;
+  min-width: 0;
 }
 
-.ChoiceMessage span {
-  opacity: 0;
-}
-
-.ChoiceMessage span.revealed {
-  opacity: 1;
-}
+.ChoiceMessage span         { opacity: 0; }
+.ChoiceMessage span.revealed { opacity: 1; }
 
 .ChoiceMessage_buttons {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .ChoiceMessage_button {
-  font-size: 10px;
-  padding: 2px 6px;
-  background: none;
-  border: 1px solid var(--menu-border-color);
-  color: var(--menu-font-color);
+  font-size: 11px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-border-chalk);
+  color: var(--color-text);
   font-family: inherit;
   cursor: pointer;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end; 
+  letter-spacing: 0.5px;
+  transition: background-color 80ms ease-out, color 80ms ease-out;
+}
+
+.ChoiceMessage_button:hover,
+.ChoiceMessage_button:focus-visible {
+  background: var(--color-bg-menu-selected);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  outline: none;
 }

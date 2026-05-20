@@ -1,78 +1,137 @@
+/* =========================================================
+ * Design Tokens — Jornada Matemágica
+ * ---------------------------------------------------------
+ * Pontos de extensão visíveis. Editar uma variável aqui
+ * reflete em todas as superfícies (overworld, quiz, login,
+ * arcade, HUDs). Antes de adicionar hardcoded em um CSS,
+ * verifique se já existe um token correspondente.
+ * ======================================================= */
 :root {
-    --dialog-background: #1a3622; /* Verde lousa escuro */
-    --menu-background: #1a3622;
-    --border-color: #d1d5db; /* Cor de giz/cinza claro */
-    --menu-border-color: #8b5a2b; /* Cor de madeira para a moldura da lousa */
-    --menu-font-color: #f3f4f6; /* Branco giz */
-    --menu-selected-background: #275234; /* Verde um pouco mais claro */
-    --font-retro: 'VT323', monospace;
+  /* ── Tipografia ─────────────────────────────────────── */
+  --font-retro:   'VT323', monospace;          /* corpo, diálogos, menus */
+  --font-pixel:   'Press Start 2P', monospace; /* HUDs, números, ranks */
+  --font-display: 'Ribeye', serif;             /* logo / decorativo */
+
+  /* ── Paleta base ("lousa de escola") ────────────────── */
+  --color-bg-dialog:        #1a3622; /* verde lousa escuro */
+  --color-bg-menu-selected: #275234; /* seleção do KeyboardMenu */
+  --color-border-chalk:     #d1d5db; /* giz */
+  --color-border-frame:     #8b5a2b; /* moldura de madeira */
+  --color-border-frame-light: #A48465; /* madeira clara (PauseMenu) */
+  --color-text:             #f3f4f6; /* branco giz */
+  --color-text-muted:       #cce0ff; /* texto secundário pastel */
+
+  /* ── Aliases legados (compat com CSS pré-tokens) ────── */
+  --dialog-background:        var(--color-bg-dialog);
+  --menu-background:          var(--color-bg-dialog);
+  --menu-selected-background: var(--color-bg-menu-selected);
+  --border-color:             var(--color-border-chalk);
+  --menu-border-color:        var(--color-border-frame);
+  --menu-font-color:          var(--color-text);
+
+  /* ── Cores semânticas ───────────────────────────────── */
+  --color-accent:        #ffeb3b; /* amarelo destaque — rank, score, XP rank */
+  --color-accent-soft:   #ffd54f; /* estrelas, amarelo suave */
+  --color-success:       #58d68d; /* acerto, fase concluída */
+  --color-success-light: #88ff99; /* gradientes verdes (vitórias, etapa bar) */
+  --color-success-text:  #8df58d; /* texto XP positivo */
+  --color-warn:          #f5b041; /* laranja aviso, spinner, XP gradient */
+  --color-warn-strong:   #ffaa33; /* streak arcade */
+  --color-error:         #ec7063; /* erro, shake vermelho */
+  --color-info:          #66ddff; /* ciano arcade (vidas, multiplicador) */
+
+  /* ── Backgrounds escuros (toasts, arcade) ───────────── */
+  --color-bg-success: #1f5132; /* toast success */
+  --color-bg-warn:    #6e4b1a; /* toast warn */
+  --color-bg-error:   #6d1f1f; /* toast error */
+  --color-bg-arcade-dark:  #1a1a2e; /* fundo de cards/barras do arcade */
+  --color-bg-arcade-medal: #2a2a4a; /* medalhas */
+
+  /* ── Sombras retrô compartilhadas ───────────────────── */
+  --shadow-frame: inset 0 0 0 2px #000, 4px 4px 0 rgba(0, 0, 0, 0.5);
+  --shadow-pixel-down: inset -2px -2px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* Aplicando a fonte e a borda estilo quadro de madeira */
-.TextMessage, .KeyboardMenu, .PauseMenu, .ChoiceMessage, .DecisionMessage, .QuizTutorial {
-    font-family: var(--font-retro);
-    font-size: 20px;
-    letter-spacing: 1px;
-    
-    /* Borda imitando moldura de quadro negro */
-    border: 4px solid var(--menu-border-color) !important;
-    box-shadow: 
-      inset 0 0 0 2px #000,
-      4px 4px 0px rgba(0,0,0,0.5); /* Sombra dura de pixel art */
+/* ── Tema retrô aplicado universalmente em diálogos ──── */
+.TextMessage,
+.KeyboardMenu,
+.PauseMenu,
+.ChoiceMessage,
+.DecisionMessage,
+.QuizTutorial {
+  font-family: var(--font-retro);
+  font-size: 20px;
+  letter-spacing: 1px;
+
+  /* Borda imitando moldura de quadro negro */
+  border: 4px solid var(--color-border-frame) !important;
+  box-shadow: var(--shadow-frame);
 }
 
-.KeyboardMenu button, .ChoiceMessage_button, .DecisionMessage_button, .QuizTutorial_button2 {
-    color: var(--menu-font-color);
-    font-family: var(--font-retro);
+.KeyboardMenu button,
+.ChoiceMessage_button,
+.DecisionMessage_button,
+.QuizTutorial_button2 {
+  color: var(--color-text);
+  font-family: var(--font-retro);
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    background: #333;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Fundo escuro com o mapa do colégio — mesmo idioma visual do LoginForm
+   * e da TitleScreen. Garante que a área fora do canvas (barras laterais
+   * em monitores largos) também pareça parte do jogo. */
+  background:
+    linear-gradient(
+      135deg,
+      rgba(26, 54, 34, 0.92) 0%,
+      rgba(0, 0, 0, 0.95) 70%
+    ),
+    url('/imagens/map/mapa.png') center / cover no-repeat #1a1a1a;
+  image-rendering: pixelated;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-container {
-    width: 352px;
-    height: 198px;
-    
-    position: relative;
-    outline: 2px solid white;
-    background: #000;
-    overflow: hidden;
+  width: 352px;
+  height: 198px;
 
-    transform: scale(3.5); 
-    
-    transform-origin: center center;
-    
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: pixelated;
-    -ms-interpolation-mode: nearest-neighbor;
+  position: relative;
+  outline: 2px solid white;
+  background: #000;
+  overflow: hidden;
+
+  transform: scale(3.5);
+  transform-origin: center center;
+
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
 }
 
 .game-container canvas {
-    width: 352px;
-    height: 198px;
-    image-rendering: pixelated;
+  width: 352px;
+  height: 198px;
+  image-rendering: pixelated;
 }
 
 body:fullscreen {
-    background: #000;
+  background: #000;
 }
 
 .game-container:fullscreen {
-    outline: none;
-    background: #000;
+  outline: none;
+  background: #000;
 }

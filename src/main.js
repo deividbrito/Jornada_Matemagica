@@ -25,8 +25,16 @@ import './styles/TouchControls.css';
 import './styles/ShowMap.css';
 import './styles/PopupWindow.css';
 import './styles/ArcadeHUD.css';
+import './styles/Toast.css';
+import './styles/LoadingOverlay.css';
+import './styles/XpBar.css';
+import './styles/FaseSelector.css';
+import './styles/FaseHUD.css';
+import './styles/FaseResult.css';
 
 // --- camada de infra (sem dependências entre si) ----------------------------
+import './Toast.js';
+import './LoadingOverlay.js';
 import './utils.js';
 import './apiClient.js';
 import './AudioManager.js';
@@ -56,6 +64,12 @@ import './ArcadeHUD.js';
 import './PlayerState.js';
 import './ArcadeMeta.js';
 import './Progress.js';
+
+// --- HUDs e overlays do jogador (dependem de ArcadeMeta + api) --------------
+import './XpBar.js';
+import './FaseHUD.js';
+import './FaseSelector.js';
+import './FaseRunner.js';
 
 // --- domínio do jogo --------------------------------------------------------
 import './LoginForm.js';

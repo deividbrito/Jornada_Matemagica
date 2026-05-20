@@ -8,6 +8,10 @@ class PauseMenu{
         return window.progress?.campanha === "medio";
     }
 
+    isFaseAtiva() {
+        return !!(window.progress && window.progress.faseRun);
+    }
+
     getOptions(pageKey) {
         if (pageKey === "root") {
             return [
@@ -27,6 +31,39 @@ class PauseMenu{
                         this.openMap();
                         console.log("Abrindo mapa..");
                         this.close();
+                    }
+                },
+                this.isFaseAtiva() && {
+                    label: "Sair da Fase",
+                    description: "Abandona a fase atual (progresso da fase não conta)",
+                    handler: async () => {
+                        const viaSelector = !!(window.progress.faseRun && window.progress.faseRun.viaSelector);
+                        window.progress.clearFase();
+                        if (window.toast) window.toast.warn("Fase abandonada.", 1800);
+                        if (!viaSelector) {
+                            // Run longa: volta pro Corredor 3 tiles acima do Mentor (mesma posição
+                            // que FaseRunner usa — dá espaço pras cutscenes andarem com o Mentor).
+                            window.progress.mapId = "Corredor";
+                            window.progress.startingHeroX = 4;
+                            window.progress.startingHeroY = 5;
+                            window.progress.startingHeroDirection = "down";
+                            try { await window.progress.save(); } catch (_) {}
+                            try { window.sessionStorage.setItem("jm_skip_title", "1"); } catch (_) {}
+                        }
+                        window.location.reload();
+                    }
+                },
+                {
+                    label: "Voltar ao Menu",
+                    description: "Encerra a sessão atual e volta à tela inicial (lembre de salvar antes)",
+                    handler: () => {
+                        // Limpa estado em memória de fase ativa pra não vazar pro próximo boot.
+                        if (window.progress && window.progress.faseRun) {
+                            window.progress.clearFase();
+                        }
+                        // Garante que NÃO pula a TitleScreen no reload.
+                        try { window.sessionStorage.removeItem("jm_skip_title"); } catch (_) {}
+                        window.location.reload();
                     }
                 },
                 {

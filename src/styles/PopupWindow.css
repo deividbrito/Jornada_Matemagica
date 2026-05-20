@@ -35,6 +35,39 @@
   overflow-y: auto;
 }
 
+/* Variante "large" — usada por onboarding e popups montados em document.body
+ * (resolução nativa, sem escala 3.5x do canvas). Tamanhos generosos pra que
+ * o texto fique confortavelmente legível em monitor full HD. */
+.PopupWindow_box--large {
+  max-width: 720px;
+  width: 92%;
+  max-height: 82vh;
+  padding: 26px 32px 22px;
+  border-width: 6px;
+}
+
+/* Etiqueta opcional acima do título (ex.: "Passo 1 de 4") */
+.PopupWindow_badge {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 8px;
+  background: var(--color-bg-menu-selected);
+  color: var(--color-accent);
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid var(--color-border-frame);
+}
+
+.PopupWindow_box--large .PopupWindow_badge {
+  margin-bottom: 14px;
+  padding: 6px 14px;
+  font-size: 13px;
+  letter-spacing: 3px;
+  border-width: 2px;
+}
+
 .PopupWindow_title {
   margin: 0 0 6px 0;
   font-size: 14px;
@@ -42,6 +75,22 @@
   border-bottom: 1px solid var(--menu-border-color);
   padding-bottom: 4px;
   letter-spacing: 1px;
+  color: var(--color-accent);
+}
+
+.PopupWindow_box--large .PopupWindow_title {
+  font-size: 30px;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  border-bottom-width: 2px;
+}
+
+.PopupWindow_box--large .PopupWindow_text {
+  font-size: 22px;
+  line-height: 1.55;
+  margin-bottom: 22px;
+  letter-spacing: 0.5px;
 }
 
 .PopupWindow_text {
@@ -70,6 +119,13 @@
   letter-spacing: 1px;
 }
 
+.PopupWindow_box--large .PopupWindow_button {
+  font-size: 20px;
+  padding: 8px 28px;
+  border-width: 3px;
+  letter-spacing: 2px;
+}
+
 .PopupWindow_button:hover {
   background: var(--menu-border-color);
   color: #fff;
@@ -82,8 +138,8 @@
   right: 6px;
   z-index: 500;
   background: rgba(0, 0, 0, 0.6);
-  color: #ffeb3b;
-  font-family: 'Press Start 2P', monospace;
+  color: var(--color-accent);
+  font-family: var(--font-pixel);
   font-size: 8px;
   padding: 4px 6px;
   border: 1px solid #555;

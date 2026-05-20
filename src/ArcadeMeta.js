@@ -252,6 +252,9 @@ class ArcadeMeta {
       };
     } catch (err) {
       console.warn("Falha ao registrar run no servidor:", err);
+      if (window.toast) {
+        window.toast.error("Não conseguimos salvar essa prova. Tente jogar de novo em instantes.");
+      }
       const computed = this._computeLocal(runResult);
       return { ...computed, persisted: false, reason: "api-error" };
     }

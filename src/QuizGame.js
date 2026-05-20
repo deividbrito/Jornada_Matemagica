@@ -27,9 +27,10 @@ class QuizGame {
       if (this.idAssunto !== null && this.idAssunto !== undefined) {
         params.append("id_assunto", this.idAssunto);
       }
-      // ENEM (medio) tem pool com dificuldade única, então não filtramos por nível.
-      // Só fundamental envia dificuldade adaptativa.
-      if (this.dificuldade && this.campanha !== "medio") {
+      // Envia a dificuldade sempre que o cliente tiver uma (manual ou adaptativa).
+      // O backend tem fallback: se o pool da campanha não tem aquele nível,
+      // ele relaxa o filtro automaticamente (quizService._fetchPool).
+      if (this.dificuldade) {
         params.append("dificuldade", this.dificuldade);
       }
       params.append("campanha", this.campanha);
@@ -49,6 +50,9 @@ class QuizGame {
 
     } catch (err) {
       console.error("Erro ao buscar quiz aleatório:", err);
+      if (window.toast) {
+        window.toast.error("Não foi possível carregar a pergunta. Verifique sua conexão.");
+      }
       this.text = "Não foi possível carregar a pergunta. Tente novamente mais tarde.";
       this.options = [{ id: "fallback", texto: "OK" }];
       this.questionDifficulty = this.dificuldade || "1";
@@ -172,14 +176,13 @@ class QuizGame {
 
     let isCorrect = false;
     let feedback = "Ocorreu um erro ao verificar sua resposta.";
+    let xpInfo = null; // backend retorna { xpGained, rankBefore, rankAfter, rankedUp } se acertou autenticado
 
     if (selectedAlternativaId === "fallback") {
       isCorrect = true;
       feedback = "";
     } else {
       try {
-        // O backend usa req.user.sid quando há JWT. Não enviamos id_sessao —
-        // o servidor decide com base no token (ou trata como guest).
         const payload = {
           id_quiz: this.quizId,
           id_alternativa_escolhida: parseInt(selectedAlternativaId),
@@ -191,6 +194,7 @@ class QuizGame {
         });
         isCorrect = result.foi_correta;
         feedback = result.feedback;
+        xpInfo = result.xp || null;
       } catch (err) {
         console.error("Erro ao submeter resposta:", err);
       }
@@ -200,12 +204,35 @@ class QuizGame {
       window.audioManager.playSfx(isCorrect ? "correct" : "wrong");
     }
 
+    // Feedback visual: pulse verde quando acerta, shake vermelho quando erra.
+    // A animação CSS roda em paralelo ao texto pedagógico.
+    this.element.classList.remove("QuizTutorial--correct", "QuizTutorial--wrong");
+    void this.element.offsetWidth; // força reflow pra reiniciar a animação
+    this.element.classList.add(isCorrect ? "QuizTutorial--correct" : "QuizTutorial--wrong");
+
+    // Floating "+X XP" sobre a caixa + evento pra XpBar + Toast de rank-up.
+    if (xpInfo) {
+      this._showFloatingXp(xpInfo.xpGained);
+      document.dispatchEvent(new CustomEvent("jm:xp-updated", { detail: xpInfo.rankAfter }));
+      if (xpInfo.rankedUp) {
+        this._showRankUpToast(xpInfo.rankAfter);
+      }
+    }
+
     this.lastResult = isCorrect;
     this.feedback = feedback;
-    this.canProceed = true;
+
+    // Delay de leitura: em acerto libera "Continuar" em 1s; em erro 2.5s.
+    // Mostra barra + texto "Aguarde…" durante o delay, depois "Pressione Enter ▶".
+    this.canProceed = false;
+    const readDelayMs = isCorrect ? 1000 : 2500;
+    this._renderContinueIndicator(readDelayMs);
 
     // Remove alternativas e imagens do enunciado após responder
     this.element.querySelectorAll(".QuizTutorial_button2").forEach(btn => btn.remove());
+    // Também remove o grid container vazio + a borda dashed (visual mais limpo)
+    const optionsContainer = this.element.querySelector(".QuizTutorial_options");
+    if (optionsContainer) optionsContainer.remove();
     const imgContainer = this.element.querySelector(".QuizTutorial_images");
     if (imgContainer) imgContainer.remove();
 
@@ -230,6 +257,66 @@ class QuizGame {
       });
       this.revealingText.init();
     }
+  }
+
+  // --- Indicador de "continuar" -------------------------------------------
+  // Cria um pequeno bloco no rodapé do quiz com:
+  //   - barra de progresso (preenche em `delayMs`)
+  //   - texto "Aguarde…" → "Pressione Enter ▶" quando libera
+  _renderContinueIndicator(delayMs) {
+    if (!this.element) return;
+
+    // Limpa indicador anterior se existir (defensivo)
+    const old = this.element.querySelector(".QuizTutorial_continue");
+    if (old) old.remove();
+
+    const wrap = document.createElement("div");
+    wrap.className = "QuizTutorial_continue";
+    wrap.innerHTML = `
+      <span class="QuizTutorial_continueLabel">Aguarde…</span>
+      <div class="QuizTutorial_continueBar" aria-hidden="true">
+        <div class="QuizTutorial_continueBarFill"></div>
+      </div>
+    `;
+    this.element.appendChild(wrap);
+
+    const fill = wrap.querySelector(".QuizTutorial_continueBarFill");
+    // Anima a largura por CSS transition. Setamos transition + width num
+    // próximo frame pra garantir que o browser registra a mudança.
+    fill.style.transitionDuration = `${delayMs}ms`;
+    requestAnimationFrame(() => { fill.style.width = "100%"; });
+
+    setTimeout(() => {
+      this.canProceed = true;
+      wrap.classList.add("QuizTutorial_continueReady");
+      wrap.querySelector(".QuizTutorial_continueLabel").textContent = "Pressione Enter ▶";
+    }, delayMs);
+  }
+
+  // --- HUD de XP -----------------------------------------------------------
+  _showFloatingXp(amount) {
+    if (!amount || amount <= 0 || !this.element) return;
+    const float = document.createElement("div");
+    float.className = "FloatingXp";
+    float.textContent = `+${amount} XP`;
+    // Posiciona acima da caixa do quiz.
+    const rect = this.element.getBoundingClientRect();
+    float.style.left = `${rect.left + rect.width / 2 - 30}px`;
+    float.style.top = `${rect.top - 8}px`;
+    document.body.appendChild(float);
+    setTimeout(() => float.remove(), 1500);
+  }
+
+  _showRankUpToast(rank) {
+    if (!rank || !rank.name) return;
+    const toast = document.createElement("div");
+    toast.className = "RankUpToast";
+    toast.innerHTML = `
+      <div class="RankUpToast_label">NOVO RANK</div>
+      <div class="RankUpToast_rank">${rank.name}</div>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2300);
   }
 
   done() {

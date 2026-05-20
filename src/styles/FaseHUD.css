@@ -1,0 +1,52 @@
+/* FaseHUD — segue a mesma linguagem visual da XpBar (DENTRO do canvas, escala 3.5x).
+ * Posicionado logo abaixo da XpBar. Valores em "game-px". */
+.FaseHUD {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 49;
+  min-width: 150px;
+  max-width: 65%;
+  padding: 2px 6px 3px;
+  background: rgba(26, 54, 34, 0.88);
+  border: 1px solid var(--color-border-chalk);
+  border-radius: 0;
+  font-family: var(--font-retro);
+  color: var(--color-text);
+  font-size: 8px;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1px #000, 0 1px 3px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  transition: opacity 200ms ease-out;
+}
+
+.FaseHUD--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.FaseHUD_name {
+  color: var(--color-accent);
+  font-weight: bold;
+  margin-bottom: 1px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.FaseHUD_stats {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-text-muted);
+}
+
+.FaseHUD_sep {
+  opacity: 0.5;
+}
+
+.FaseHUD_correct {
+  color: var(--color-success-text);
+}

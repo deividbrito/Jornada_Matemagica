@@ -1,3 +1,11 @@
+// Avalia uma entrada do array `required` de cenários/eventos.
+// Prefix `!` significa "flag NÃO setada". Sem prefix = flag setada.
+function _flagSatisfied(sf) {
+  if (typeof sf !== "string") return true;
+  if (sf.startsWith("!")) return !window.playerState.storyFlags[sf.slice(1)];
+  return !!window.playerState.storyFlags[sf];
+}
+
 class OverworldMap {
   constructor(config) {
     this.overworld = null;
@@ -76,9 +84,7 @@ class OverworldMap {
     if (!this.isCutscenePlaying && match && match.talking.length) {
 
       const relevantScenario = match.talking.find(scenario => {
-        return (scenario.required || []).every(sf => {
-          return playerState.storyFlags[sf]
-        })
+        return (scenario.required || []).every((sf) => _flagSatisfied(sf));
       })
       relevantScenario && this.startCutscene(relevantScenario.events)
     }
@@ -89,7 +95,7 @@ class OverworldMap {
     const match = this.cutsceneSpaces[ `${hero.x},${hero.y}` ];
     if (!this.isCutscenePlaying && match) {
       const relevantScenario = match.find(scenario => {
-        return (scenario.required || []).every(sf => playerState.storyFlags[sf]);
+        return (scenario.required || []).every((sf) => _flagSatisfied(sf));
       });
       relevantScenario && this.startCutscene(relevantScenario.events);
     }
@@ -135,49 +141,95 @@ window.OverworldMaps = {
         y: window.utils.withGrid(3),
         src: "imagens/personagens/alice.png",
       }),
-      personagem: new window.Person({
-        x: window.utils.withGrid(1),
-        y: window.utils.withGrid(6),
-        src: "imagens/personagens/p1.png",
+      // Professor Mentor — guia narrativo, posicionado no centro do Corredor
+      // (acessível em qualquer momento). Na intro, anda até Alice e volta.
+      // Ordem importa: o primeiro `required` que satisfaz é usado.
+      // `faceHero` no início de cada cenário garante que ele encara Alice
+      // antes de falar, independente do lado em que ela se aproxima.
+      mentor: new window.Person({
+        x: window.utils.withGrid(4),
+        y: window.utils.withGrid(8),
+        direction: "up",
+        src: "imagens/personagens/p3.png",
         behaviorLoop: [
-          { type: "stand",  direction: "right", time: 3200 },
+          { type: "stand", direction: "up", time: 3200 },
         ],
         talking: [
-          {
-            events: [
-              { type: "textMessage", text: "Teste."},
-            ]
-          }
+          { required: ["epilogo_done"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Que tipo de matemágico você quer ser hoje, Alice?" },
+          ]},
+          { required: ["MAGO_PORCENTAGEM_DERROTADO", "boss_revelado"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Você fez o impossível. Venha, vamos conversar." },
+          ]},
+          { required: ["MAGO_RACIONAIS_DERROTADO", "antes_jardim_done"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Apenas o Jardim resta. Eu não posso ir junto. Volte inteira." },
+          ]},
+          { required: ["MAGO_RACIONAIS_DERROTADO"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Cinco magos. Apenas o Jardim resta. Atravesse o Pátio para chegar lá." },
+          ]},
+          { required: ["MAGO_FRACOES_DERROTADO"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: A Biblioteca está mais leve. As páginas voltam a se colar. Vá ao Pátio." },
+          ]},
+          { required: ["MAGO_PRIMOS_DERROTADO", "metade_caminho_done"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Metade do caminho. Você sabe quem é o Sombrio agora. Não tema; saiba." },
+          ]},
+          { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Três salas, três magos. O Grêmio é o próximo. A Sentinela conta números — e pessoas — friamente." },
+          ]},
+          { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Bom. A Sala 2 te espera. O Mestre da Aproximação é... vago. Não se distraia." },
+          ]},
+          { events: [
+              { type: "faceHero", who: "mentor" },
+              { type: "textMessage", text: "Mentor: Comece pela Sala 1, Alice. O Conde está esperando." },
+          ]},
         ]
       }),
+      // Acesso ao Pátio — só liberado durante a fase 5 (após Bibliófilo).
+      // Pátio continua acessível APÓS derrota do Trapaceiro porque é caminho
+      // pro Jardim (boss final).
       vazio: new window.Person({
         x: window.utils.withGrid(4),
         y: window.utils.withGrid(2),
         src: "imagens/personagens/vazio.png",
         talking: [
-          {
-            events: [
-              { type: "changeMap", 
-                map: "Patio",
-                x: window.utils.withGrid(9),
-                y: window.utils.withGrid(17),
-                direction: "up",
-                requireConfirmation: true,
-                confirmationText: "Deseja ir até o pátio? O Prof. Potencialus Decimus te aguarda lá, com desafios de aproximação de números a potências de 10!"
-              },
-            ]
-          }
+          { required: ["!MAGO_FRACOES_DERROTADO"], events: [
+            { type: "textMessage", text: "Alice: Ainda não posso sair. Devia ir até a Biblioteca primeiro." }
+          ]},
+          // Aviso 5.A — primeira vez indo ao Pátio (Trapaceiro Racional).
+          { required: ["MAGO_FRACOES_DERROTADO", "!mago5_aviso"], events: [
+            { type: "textMessage", text: "[Vozes do Pátio. Risadas exageradas. Algo desencaixado nelas.]" },
+            { type: "textMessage", text: "Aluna (encostada na parede): O Trapaceiro me convenceu de que três vezes dois era cinco." },
+            { type: "textMessage", text: "Aluna: E eu ri junto. Eu RI. Como se fosse engraçado." },
+            { type: "textMessage", text: "Aluna: Ele faz parecer que regra é piada. Não caia nisso, Alice." },
+            { type: "addStoryFlag", flag: "mago5_aviso" },
+            { type: "changeMap", map: "Patio", x: window.utils.withGrid(9), y: window.utils.withGrid(17), direction: "up" }
+          ]},
+          { events: [
+            { type: "changeMap", map: "Patio", x: window.utils.withGrid(9), y: window.utils.withGrid(17), direction: "up" }
+          ]}
         ]
       }),
 
-      //figurantes
+      //figurantes (cada um com 1 fala de ambientação fixa)
       figurante1: new window.Person({
         x: window.utils.withGrid(1),
         y: window.utils.withGrid(11),
         src: "imagens/personagens/figurante1.png",
         behaviorLoop: [
-          { type: "stand",  direction: "right", time: 3200 },
-          { type: "stand",  direction: "down", time: 800 },
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 800 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Eu vi um número se mexer. Sério. Estava no quadro e... pulou." }] },
         ],
       }),
       figurante2: new window.Person({
@@ -185,8 +237,12 @@ window.OverworldMaps = {
         y: window.utils.withGrid(4),
         src: "imagens/personagens/figurante2.png",
         behaviorLoop: [
-          { type: "stand",  direction: "left", time: 3200 },
-          { type: "stand",  direction: "up", time: 800 },
+          { type: "stand", direction: "left", time: 3200 },
+          { type: "stand", direction: "up", time: 800 },
+        ],
+        talking: [
+          { required: ["epilogo_done"], events: [{ type: "textMessage", text: "Aluna: A diretora destrancou o gabinete. A escola voltou ao normal, graças a você." }] },
+          { events: [{ type: "textMessage", text: "Aluna: A diretora trancou o gabinete. Ninguém sabe se ela está bem." }] },
         ],
       }),
       figurante3: new window.Person({
@@ -194,7 +250,10 @@ window.OverworldMaps = {
         y: window.utils.withGrid(17),
         src: "imagens/personagens/figurante3.png",
         behaviorLoop: [
-          { type: "stand",  direction: "right", time: 3200 },
+          { type: "stand", direction: "right", time: 3200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Tentei contar as vírgulas no quadro da Sala 1. Não consegui chegar ao fim." }] },
         ],
       }),
       figurante4: new window.Person({
@@ -202,7 +261,10 @@ window.OverworldMaps = {
         y: window.utils.withGrid(17),
         src: "imagens/personagens/figurante4.png",
         behaviorLoop: [
-          { type: "stand",  direction: "left", time: 3200 },
+          { type: "stand", direction: "left", time: 3200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluna: Na Sala 2 tudo é 'mais ou menos'. Sinto falta do exato." }] },
         ],
       }),
       figurante5: new window.Person({
@@ -210,8 +272,11 @@ window.OverworldMaps = {
         y: window.utils.withGrid(38),
         src: "imagens/personagens/figurante5.png",
         behaviorLoop: [
-          { type: "stand",  direction: "up", time: 3200 },
-          { type: "stand",  direction: "right", time: 1200 },
+          { type: "stand", direction: "up", time: 3200 },
+          { type: "stand", direction: "right", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Eu estava na lista da Sentinela. Acho que eu sumi por um tempo... ainda não me lembro de tudo." }] },
         ],
       }),
       figurante6: new window.Person({
@@ -219,8 +284,11 @@ window.OverworldMaps = {
         y: window.utils.withGrid(3),
         src: "imagens/personagens/figurante6.png",
         behaviorLoop: [
-          { type: "stand",  direction: "right", time: 3200 },
-          { type: "stand",  direction: "down", time: 1200 },
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Esse livro daqui... metade tá faltando. Achei o resto rasgado no chão da Biblioteca." }] },
         ],
       }),
       figurante7: new window.Person({
@@ -228,10 +296,13 @@ window.OverworldMaps = {
         y: window.utils.withGrid(4),
         src: "imagens/personagens/figurante7.png",
         behaviorLoop: [
-          { type: "stand",  direction: "left", time: 3200 },
-          { type: "stand",  direction: "up", time: 1200 },
-          { type: "stand",  direction: "right", time: 3200 },
-          { type: "stand",  direction: "down", time: 1200 },
+          { type: "stand", direction: "left", time: 3200 },
+          { type: "stand", direction: "up", time: 1200 },
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluna: O Trapaceiro me convenceu de uma piada que ainda dói. Não caia nas dele." }] },
         ],
       }),
       figurante8: new window.Person({
@@ -239,10 +310,13 @@ window.OverworldMaps = {
         y: window.utils.withGrid(24),
         src: "imagens/personagens/figurante8.png",
         behaviorLoop: [
-          { type: "stand",  direction: "left", time: 3200 },
-          { type: "stand",  direction: "up", time: 1200 },
-          { type: "stand",  direction: "right", time: 3200 },
-          { type: "stand",  direction: "down", time: 1200 },
+          { type: "stand", direction: "left", time: 3200 },
+          { type: "stand", direction: "up", time: 1200 },
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Eu fui até o Jardim. As plantas pararam de crescer. Tudo congelado em 100%." }] },
         ],
       }),
       figurante9: new window.Person({
@@ -250,143 +324,142 @@ window.OverworldMaps = {
         y: window.utils.withGrid(35),
         src: "imagens/personagens/figurante9.png",
         behaviorLoop: [
-          { type: "stand",  direction: "left", time: 3200 },
-          { type: "stand",  direction: "up", time: 1200 },
+          { type: "stand", direction: "left", time: 3200 },
+          { type: "stand", direction: "up", time: 1200 },
+        ],
+        talking: [
+          { required: ["epilogo_done"], events: [{ type: "textMessage", text: "Aluna: A escola voltou. Você é a Alice, né? Obrigada." }] },
+          { events: [{ type: "textMessage", text: "Aluna: Você é a Alice, né? Por favor... a gente precisa de você." }] },
+        ],
+      }),
+      // figurante10 — só fala depois do epílogo (pré-epílogo fica silencioso).
+      figurante10: new window.Person({
+        x: window.utils.withGrid(3),
+        y: window.utils.withGrid(35),
+        src: "imagens/personagens/figurante10.png",
+        behaviorLoop: [
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { required: ["epilogo_done"], events: [{ type: "textMessage", text: "Aluno: Quer dividir meu lanche? Eu sei calcular as porções agora — graças a você." }] },
         ],
       }),
     },
 
     cutsceneSpaces: {
-      //acesso sala2
+      //acesso sala2 — só acessível durante a fase 2 (mago1 derrotado, mago2 não)
       [window.utils.asGridCoord(0,12)]: [
-        {
-          events: [
-            { type: "changeMap",  
-              map: "Sala2",
-              x: window.utils.withGrid(15),
-              y: window.utils.withGrid(18),
-              direction: "up",
-              requireConfirmation: true,
-              confirmationText: "Deseja ir até a sala 2? O Prof. Fulano te aplicará uma prova sobre operações com números naturais!"
-            }
-          ]
-        }
+        { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
+          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
+        ]},
+        { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(0,13)]: [
-        {
-          events: [
-            { type: "changeMap",  
-              map: "Sala2",
-              x: window.utils.withGrid(15),
-              y: window.utils.withGrid(18),
-              direction: "up",
-              requireConfirmation: true,
-              confirmationText: "Deseja ir até a sala 2? O Prof. Operanis Naturalis te aplicará uma prova sobre operações com números naturais!"
-            }
-          ]
-        }
+        { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
+          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
+        ]},
+        { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+        ]},
+        { required: ["MAGO_DECIMAIS_DERROTADO", "!mago2_aviso"], events: [
+          { type: "textMessage", text: "[O ar perto da Sala 2 parece fora de foco. Tudo lá dentro fica meio aproximado.]" },
+          { type: "textMessage", text: "Alice: ...o Mestre da Aproximação me espera." },
+          { type: "addStoryFlag", flag: "mago2_aviso" },
+        ]},
+        { events: [
+          { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(0,14)]: [
-        {
-          events: [
-            { type: "changeMap",  
-              map: "Sala2",
-              x: window.utils.withGrid(15),
-              y: window.utils.withGrid(18),
-              direction: "up",
-              requireConfirmation: true,
-              confirmationText: "Deseja ir até a sala 2? O Prof. Operanis Naturalis te aplicará uma prova sobre operações com números naturais!"
-            }
-          ]
-        }
+        { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
+          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
+        ]},
+        { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
 
-      //acesso sala1
+      //acesso sala1 — bloqueia após derrota; aviso (1ª vez) no tile central
       [window.utils.asGridCoord(9,12)]: [
-        {
-          events: [
-            { type: "changeMap",  
-              map: "Sala1",
-              x: window.utils.withGrid(15),
-              y: window.utils.withGrid(18),
-              direction: "up",
-              requireConfirmation: true,
-              confirmationText: `
-              <b style="font-family: 'Courier New', monospace;">Prof. Decimalus:</b><br>
-              Deseja ser desafiada nos números decimais?`
-            }
-          ]
-        }
+        { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(9,13)]: [
-        {
-          events: [
-            { type: "changeMap",  
-              map: "Sala1",
-              x: window.utils.withGrid(15),
-              y: window.utils.withGrid(18),
-              direction: "up",
-              requireConfirmation: true,
-              confirmationText: `
-              <b style="font-family: 'Courier New', monospace;">Prof. Decimalus:</b><br>
-              Deseja ser desafiada nos números decimais?`
-            }
-          ]
-        }
+        { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" }
+        ]},
+        { required: ["!mago1_aviso"], events: [
+          { type: "textMessage", text: "[Vozes baixas vêm de dentro da Sala 1.]" },
+          { type: "textMessage", text: "[Você ouve um murmurar contínuo de números... vírgulas, decimais.]" },
+          { type: "textMessage", text: "Alice: ...o Conde dos Decimais está lá dentro." },
+          { type: "textMessage", text: "Alice: Preciso preparar minha cabeça antes de entrar." },
+          { type: "addStoryFlag", flag: "mago1_aviso" },
+        ]},
+        { events: [
+          { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(9,14)]: [
-        {
-          events: [
-            { type: "changeMap",  
-              map: "Sala1",
-              x: window.utils.withGrid(15),
-              y: window.utils.withGrid(18),
-              direction: "up",
-              requireConfirmation: true,
-              confirmationText: `
-              <b style="font-family: 'Courier New', monospace;">Prof. Decimalus:</b><br>
-              Deseja ser desafiada nos números decimais?`
-            }
-          ]
-        }
+        { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
 
-      //acesso gremio
+      //acesso gremio — só acessível durante a fase 3 (mago2 derrotado, mago3 não)
       [window.utils.asGridCoord(0,19)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Gremio",
-              x: window.utils.withGrid(4),
-              y: window.utils.withGrid(8), 
-              direction: "up"
-            }
-          ]
-        }
+        { required: ["MAGO_PRIMOS_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
+        ]},
+        { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(0,20)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Gremio",
-              x: window.utils.withGrid(4),
-              y: window.utils.withGrid(8), 
-              direction: "up"
-            }
-          ]
-        }
+        { required: ["MAGO_PRIMOS_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
+        ]},
+        { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+        ]},
+        { required: ["MAGO_APROXIMACAO_DERROTADO", "!mago3_aviso"], events: [
+          { type: "textMessage", text: "[Papéis rasgados saem por baixo da porta do Grêmio.]" },
+          { type: "textMessage", text: "[Uma voz fria conta números: 'dois, três, cinco...']" },
+          { type: "textMessage", text: "Alice: A Sentinela dos Primos. Hora de contar com ela." },
+          { type: "addStoryFlag", flag: "mago3_aviso" },
+        ]},
+        { events: [
+          { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(0,21)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Gremio",
-              x: window.utils.withGrid(4),
-              y: window.utils.withGrid(8), 
-              direction: "up"
-            }
-          ]
-        }
+        { required: ["MAGO_PRIMOS_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
+        ]},
+        { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
+        ]}
       ],
 
       //acesso sala de estudos
@@ -427,65 +500,62 @@ window.OverworldMaps = {
         }
       ],
 
-      //acesso banheiro
+      //acesso toalete — trancado durante todo o arco (fora de escopo)
       [window.utils.asGridCoord(0,27)]: [
-        {
-          events: [
-            { }
-          ]
-        }
+        { events: [
+          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" }
+        ]}
       ],
       [window.utils.asGridCoord(0,28)]: [
-        {
-          events: [
-            {}
-          ]
-        }
+        { events: [
+          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" }
+        ]}
       ],
       [window.utils.asGridCoord(0,29)]: [
-        {
-          events: [
-            { }
-          ]
-        }
+        { events: [
+          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" }
+        ]}
       ],
 
-      //acesso biblioteca
+      //acesso biblioteca — só acessível durante a fase 4 (mago3 derrotado, mago4 não)
       [window.utils.asGridCoord(9,27)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Biblioteca",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(18),
-              direction: "up"
-            }
-          ]
-        }
+        { required: ["MAGO_FRACOES_DERROTADO"], events: [
+          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
+        ]},
+        { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia ir até o Grêmio primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(9,28)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Biblioteca",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(18),
-              direction: "up"
-            }
-          ]
-        }
+        { required: ["MAGO_FRACOES_DERROTADO"], events: [
+          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
+        ]},
+        { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia ir até o Grêmio primeiro." }
+        ]},
+        { required: ["MAGO_PRIMOS_DERROTADO", "!mago4_aviso"], events: [
+          { type: "textMessage", text: "[Páginas voam pela fresta da porta da Biblioteca.]" },
+          { type: "textMessage", text: "[Tudo está dividido em pedaços. Nada inteiro sobrevive lá dentro.]" },
+          { type: "textMessage", text: "Alice: O Bibliófilo das Frações. Vou recompor o que ele rasgou." },
+          { type: "addStoryFlag", flag: "mago4_aviso" },
+        ]},
+        { events: [
+          { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
       [window.utils.asGridCoord(9,29)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Biblioteca",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(18),
-              direction: "up"
-            }
-          ]
-        }
+        { required: ["MAGO_FRACOES_DERROTADO"], events: [
+          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
+        ]},
+        { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia ir até o Grêmio primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
+        ]}
       ],
     },
 
@@ -548,8 +618,112 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(8,30)]: true, [window.utils.asGridCoord(8,31)]: true, [window.utils.asGridCoord(8,32)]: true,
 
       //maquininha de refris
-      [window.utils.asGridCoord(6,3)]: true, [window.utils.asGridCoord(7,3)]: true, 
-    }
+      [window.utils.asGridCoord(6,3)]: true, [window.utils.asGridCoord(7,3)]: true,
+    },
+    // entryCutscene é array de cenas — a PRIMEIRA cujo `required` satisfaz roda.
+    // Ordem: epílogo > transição 1 > intro (mais específico antes do genérico).
+    entryCutscene: [
+      // Boss revelado + Epílogo — primeira volta ao Corredor após derrota do 6º mago.
+      // A revelação do Sombrio acontece aqui (não no Jardim) porque FaseRunner
+      // sempre manda o jogador de volta ao Corredor.
+      {
+        required: ["MAGO_PORCENTAGEM_DERROTADO", "!epilogo_done"],
+        events: [
+          { type: "stand", who: "hero", direction: "down", time: 400 },
+          { type: "textMessage", text: "[Um vento frio percorre o Corredor. As luzes piscam uma vez. Duas. Param.]" },
+          { type: "textMessage", text: "[Uma voz vem de todas as direções ao mesmo tempo.]" },
+          { type: "textMessage", text: "Sombrio: Impressionante, Alice. Não acreditei quando soube que você ainda pensava." },
+          { type: "textMessage", text: "Sombrio: Vinte anos. Vinte anos esta escola me esqueceu." },
+          { type: "textMessage", text: "Sombrio: Eu organizei tudo, sabe? Cada nota. Cada matrícula. Cada nome." },
+          { type: "textMessage", text: "Sombrio: E quando me aposentaram... apagaram o meu nome também." },
+          { type: "textMessage", text: "Alice: Você usou meus colegas. Eles eram só ferramentas pra você." },
+          { type: "textMessage", text: "Sombrio: Eles eram instrumentos. Eu sou o regente." },
+          { type: "textMessage", text: "Sombrio: Mas você... você sabe somar, dividir, fracionar. Você lembra." },
+          { type: "textMessage", text: "Sombrio: Por isso, hoje, eu te deixo viver. Nos vemos no próximo colégio, Alice." },
+          { type: "textMessage", text: "[A voz se dissolve. O Corredor volta a respirar.]" },
+          { type: "addStoryFlag", flag: "boss_revelado" },
+          // Mentor caminha até Alice (de (4,8) até (4,6), parando 1 tile abaixo dela).
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "stand", who: "mentor", direction: "up", time: 300 },
+          { type: "textMessage", text: "Mentor: Você conseguiu, Alice. A escola respira de novo." },
+          { type: "textMessage", text: "[Pelos cantos do Corredor, alunos voltam a circular. O Conde acena de longe. O Bibliófilo abraça um livro inteiro.]" },
+          { type: "textMessage", text: "Alice: Ele vai voltar?" },
+          { type: "textMessage", text: "Mentor: Provavelmente. Esquecimento é um feitiço difícil de quebrar de vez." },
+          { type: "textMessage", text: "Mentor: Mas hoje, ele deixou uma prova: ser apagado não dá direito a apagar os outros." },
+          { type: "textMessage", text: "Mentor: Há outros colégios, Alice. Outras escolas com magos. Você só começou." },
+          // Mentor recua pra posição original (4,8)
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "stand", who: "mentor", direction: "up", time: 200 },
+          { type: "addStoryFlag", flag: "epilogo_done" },
+          // Encerramento — popup com escolha de voltar ao menu ou ficar.
+          { type: "endGame" },
+        ]
+      },
+      // Transição 1 — após 3 magos derrotados (revelação do Sombrio)
+      {
+        required: ["MAGO_PRIMOS_DERROTADO", "!metade_caminho_done"],
+        events: [
+          { type: "stand", who: "hero", direction: "down", time: 400 },
+          // Mentor caminha até Alice (de (4,8) até (4,6), parando 1 abaixo).
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "stand", who: "mentor", direction: "up", time: 300 },
+          { type: "textMessage", text: "Mentor: Três magos. Três colegas libertos." },
+          { type: "textMessage", text: "Mentor: Você é mais forte do que eu esperava, Alice. Por isso preciso ser honesto com você." },
+          { type: "textMessage", text: "Alice: Sobre quem está por trás disso?" },
+          { type: "textMessage", text: "Mentor: O nome dele saiu dos registros há vinte anos. A escola tentou esquecer." },
+          { type: "textMessage", text: "Mentor: Ele era vice-diretor. Adorava ordem. Listas. Hierarquia." },
+          { type: "textMessage", text: "Mentor: Quando o aposentaram contra a vontade... ele descobriu algo na biblioteca." },
+          { type: "textMessage", text: "Mentor: Um livro que esta escola devia ter queimado." },
+          { type: "textMessage", text: "Alice: Por que ele está fazendo isso? Vinte anos depois?" },
+          { type: "textMessage", text: "Mentor: Porque magia da raiva não envelhece. Só amadurece." },
+          { type: "textMessage", text: "Mentor: Os próximos magos vão sentir o cheiro dele em você. Cuidado redobrado." },
+          // Mentor recua pra posição original (4,8)
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "stand", who: "mentor", direction: "up", time: 200 },
+          { type: "addStoryFlag", flag: "metade_caminho_done" },
+        ]
+      },
+      // Intro — primeiro boot do save. Mentor caminha até Alice, conversa,
+      // e depois recua pra sua posição habitual no centro do Corredor.
+      {
+        required: ["!intro_done"],
+        events: [
+          { type: "stand", who: "hero", direction: "down", time: 400 },
+          { type: "textMessage", text: "Alice: ...onde estão todos?" },
+          { type: "textMessage", text: "[Passos lentos ecoam no Corredor. Alguém se aproxima.]" },
+          // Mentor caminha 4 tiles pra cima: (4,8) → (4,4), parando abaixo de Alice
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "walk", who: "mentor", direction: "up" },
+          { type: "stand", who: "mentor", direction: "up", time: 300 },
+          { type: "textMessage", text: "Mentor: Alice. Que bom que você acordou." },
+          { type: "textMessage", text: "Mentor: Você dormiu na biblioteca. Quando despertou, a escola não era mais a mesma." },
+          { type: "textMessage", text: "Alice: O que aconteceu?" },
+          { type: "textMessage", text: "Mentor: Seis colegas — alunos, professores — foram tomados por uma magia antiga." },
+          { type: "textMessage", text: "Mentor: Cada um se trancou numa sala, dominado por um conceito que amava em vida." },
+          { type: "textMessage", text: "Mentor: Você é a única que ainda pensa com clareza. Sabe o que isso significa?" },
+          { type: "textMessage", text: "Alice: ...que sou a única que pode trazê-los de volta." },
+          { type: "textMessage", text: "Mentor: Exatamente. E precisa começar agora, antes que o feitiço se aprofunde." },
+          { type: "textMessage", text: "Mentor: Vá pela Sala 1. O Conde dos Decimais já sente o cheiro de quem ainda pensa." },
+          { type: "textMessage", text: "Mentor: Use as setas pra andar. Encoste em alguém e aperte Enter pra falar." },
+          { type: "textMessage", text: "Mentor: Quando os seis estiverem livres, volte aqui. Há algo maior por trás de tudo isso." },
+          { type: "textMessage", text: "Alice: Algo maior?" },
+          { type: "textMessage", text: "Mentor: A tempo. Vá, Alice. Cada minuto a mais aqui é um aluno a menos lá dentro." },
+          // Mentor recua 4 tiles pra sua posição
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "walk", who: "mentor", direction: "down" },
+          { type: "stand", who: "mentor", direction: "up", time: 200 },
+          { type: "addStoryFlag", flag: "intro_done" },
+        ]
+      },
+    ]
   },
   Jardim: {
     id: "Jardim",
@@ -567,41 +741,39 @@ window.OverworldMaps = {
         y: window.utils.withGrid(7),
         src: "imagens/personagens/p3.png",
         talking: [
-          {
-            events: [
-              { type: "textMessage", text: "Teste."},
-            ]
-          }
+          { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+            { type: "textMessage", text: "Sobrevivente: Você foi a fração que ele não previu. Eu acho que vou conseguir voltar pra casa." },
+          ]},
+          { events: [
+            { type: "textMessage", text: "Sobrevivente: Ele... ele falou que 100% dos que entrassem viraria adubo." },
+            { type: "textMessage", text: "Sobrevivente: Por favor, Alice, não vire mais um número na estatística dele." },
+          ]},
         ]
       }),
-        vilao7: new window.Person({
+      // Mestre das Porcentagens — NPC visível no Jardim (boss final).
+      mago: new window.Person({
         x: window.utils.withGrid(5),
         y: window.utils.withGrid(6),
-        src: "imagens/personagens/vilao3.png",
+        direction: "down",
+        src: "imagens/personagens/vilao7.png",
         talking: [
-          {
-            required: ["DESAFIO7D3_COMPLETO"],
-            events: [
-              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
-            ]
-          },
-          {
-            required: ["DESAFIO7D2_COMPLETO"],
-            events: [
-              { type: "changeMap", map: "Desafio7d3"}
-            ]
-          },
-          {
-            required: ["DESAFIO7D1_COMPLETO"],
-            events: [
-              { type: "changeMap", map: "Desafio7d2"}
-            ]
-          },
-          {
-            events: [
-              { type: "changeMap", map: "Desafio7d1"}
-            ]
-          },
+          // Pós-luta — Mestre lúcido
+          { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+            { type: "textMessage", text: "Mestre: Você... é a exceção. 100% da minha confiança. Eu estava errado." },
+            { type: "textMessage", text: "Mestre: O Sombrio se foi. Mas ele deixou marcas." },
+            { type: "textMessage", text: "Mestre: Eu fui coordenador. Eu ordenava as listas, os horários, as filas." },
+            { type: "textMessage", text: "Mestre: O Sombrio me ofereceu hierarquia eterna. Eu aceitei sem pensar." },
+            { type: "textMessage", text: "Mestre: Volte ao Corredor. A escola te espera." },
+          ]},
+          // Pré-luta — provocação + inicia fase
+          { events: [
+            { type: "textMessage", text: "Mestre: 100% dos que entraram neste jardim... 100% foram aniquilados." },
+            { type: "textMessage", text: "Mestre: A estatística é minha amiga. A história, minha aliada." },
+            { type: "textMessage", text: "Mestre: Você é a sexta. As cinco anteriores eu transformei em adubo." },
+            { type: "textMessage", text: "Mestre: Mas... talvez você seja diferente. 16,67% de chance, eu calculei." },
+            { type: "textMessage", text: "Mestre: Prove-me. Domine a parte e dominará o todo." },
+            { type: "startFase", codigo: "jardim_porcentagem" },
+          ]},
         ]
       }),
       figurante1: new window.Person({
@@ -620,7 +792,20 @@ window.OverworldMaps = {
           { type: "stand",  direction: "down", time: 3200 },
         ],
       }),
-    }, 
+      // ROTEIRO posiciona figurante8.png no Jardim com a linha sobre as plantas.
+      figurante3: new window.Person({
+        x: window.utils.withGrid(3),
+        y: window.utils.withGrid(8),
+        src: "imagens/personagens/figurante8.png",
+        behaviorLoop: [
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Eu não sei como cheguei aqui. As plantas pararam." }] },
+        ],
+      }),
+    },
 
     walls: {
       //limite de mapa superior
@@ -663,11 +848,17 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(16,12)]: true, [window.utils.asGridCoord(16,13)]: true,
       [window.utils.asGridCoord(16,14)]: true, [window.utils.asGridCoord(16,15)]: true,
 
-      //árvore
-      [window.utils.asGridCoord(12,4)]: true, [window.utils.asGridCoord(11,4)]: true,
+      //árvore (canto superior direito — copa ocupa 3x3, tronco no centro)
+      [window.utils.asGridCoord(10,3)]: true, [window.utils.asGridCoord(11,3)]: true, [window.utils.asGridCoord(12,3)]: true,
+      [window.utils.asGridCoord(10,4)]: true, [window.utils.asGridCoord(11,4)]: true, [window.utils.asGridCoord(12,4)]: true,
+      [window.utils.asGridCoord(11,5)]: true,
 
-      //poste
+      //poste com placa "GINÁSIO" (canto superior esquerdo)
+      [window.utils.asGridCoord(1,1)]: true,
       [window.utils.asGridCoord(1,3)]: true, [window.utils.asGridCoord(1,4)]: true,
+
+      //banco abaixo da placa
+      [window.utils.asGridCoord(2,3)]: true, [window.utils.asGridCoord(3,3)]: true,
     },
     cutsceneSpaces: {
       [window.utils.asGridCoord(15,7)]: [
@@ -684,9 +875,22 @@ window.OverworldMaps = {
           ]
         }
       ],
-    }
+    },
+    // Aviso 6.A — primeira entrada no Jardim, antes do Mestre das Porcentagens.
+    entryCutscene: [
+      {
+        required: ["!mago6_aviso", "!MAGO_PORCENTAGEM_DERROTADO"],
+        events: [
+          { type: "stand", who: "hero", direction: "left", time: 400 },
+          { type: "textMessage", text: "[O Jardim está enevoado. As plantas estão imóveis, como se congeladas no tempo.]" },
+          { type: "textMessage", text: "Alice: ...as plantas. Elas não se mexem." },
+          { type: "textMessage", text: "Alice: É como se 100% delas tivessem parado de existir ao mesmo tempo." },
+          { type: "addStoryFlag", flag: "mago6_aviso" },
+        ]
+      }
+    ]
   },
-  Sala2: { 
+  Sala2: {
     id: "Sala2",
     lowerSrc: "imagens/mapas/sala1.png",
     upperSrc: "imagens/personagens/vazio.png",
@@ -697,50 +901,43 @@ window.OverworldMaps = {
         y: window.utils.withGrid(18),
         src: "imagens/personagens/alice.png",
       }),
-      vilao2: new window.Person({
+      // Mestre da Aproximação — NPC visível na Sala 2.
+      mago: new window.Person({
         x: window.utils.withGrid(15),
         y: window.utils.withGrid(6),
-        src: "imagens/personagens/vilao2.png",
+        direction: "down",
+        src: "imagens/personagens/vilao3.png",
         talking: [
-          {
-            required: ["DESAFIO2D3_COMPLETO"],
-            events: [
-              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
-            ]
-          },
-          {
-            required: ["DESAFIO2D2_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio2d3",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            required: ["DESAFIO2D1_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio2d2",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            events: [
-              { type: "changeMap", 
-                map: "Desafio2d1",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
+          // Pós-luta — Mestre lúcido
+          { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
+            { type: "textMessage", text: "Mestre: Eu via tudo borrado. Tudo 'mais ou menos'. E achava bom assim." },
+            { type: "textMessage", text: "Mestre: Mas precisão importa, não importa? Saber onde está o número exato... é saber onde você está." },
+            { type: "textMessage", text: "Mestre: O Sombrio me ofereceu o conforto da imprecisão. Eu aceitei." },
+            { type: "textMessage", text: "Alice: Conforto?" },
+            { type: "textMessage", text: "Mestre: Quem nunca tenta acertar... nunca erra. Mas também nunca chega a lugar nenhum." },
+          ]},
+          // Pré-luta — provocação + inicia fase
+          { events: [
+            { type: "textMessage", text: "Mestre: Aproximadamente... uma intrusa. Mais ou menos uma ameaça." },
+            { type: "textMessage", text: "Mestre: Por que se importar com a casa do meio? Com a casa exata?" },
+            { type: "textMessage", text: "Mestre: O suficiente sempre foi suficiente. Por que insistir em ser preciso?" },
+            { type: "textMessage", text: "Mestre: Mostre-me que sabe arredondar... antes que eu te arredonde pra fora daqui." },
+            { type: "startFase", codigo: "sala2_aproximacao" },
+          ]},
         ]
+      }),
+      // Figurante 4 — aluna trancada na Sala 2 (linha do ROTEIRO).
+      figurante4: new window.Person({
+        x: window.utils.withGrid(5),
+        y: window.utils.withGrid(15),
+        src: "imagens/personagens/figurante4.png",
+        behaviorLoop: [
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "up", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluna: Tudo aqui é 'mais ou menos'. Sinto falta do exato." }] },
+        ],
       }),
     },
     walls: {
@@ -791,6 +988,26 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(23,19)]: true, [window.utils.asGridCoord(24,19)]: true,
       [window.utils.asGridCoord(25,19)]: true, [window.utils.asGridCoord(26,19)]: true,
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
+
+      // carteiras (mesas em pares) — 3 fileiras. x=15 livre pra Alice chegar
+      // ao mago em (15,6). Mesas em x=13,14 e 19,20 deixam o vão central.
+      [window.utils.asGridCoord(3,6)]:  true, [window.utils.asGridCoord(4,6)]:  true,
+      [window.utils.asGridCoord(8,6)]:  true, [window.utils.asGridCoord(9,6)]:  true,
+      [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
+      [window.utils.asGridCoord(19,6)]: true, [window.utils.asGridCoord(20,6)]: true,
+      [window.utils.asGridCoord(25,6)]: true, [window.utils.asGridCoord(26,6)]: true,
+
+      [window.utils.asGridCoord(3,10)]:  true, [window.utils.asGridCoord(4,10)]:  true,
+      [window.utils.asGridCoord(8,10)]:  true, [window.utils.asGridCoord(9,10)]:  true,
+      [window.utils.asGridCoord(13,10)]: true, [window.utils.asGridCoord(14,10)]: true,
+      [window.utils.asGridCoord(19,10)]: true, [window.utils.asGridCoord(20,10)]: true,
+      [window.utils.asGridCoord(25,10)]: true, [window.utils.asGridCoord(26,10)]: true,
+
+      [window.utils.asGridCoord(3,13)]:  true, [window.utils.asGridCoord(4,13)]:  true,
+      [window.utils.asGridCoord(8,13)]:  true, [window.utils.asGridCoord(9,13)]:  true,
+      [window.utils.asGridCoord(13,13)]: true, [window.utils.asGridCoord(14,13)]: true,
+      [window.utils.asGridCoord(19,13)]: true, [window.utils.asGridCoord(20,13)]: true,
+      [window.utils.asGridCoord(25,13)]: true, [window.utils.asGridCoord(26,13)]: true,
     },
     cutsceneSpaces: {
       //acesso sala2
@@ -860,56 +1077,52 @@ window.OverworldMaps = {
         y: window.utils.withGrid(5),
         src: "imagens/personagens/p4.png",
         talking: [
-          {
-            events: [
-              { type: "textMessage", text: "Teste."},
-            ]
-          }
+          { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
+            { type: "textMessage", text: "Aluno: Você apagou as vírgulas dele do meu nome. Eu consigo respirar de novo. Obrigado." },
+          ]},
+          { events: [
+            { type: "textMessage", text: "Aluno: Eu... eu tava na chamada quando o Conde veio." },
+            { type: "textMessage", text: "Aluno: Ele anotou meu nome com a vírgula no lugar errado. Salva a gente, Alice." },
+          ]},
         ]
       }),
-      vilao1: new window.Person({
+      // Figurante 3 — aluno trancado na Sala 1 (linha do ROTEIRO 1.A/figurantes).
+      figurante3: new window.Person({
+        x: window.utils.withGrid(5),
+        y: window.utils.withGrid(7),
+        src: "imagens/personagens/figurante3.png",
+        behaviorLoop: [
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Já tentei contar as vírgulas no quadro. Não consegui chegar ao fim." }] },
+        ],
+      }),
+      // Conde dos Decimais — NPC visível na Sala 1.
+      // Sprite trocado pra _derrotado.png via Overworld._applyVilaoSprites quando flag setada.
+      mago: new window.Person({
         x: window.utils.withGrid(15),
         y: window.utils.withGrid(14),
-        src: "imagens/personagens/vilao4.png",
+        direction: "down",
+        src: "imagens/personagens/vilao2.png",
         talking: [
-          {
-            required: ["DESAFIO1D3_COMPLETO"],
-            events: [
-              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
-            ]
-          },
-          {
-            required: ["DESAFIO1D2_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio1d3",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            required: ["DESAFIO1D1_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio1d2",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            events: [
-              { type: "changeMap", 
-                map: "Desafio1d1",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
+          // Pós-luta — Conde lúcido
+          { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
+            { type: "textMessage", text: "Conde: ...obrigado. Eu já não me lembrava do meu próprio nome." },
+            { type: "textMessage", text: "Conde: Quando o Mago Sombrio me tocou, tudo virou número. Eu só via vírgulas." },
+            { type: "textMessage", text: "Conde: Cada aluno que entrava nesta sala... eu queria apagar." },
+            { type: "textMessage", text: "Alice: Quem é o Mago Sombrio?" },
+            { type: "textMessage", text: "Conde: Alguém que esta escola esqueceu. E que não esquece. Cuide-se." },
+          ]},
+          // Pré-luta — provocação + inicia fase
+          { events: [
+            { type: "textMessage", text: "Conde: ...zero vírgula zero zero zero... um... cinco..." },
+            { type: "textMessage", text: "Conde: Ah. Uma intrusa." },
+            { type: "textMessage", text: "Conde: Você acha que sabe contar? Que conhece o valor de cada algarismo?" },
+            { type: "textMessage", text: "Conde: Mostre-me. Erre uma única vírgula, e eu te apago do quadro." },
+            { type: "startFase", codigo: "sala1_decimais" },
+          ]},
         ]
       }),
     },
@@ -963,13 +1176,33 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(23,19)]: true, [window.utils.asGridCoord(24,19)]: true,
       [window.utils.asGridCoord(25,19)]: true, [window.utils.asGridCoord(26,19)]: true,
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
+
+      // carteiras (mesas em pares) — 3 fileiras. Caminho central x=15 fica
+      // livre pra Alice chegar até o mago em (15,14).
+      [window.utils.asGridCoord(3,6)]:  true, [window.utils.asGridCoord(4,6)]:  true,
+      [window.utils.asGridCoord(8,6)]:  true, [window.utils.asGridCoord(9,6)]:  true,
+      [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
+      [window.utils.asGridCoord(19,6)]: true, [window.utils.asGridCoord(20,6)]: true,
+      [window.utils.asGridCoord(25,6)]: true, [window.utils.asGridCoord(26,6)]: true,
+
+      [window.utils.asGridCoord(3,10)]:  true, [window.utils.asGridCoord(4,10)]:  true,
+      [window.utils.asGridCoord(8,10)]:  true, [window.utils.asGridCoord(9,10)]:  true,
+      [window.utils.asGridCoord(13,10)]: true, [window.utils.asGridCoord(14,10)]: true,
+      [window.utils.asGridCoord(19,10)]: true, [window.utils.asGridCoord(20,10)]: true,
+      [window.utils.asGridCoord(25,10)]: true, [window.utils.asGridCoord(26,10)]: true,
+
+      [window.utils.asGridCoord(3,13)]:  true, [window.utils.asGridCoord(4,13)]:  true,
+      [window.utils.asGridCoord(8,13)]:  true, [window.utils.asGridCoord(9,13)]:  true,
+      [window.utils.asGridCoord(13,13)]: true, [window.utils.asGridCoord(14,13)]: true,
+      [window.utils.asGridCoord(19,13)]: true, [window.utils.asGridCoord(20,13)]: true,
+      [window.utils.asGridCoord(25,13)]: true, [window.utils.asGridCoord(26,13)]: true,
     },
     cutsceneSpaces: {
       //acesso sala1
       [window.utils.asGridCoord(13,19)]: [
         {
           events: [
-            { type: "changeMap",  
+            { type: "changeMap",
               map: "Corredor",
               x: window.utils.withGrid(8),
               y: window.utils.withGrid(13),
@@ -1139,50 +1372,45 @@ window.OverworldMaps = {
         y: window.utils.withGrid(8),
         src: "imagens/personagens/alice.png",
       }),
-        vilao3: new window.Person({
+      // Sentinela dos Primos — NPC visível no Grêmio.
+      mago: new window.Person({
         x: window.utils.withGrid(1),
         y: window.utils.withGrid(3),
-        src: "imagens/personagens/vilao.png",
+        direction: "down",
+        src: "imagens/personagens/vilao4.png",
         talking: [
-          {
-            required: ["DESAFIO3D3_COMPLETO"],
-            events: [
-              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
-            ]
-          },
-          {
-            required: ["DESAFIO3D2_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio3d3",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            required: ["DESAFIO3D1_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio3d2",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            events: [
-              { type: "changeMap", 
-                map: "Desafio3d1",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
+          // Pós-luta — Sentinela lúcida
+          { required: ["MAGO_PRIMOS_DERROTADO"], events: [
+            { type: "textMessage", text: "Sentinela: Eu fui presidente do grêmio. Eu organizava festas, debates, eleições." },
+            { type: "textMessage", text: "Sentinela: O Sombrio me disse que só os 'melhores' mereciam representação." },
+            { type: "textMessage", text: "Sentinela: E eu acreditei. Eu acreditei que dividir era fraqueza." },
+            { type: "textMessage", text: "Alice: Mas todo número composto é feito de primos." },
+            { type: "textMessage", text: "Sentinela: ...sim. Eu esqueci disso. Obrigada." },
+          ]},
+          // Pré-luta — provocação + inicia fase
+          { events: [
+            { type: "textMessage", text: "Sentinela: Dois. Três. Cinco. Sete." },
+            { type: "textMessage", text: "Sentinela: Você não está na lista. Você é... composta." },
+            { type: "textMessage", text: "Alice: Composta de quê?" },
+            { type: "textMessage", text: "Sentinela: De partes. De divisões. De fraquezas." },
+            { type: "textMessage", text: "Sentinela: O primo é puro. Indivisível. Como deveria ser todo aluno deste colégio." },
+            { type: "textMessage", text: "Sentinela: Prove que sabe a diferença entre o puro e o sujo. Ou seja descartada." },
+            { type: "startFase", codigo: "gremio_primos" },
+          ]},
         ]
+      }),
+      // Figurante 5 — aluno do Grêmio "descartado" da lista da Sentinela.
+      figurante5: new window.Person({
+        x: window.utils.withGrid(5),
+        y: window.utils.withGrid(5),
+        src: "imagens/personagens/figurante5.png",
+        behaviorLoop: [
+          { type: "stand", direction: "left", time: 3200 },
+          { type: "stand", direction: "down", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Eu estava na lista da Sentinela. Acho que eu sumi por um tempo." }] },
+        ],
       }),
     },
     walls: {
@@ -1249,50 +1477,45 @@ window.OverworldMaps = {
         y: window.utils.withGrid(18),
         src: "imagens/personagens/alice.png",
       }),
-        vilao5: new window.Person({
+      // Bibliófilo das Frações — NPC visível na Biblioteca.
+      mago: new window.Person({
         x: window.utils.withGrid(15),
         y: window.utils.withGrid(6),
-        src: "imagens/personagens/vilao7.png",
+        direction: "down",
+        src: "imagens/personagens/vilao5.png",
         talking: [
-          {
-            required: ["DESAFIO5D3_COMPLETO"],
-            events: [
-              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
-            ]
-          },
-          {
-            required: ["DESAFIO5D2_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio5d3",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            required: ["DESAFIO5D1_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio5d2",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            events: [
-              { type: "changeMap", 
-                map: "Desafio5d1",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
+          // Pós-luta — Bibliófilo lúcido
+          { required: ["MAGO_FRACOES_DERROTADO"], events: [
+            { type: "textMessage", text: "Bibliófilo: Você somou minhas partes. Conseguiu juntar o que eu separava." },
+            { type: "textMessage", text: "Bibliófilo: Eu era professor de literatura. Eu ensinava poesia." },
+            { type: "textMessage", text: "Bibliófilo: Mas ninguém ouvia. As salas estavam sempre vazias." },
+            { type: "textMessage", text: "Bibliófilo: O Sombrio me sussurrou que se eu virasse fragmentos... talvez alguém recolhesse." },
+            { type: "textMessage", text: "Alice: Eu vou ler seus livros. Os inteiros e os que sobraram." },
+            { type: "textMessage", text: "Bibliófilo: ...isso é mais do que eu mereço." },
+          ]},
+          // Pré-luta — provocação + inicia fase
+          { events: [
+            { type: "textMessage", text: "Bibliófilo: Você chegou em pedaços, Alice. Como todos nós." },
+            { type: "textMessage", text: "Bibliófilo: Meu corpo é três quartos memória, um quarto presente." },
+            { type: "textMessage", text: "Bibliófilo: Minha alma é dois terços tristeza, um terço esperança que rasguei." },
+            { type: "textMessage", text: "Bibliófilo: Você acha que existe inteiro? Diga-me, antes que eu te divida também." },
+            { type: "textMessage", text: "Bibliófilo: Some, subtraia, compare. Mostre-me que entende as partes." },
+            { type: "startFase", codigo: "biblioteca_fracoes" },
+          ]},
         ]
+      }),
+      // Figurante 6 — aluno da Biblioteca segurando metade de um livro.
+      figurante6: new window.Person({
+        x: window.utils.withGrid(3),
+        y: window.utils.withGrid(13),
+        src: "imagens/personagens/figurante6.png",
+        behaviorLoop: [
+          { type: "stand", direction: "right", time: 3200 },
+          { type: "stand", direction: "up", time: 1200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluno: Esse livro... metade tá faltando. Achei o resto rasgado no chão." }] },
+        ],
       }),
     },
     //paredes biblioteca
@@ -1355,6 +1578,17 @@ window.OverworldMaps = {
 
       //armário canto superior-esquerdo
       [window.utils.asGridCoord(2,4)]: true, [window.utils.asGridCoord(3,4)]: true,
+
+      //sofá comprido à esquerda
+      [window.utils.asGridCoord(1,8)]: true, [window.utils.asGridCoord(1,9)]: true,
+
+      //mesas de leitura espalhadas — caminho central x=14,15 livre
+      [window.utils.asGridCoord(7,8)]:  true,
+      [window.utils.asGridCoord(11,8)]: true,
+      [window.utils.asGridCoord(8,11)]: true,
+      [window.utils.asGridCoord(12,12)]: true,
+      [window.utils.asGridCoord(6,14)]: true,
+      [window.utils.asGridCoord(10,15)]: true,
 
       //parede esquerda
       [window.utils.asGridCoord(0,4)]: true, [window.utils.asGridCoord(0,5)]: true,
@@ -1436,11 +1670,13 @@ window.OverworldMaps = {
         y: window.utils.withGrid(5),
         src: "imagens/personagens/p5.png",
         talking: [
-          {
-            events: [
-              { type: "textMessage", text: "Teste."},
-            ]
-          }
+          { required: ["MAGO_RACIONAIS_DERROTADO"], events: [
+            { type: "textMessage", text: "Aluna: Você levou ele a sério. Foi a única coisa que ele não esperava. Obrigada." },
+          ]},
+          { events: [
+            { type: "textMessage", text: "Aluna: O Trapaceiro tirou tudo a sério de mim. Hoje eu rio até quando tô triste." },
+            { type: "textMessage", text: "Aluna: Cuidado com o sorriso dele, Alice. Ele esconde mais do que mostra." },
+          ]},
         ]
       }),
       figurante1: new window.Person({
@@ -1451,12 +1687,16 @@ window.OverworldMaps = {
           { type: "stand",  direction: "right", time: 3200 },
         ],
       }),
+      // ROTEIRO posiciona figurante7.png no Pátio com a linha sobre o Trapaceiro.
       figurante2: new window.Person({
         x: window.utils.withGrid(12),
         y: window.utils.withGrid(16),
         src: "imagens/personagens/figurante7.png",
         behaviorLoop: [
           { type: "stand",  direction: "left", time: 3200 },
+        ],
+        talking: [
+          { events: [{ type: "textMessage", text: "Aluna: Ele me convenceu de uma piada que ainda dói. Não caia nas dele." }] },
         ],
       }),
       figurante3: new window.Person({
@@ -1475,49 +1715,31 @@ window.OverworldMaps = {
           { type: "stand",  direction: "left", time: 3200 },
         ],
       }),
-        vilao6: new window.Person({
+      // Trapaceiro Racional — NPC visível no Pátio.
+      mago: new window.Person({
         x: window.utils.withGrid(15),
         y: window.utils.withGrid(6),
-        src: "imagens/personagens/vilao5.png",
+        direction: "down",
+        src: "imagens/personagens/vilao6.png",
         talking: [
-          {
-            required: ["DESAFIO6D3_COMPLETO"],
-            events: [
-              {type: "textMessage", text: "Prof.: Impressionante... você acertou tudo!"},
-            ]
-          },
-          {
-            required: ["DESAFIO6D2_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio6d3",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            required: ["DESAFIO6D1_COMPLETO"],
-            events: [
-              { type: "changeMap", 
-                map: "Desafio6d2",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
-          {
-            events: [
-              { type: "changeMap", 
-                map: "Desafio6d1",
-                x: window.utils.withGrid(8),
-                y: window.utils.withGrid(8),
-                direction: "down"
-              }
-            ]
-          },
+          // Pós-luta — Trapaceiro lúcido
+          { required: ["MAGO_RACIONAIS_DERROTADO"], events: [
+            { type: "textMessage", text: "Trapaceiro: ...você levou a sério. Ninguém leva a sério." },
+            { type: "textMessage", text: "Trapaceiro: Eu era o mais popular daqui. Todo mundo ria das minhas piadas." },
+            { type: "textMessage", text: "Trapaceiro: Mas ninguém me ouvia quando eu falava sério. Então parei de falar sério." },
+            { type: "textMessage", text: "Trapaceiro: O Sombrio me ofereceu uma piada eterna. Uma onde ninguém me cobrava resposta." },
+            { type: "textMessage", text: "Alice: Você ainda pode falar sério. Comigo, pelo menos." },
+            { type: "textMessage", text: "Trapaceiro: ...obrigado. Mesmo." },
+          ]},
+          // Pré-luta — provocação + inicia fase
+          { events: [
+            { type: "textMessage", text: "Trapaceiro: Olha só quem chegou! A herói da escola!" },
+            { type: "textMessage", text: "Trapaceiro: Quer apostar? Eu te dou dois terços, você me dá metade. Ninguém perde, ninguém ganha. Topa?" },
+            { type: "textMessage", text: "Alice: Isso não faz sentido." },
+            { type: "textMessage", text: "Trapaceiro: EXATAMENTE! Hahaha! Sentido é só um acordo entre tolos." },
+            { type: "textMessage", text: "Trapaceiro: Vamos brincar do seu jeito. Operações com racionais. Tenta acompanhar." },
+            { type: "startFase", codigo: "patio_racionais" },
+          ]},
         ]
       }),
     },
@@ -1567,91 +1789,106 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(13,20)]: true, [window.utils.asGridCoord(14,20)]: true,
       [window.utils.asGridCoord(15,20)]: true, [window.utils.asGridCoord(16,20)]: true,
       [window.utils.asGridCoord(17,20)]: true, [window.utils.asGridCoord(18,20)]: true,
+
+      // Estátua central + pedestal (busto cinza no centro do pátio)
+      [window.utils.asGridCoord(9,8)]:  true, [window.utils.asGridCoord(10,8)]: true,
+      [window.utils.asGridCoord(9,9)]:  true, [window.utils.asGridCoord(10,9)]: true,
+
+      // Lampiões/vasos com plantas nos cantos superiores
+      [window.utils.asGridCoord(2,2)]:  true,
+      [window.utils.asGridCoord(14,2)]: true,
+
+      // Bancos da parte superior
+      [window.utils.asGridCoord(4,2)]:  true, [window.utils.asGridCoord(5,2)]:  true,
+      [window.utils.asGridCoord(11,2)]: true, [window.utils.asGridCoord(12,2)]: true,
     },
     cutsceneSpaces: {
+      // Portão do Jardim — bloqueia após Mestre das Porcentagens derrotado.
       [window.utils.asGridCoord(0,6)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(0,7)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(0,8)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(0,9)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        // Transição 2 — primeira vez próximo do portão, após V6 derrotado
+        { required: ["MAGO_RACIONAIS_DERROTADO", "!antes_jardim_done"], events: [
+          { type: "textMessage", text: "[Alice se aproxima do portão. O ar fica mais frio. Os sons da escola desaparecem.]" },
+          { type: "textMessage", text: "Alice: ...por que o Jardim está tão silencioso?" },
+          { type: "textMessage", text: "[A voz do Mentor ecoa, vinda de longe.]" },
+          { type: "textMessage", text: "Mentor (eco): Alice. Está me ouvindo?" },
+          { type: "textMessage", text: "Mentor (eco): O último mago não é como os outros. Ele já estava perdido antes do feitiço." },
+          { type: "textMessage", text: "Mentor (eco): O Sombrio o escolheu primeiro. Se você cair lá dentro... ninguém vem te buscar." },
+          { type: "textMessage", text: "Alice: Eu não vou cair." },
+          { type: "textMessage", text: "Mentor (eco): Eu sei. Por isso eu te chamei." },
+          { type: "addStoryFlag", flag: "antes_jardim_done" },
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(0,10)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(0,11)]: [
-        {
-           events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(0,12)]: [
-        {
-          events: [
-            { type: "changeMap", 
-              map: "Jardim",
-              x: window.utils.withGrid(14),
-              y: window.utils.withGrid(7),
-              direction: "down"
-             }
-          ]
-        }
+        { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+        ]},
+        { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
+          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+        ]},
+        { events: [
+          { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
+        ]}
       ],
       [window.utils.asGridCoord(5,19)]: [
         {
@@ -1778,65 +2015,316 @@ window.OverworldMaps = {
 
 // MAPAS DE DESAFIOS!!!
 
+  // =============================================
+  // ARENAS DOS MAGOS — uma por fase do modo Fundamental.
+  // =============================================
+  // Padrão: hero em (8,8), vilão visível em (8,5). entryCutscene dispara
+  // automaticamente o duelo com N quizGame events (= meta_questoes da fase).
+  //
+  // Fluxo em fase ativa: FaseRunner.finalize() recarrega a página após o
+  // N-ésimo quiz, então os eventos finais (textMessage de derrota do mago +
+  // changeMap pro Corredor) só rodam se o jogador entrar fora de fase
+  // (caminho legado via sala). Isso é intencional — preserva "modo treino".
+
   Desafio1d1: {
     id: "Desafio1d1",
-    upperSrc: "imagens/personagens/vazio.png",
-    lowerSrc: "imagens/mapas/desafios/desafio1.png",
+    lowerSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/desafios/desafio1.png",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
         x: window.utils.withGrid(8),
         y: window.utils.withGrid(8),
-        src: "imagens/personagens/vazio.png",
+        direction: "up",
+        src: "imagens/personagens/alice.png",
       }),
-      bancada: new window.Person({
+      vilao: new window.Person({
         x: window.utils.withGrid(8),
-        y: window.utils.withGrid(9),
-        src:"imagens/personagens/vazio.png",
-        talking: [
-          {
-            events: [
-              { type: "textMessage", text: "Prof.: Está pronta para o desafio?" },
-              { type: "quizGame", idAssunto: 1 }, // sem dificuldade explícita
-              { type: "quizGame", idAssunto: 1 },
-              { type: "quizGame", idAssunto: 1 },
-              { type: "quizGame", idAssunto: 1 },
-              { type: "quizGame", idAssunto: 1 },
-              { type: "textMessage", text: "Prof.: Hmpf. Parece que você estava mais preparada do que eu imaginava." },
-              { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(16), direction: "up" },
-              /*
-              {
-              type: "choiceMessage",
-              text: "Você completou os desafios de nível 1! Deseja prosseguir para o próximo desafio?",
-              options: [
-                {
-                  label: "Sim",
-                  value: "yes",
-                  events: [
-                    //{ type: "addStoryFlag", flag: "DESAFIO1D1_COMPLETO" },
-                    { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(16), direction: "up" }
-                  ]
-                },
-                {
-                  label: "Não",
-                  value: "no",
-                  events: [
-                    { type: "textMessage", text: "Prof.: Tudo bem, volte quando estiver pronta." },
-                    { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(16), direction: "up" }
-                  ]
-                }
-              ]
-            },*/
-            ]
-          }
-        ]
-    }),
-  },
-      walls:{
-      [window.utils.asGridCoord(9,8)]: true, [window.utils.asGridCoord(8,9)]: true,
-      [window.utils.asGridCoord(7,8)]: true, [window.utils.asGridCoord(8,7)]: true,
+        y: window.utils.withGrid(5),
+        direction: "down",
+        src: "imagens/personagens/vilao2.png",
+      }),
     },
-},
+    walls: {
+      [window.utils.asGridCoord(7,8)]: true,
+      [window.utils.asGridCoord(9,8)]: true,
+      [window.utils.asGridCoord(8,7)]: true,
+      [window.utils.asGridCoord(8,9)]: true,
+    },
+    entryCutscene: {
+      events: [
+        { type: "textMessage", text: "[O Conde se vira lentamente. O quadro às suas costas está coberto de vírgulas.]" },
+        { type: "textMessage", text: "Conde: Mostre-me que sabe a diferença entre o que pesa e o que é descartado." },
+        { type: "quizGame", idAssunto: 1 },
+        { type: "quizGame", idAssunto: 1 },
+        { type: "quizGame", idAssunto: 1 },
+        { type: "quizGame", idAssunto: 1 },
+        { type: "quizGame", idAssunto: 1 },
+        { type: "seAprovou", events: [
+          { type: "textMessage", text: "[O Conde cai de joelhos. O quadro às suas costas se apaga sozinho.]" },
+          { type: "textMessage", text: "Conde: ...obrigado." },
+          { type: "textMessage", text: "Conde: Eu já não me lembrava do meu próprio nome." },
+          { type: "textMessage", text: "Conde: Quando o Sombrio me tocou, tudo virou número. Eu só via vírgulas." },
+          { type: "textMessage", text: "Alice: Quem é o Sombrio?" },
+          { type: "textMessage", text: "Conde: Alguém que esta escola esqueceu. E que não esquece." },
+          { type: "textMessage", text: "Conde: Cuide-se, Alice. Eu vou descansar agora." },
+        ]},
+        { type: "finalizarFase" },
+        { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
+      ]
+    }
+  },
+
+  Desafio2d1: {
+    id: "Desafio2d1",
+    lowerSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/desafios/desafio2.png",
+    gameObjects: {
+      hero: new window.Person({
+        isPlayerControlled: true,
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(8),
+        direction: "up",
+        src: "imagens/personagens/alice.png",
+      }),
+      vilao: new window.Person({
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(5),
+        direction: "down",
+        src: "imagens/personagens/vilao3.png",
+      }),
+    },
+    walls: {
+      [window.utils.asGridCoord(7,8)]: true,
+      [window.utils.asGridCoord(9,8)]: true,
+      [window.utils.asGridCoord(8,7)]: true,
+      [window.utils.asGridCoord(8,9)]: true,
+    },
+    entryCutscene: {
+      events: [
+        { type: "textMessage", text: "[O Mestre oscila como se não tivesse certeza de onde está pisando.]" },
+        { type: "textMessage", text: "Mestre: Vamos lá. Mais ou menos. Aproximadamente uma luta." },
+        { type: "quizGame", idAssunto: 6 },
+        { type: "quizGame", idAssunto: 6 },
+        { type: "quizGame", idAssunto: 6 },
+        { type: "quizGame", idAssunto: 6 },
+        { type: "quizGame", idAssunto: 6 },
+        { type: "seAprovou", events: [
+          { type: "textMessage", text: "[O Mestre fica imóvel pela primeira vez. Olha as próprias mãos.]" },
+          { type: "textMessage", text: "Mestre: ...eu via tudo borrado. Tudo 'mais ou menos'." },
+          { type: "textMessage", text: "Mestre: E achava bom assim." },
+          { type: "textMessage", text: "Alice: Por quê?" },
+          { type: "textMessage", text: "Mestre: Quem nunca tenta acertar... nunca erra." },
+          { type: "textMessage", text: "Mestre: Mas também nunca chega a lugar nenhum. Obrigado por me apontar onde eu estava." },
+        ]},
+        { type: "finalizarFase" },
+        { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
+      ]
+    }
+  },
+
+  Desafio3d1: {
+    id: "Desafio3d1",
+    lowerSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/desafios/desafio3.png",
+    gameObjects: {
+      hero: new window.Person({
+        isPlayerControlled: true,
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(8),
+        direction: "up",
+        src: "imagens/personagens/alice.png",
+      }),
+      vilao: new window.Person({
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(5),
+        direction: "down",
+        src: "imagens/personagens/vilao4.png",
+      }),
+    },
+    walls: {
+      [window.utils.asGridCoord(7,8)]: true,
+      [window.utils.asGridCoord(9,8)]: true,
+      [window.utils.asGridCoord(8,7)]: true,
+      [window.utils.asGridCoord(8,9)]: true,
+    },
+    entryCutscene: {
+      events: [
+        { type: "textMessage", text: "[Folhas rasgadas cobrem o chão da arena. A Sentinela está imóvel.]" },
+        { type: "textMessage", text: "Sentinela: Dois. Três. Cinco. Sete. Sua vez de provar que não é descartável." },
+        { type: "quizGame", idAssunto: 3 },
+        { type: "quizGame", idAssunto: 3 },
+        { type: "quizGame", idAssunto: 3 },
+        { type: "quizGame", idAssunto: 3 },
+        { type: "quizGame", idAssunto: 3 },
+        { type: "seAprovou", events: [
+          { type: "textMessage", text: "[A Sentinela larga os papéis. Eles caem sem som.]" },
+          { type: "textMessage", text: "Sentinela: Pare. Pelo menos uma vez na vida, eu posso parar de contar." },
+          { type: "textMessage", text: "Sentinela: Eu fui presidente do grêmio. Eu organizava festas, eleições, listas." },
+          { type: "textMessage", text: "Sentinela: O Sombrio me disse que só os 'melhores' mereciam representação." },
+          { type: "textMessage", text: "Alice: Mas todo número composto é feito de primos." },
+          { type: "textMessage", text: "Sentinela: ...sim. Eu esqueci disso. Obrigada por lembrar." },
+        ]},
+        { type: "finalizarFase" },
+        { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
+      ]
+    }
+  },
+
+  Desafio5d1: {
+    id: "Desafio5d1",
+    lowerSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/desafios/desafio5.png",
+    gameObjects: {
+      hero: new window.Person({
+        isPlayerControlled: true,
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(8),
+        direction: "up",
+        src: "imagens/personagens/alice.png",
+      }),
+      vilao: new window.Person({
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(5),
+        direction: "down",
+        src: "imagens/personagens/vilao5.png",
+      }),
+    },
+    walls: {
+      [window.utils.asGridCoord(7,8)]: true,
+      [window.utils.asGridCoord(9,8)]: true,
+      [window.utils.asGridCoord(8,7)]: true,
+      [window.utils.asGridCoord(8,9)]: true,
+    },
+    entryCutscene: {
+      events: [
+        { type: "textMessage", text: "[Páginas voam pelo ar. O Bibliófilo segura metade de um livro contra o peito.]" },
+        { type: "textMessage", text: "Bibliófilo: Você chegou em pedaços, Alice. Como todos nós." },
+        { type: "textMessage", text: "Bibliófilo: Some, subtraia, compare. Cada pedaço pesa." },
+        { type: "quizGame", idAssunto: 4 },
+        { type: "quizGame", idAssunto: 4 },
+        { type: "quizGame", idAssunto: 4 },
+        { type: "quizGame", idAssunto: 4 },
+        { type: "quizGame", idAssunto: 4 },
+        { type: "quizGame", idAssunto: 4 },
+        { type: "seAprovou", events: [
+          { type: "textMessage", text: "[As páginas pousam. O Bibliófilo abraça o livro — agora inteiro.]" },
+          { type: "textMessage", text: "Bibliófilo: Inteiro. Pela primeira vez em meses, eu me sinto inteiro." },
+          { type: "textMessage", text: "Bibliófilo: Eu era professor de literatura. Eu ensinava poesia em voz alta." },
+          { type: "textMessage", text: "Bibliófilo: Mas as salas estavam sempre vazias." },
+          { type: "textMessage", text: "Bibliófilo: O Sombrio me sussurrou que se eu virasse fragmentos... talvez alguém recolhesse os pedaços." },
+          { type: "textMessage", text: "Alice: Eu vou ler seus livros. Os inteiros e os que sobraram." },
+          { type: "textMessage", text: "Bibliófilo: ...isso é mais do que eu mereço." },
+        ]},
+        { type: "finalizarFase" },
+        { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
+      ]
+    }
+  },
+
+  Desafio6d1: {
+    id: "Desafio6d1",
+    lowerSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/desafios/desafio6.png",
+    gameObjects: {
+      hero: new window.Person({
+        isPlayerControlled: true,
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(8),
+        direction: "up",
+        src: "imagens/personagens/alice.png",
+      }),
+      vilao: new window.Person({
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(5),
+        direction: "down",
+        src: "imagens/personagens/vilao6.png",
+      }),
+    },
+    walls: {
+      [window.utils.asGridCoord(7,8)]: true,
+      [window.utils.asGridCoord(9,8)]: true,
+      [window.utils.asGridCoord(8,7)]: true,
+      [window.utils.asGridCoord(8,9)]: true,
+    },
+    entryCutscene: {
+      events: [
+        { type: "textMessage", text: "[O Trapaceiro lança a moeda no ar uma, duas, três vezes. Nunca olha.]" },
+        { type: "textMessage", text: "Trapaceiro: Vai lá, heroína. Acompanhe meu ritmo. Se conseguir." },
+        { type: "quizGame", idAssunto: 5 },
+        { type: "quizGame", idAssunto: 5 },
+        { type: "quizGame", idAssunto: 5 },
+        { type: "quizGame", idAssunto: 5 },
+        { type: "quizGame", idAssunto: 5 },
+        { type: "quizGame", idAssunto: 5 },
+        { type: "seAprovou", events: [
+          { type: "textMessage", text: "[A moeda cai. O Trapaceiro nem se dá ao trabalho de pegar.]" },
+          { type: "textMessage", text: "Trapaceiro: Hahaha... haha... ha." },
+          { type: "textMessage", text: "Trapaceiro: Não tem graça, né?" },
+          { type: "textMessage", text: "Trapaceiro: Eu era o mais popular daqui. Todo mundo ria das minhas piadas." },
+          { type: "textMessage", text: "Trapaceiro: Mas ninguém me ouvia quando eu falava sério." },
+          { type: "textMessage", text: "Trapaceiro: O Sombrio me ofereceu uma piada eterna. Sem cobrança de resposta." },
+          { type: "textMessage", text: "Alice: Conta uma piada de verdade pra mim algum dia." },
+          { type: "textMessage", text: "Trapaceiro: ...obrigado. Conto, sim. Quando eu lembrar de alguma." },
+        ]},
+        { type: "finalizarFase" },
+        { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
+      ]
+    }
+  },
+
+  Desafio7d1: {
+    id: "Desafio7d1",
+    lowerSrc: "imagens/personagens/vazio.png",
+    upperSrc: "imagens/mapas/desafios/desafio7.png",
+    gameObjects: {
+      hero: new window.Person({
+        isPlayerControlled: true,
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(8),
+        direction: "up",
+        src: "imagens/personagens/alice.png",
+      }),
+      vilao: new window.Person({
+        x: window.utils.withGrid(8),
+        y: window.utils.withGrid(5),
+        direction: "down",
+        src: "imagens/personagens/vilao7.png",
+      }),
+    },
+    walls: {
+      [window.utils.asGridCoord(7,8)]: true,
+      [window.utils.asGridCoord(9,8)]: true,
+      [window.utils.asGridCoord(8,7)]: true,
+      [window.utils.asGridCoord(8,9)]: true,
+    },
+    entryCutscene: {
+      events: [
+        { type: "textMessage", text: "[O Jardim está enevoado. As plantas estão congeladas no tempo, paradas em flor.]" },
+        { type: "textMessage", text: "Mestre: 100% dos que entraram aqui... 100% foram aniquilados." },
+        { type: "textMessage", text: "Mestre: Você é a sexta. Calculei 16,67% de chance de você ser diferente." },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "quizGame", idAssunto: 7 },
+        { type: "seAprovou", events: [
+          { type: "textMessage", text: "[O Mestre cai. Atrás dele, uma flor isolada começa a se mover de novo.]" },
+          { type: "textMessage", text: "Mestre: 100% derrotado. 100% lúcido. Pela primeira vez em vinte anos." },
+          { type: "textMessage", text: "Mestre: Eu fui coordenador. Eu organizava as filas, os horários, os boletins." },
+          { type: "textMessage", text: "Mestre: O Sombrio me ofereceu hierarquia eterna. Eu aceitei sem pensar." },
+          { type: "textMessage", text: "Alice: E o Sombrio?" },
+          { type: "textMessage", text: "Mestre: Cuidado. Ele te observou desde a primeira sala." },
+          { type: "textMessage", text: "Mestre: Ele vai te procurar. Não no Jardim. No lugar que você menos espera." },
+        ]},
+        { type: "finalizarFase" },
+        { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
+      ]
+    }
+  },
 
 // =============================================
 // MAPA ARCADE — ENSINO MÉDIO
