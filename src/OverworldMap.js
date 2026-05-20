@@ -729,6 +729,10 @@ window.OverworldMaps = {
     id: "Jardim",
     lowerSrc: "imagens/mapas/jardim.png",
     upperSrc: "imagens/mapas/jardimUpper.png",
+    // BGM tenso pra ancorar a atmosfera do boss final. Demais mapas ficam
+    // silenciosos por padrão — basta declarar `bgm: "audio/bgm/<arquivo>.mp3"`
+    // em qualquer outro map config pra adicionar trilha sonora.
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,

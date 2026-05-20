@@ -33,6 +33,14 @@ class FaseRunner {
     const codigo = run.codigo;
     const nome = run.nome;
     const viaSelector = !!run.viaSelector;
+    // Stats locais (não vão pro backend — só pro popup pedagógico).
+    const stats = {
+      totalElapsedMs: Date.now() - (run.startTime || Date.now()),
+      totalAnswerTimeMs: run.totalTimeMs || 0,
+      maxStreak: run.maxStreak || 0,
+      score: run.score || 0,
+      usedBuff: !!run.usedBuff,
+    };
 
     if (window.loadingOverlay) window.loadingOverlay.show("Finalizando fase…");
 
@@ -70,10 +78,18 @@ class FaseRunner {
     // Limpa o estado da fase ANTES de mostrar o popup — assim o FaseHUD some.
     window.progress.clearFase();
 
-    FaseRunner._showResultPopup({ nome, payload, result, viaSelector });
+    FaseRunner._showResultPopup({ nome, payload, result, viaSelector, stats });
   }
 
-  static _showResultPopup({ nome, payload, result, viaSelector }) {
+  static _formatTime(ms) {
+    if (!ms || ms < 0) return "—";
+    const totalSec = Math.round(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return m > 0 ? `${m}m ${s.toString().padStart(2, "0")}s` : `${s}s`;
+  }
+
+  static _showResultPopup({ nome, payload, result, viaSelector, stats }) {
     const aprovou = result.aprovou;
     const primeira = result.primeiraConclusao;
     const estrelas = result.estrelas;
@@ -96,6 +112,42 @@ class FaseRunner {
           ? `<div class="FaseResult_reward FaseResult_reward--repeat">XP já obtido em conclusão anterior</div>`
           : "");
 
+    // Stats detalhados — todos derivados localmente, sem dependência do backend.
+    const totalQuestoes = payload.totalQuestoes || 0;
+    const acertos = payload.acertos || 0;
+    const pct = totalQuestoes > 0 ? Math.round((acertos / totalQuestoes) * 100) : 0;
+    const avgMs = totalQuestoes > 0 ? Math.round((stats.totalAnswerTimeMs || 0) / totalQuestoes) : 0;
+    const tempoTotalStr = FaseRunner._formatTime(stats.totalElapsedMs);
+    const avgStr = avgMs > 0 ? `${(avgMs / 1000).toFixed(1)}s` : "—";
+    const semBuffsLabel = stats.usedBuff
+      ? `<span class="FaseResult_extra FaseResult_extra--muted">Buff usado</span>`
+      : `<span class="FaseResult_extra FaseResult_extra--ok">Sem buffs ✨</span>`;
+
+    const detailsHtml = `
+      <div class="FaseResult_breakdown">
+        <div class="FaseResult_cell">
+          <span class="FaseResult_cellLabel">Aproveitamento</span>
+          <span class="FaseResult_cellValue">${pct}%</span>
+        </div>
+        <div class="FaseResult_cell">
+          <span class="FaseResult_cellLabel">Streak máx</span>
+          <span class="FaseResult_cellValue">🔥 ${stats.maxStreak || 0}</span>
+        </div>
+        <div class="FaseResult_cell">
+          <span class="FaseResult_cellLabel">Tempo total</span>
+          <span class="FaseResult_cellValue">${tempoTotalStr}</span>
+        </div>
+        <div class="FaseResult_cell">
+          <span class="FaseResult_cellLabel">Méd / questão</span>
+          <span class="FaseResult_cellValue">${avgStr}</span>
+        </div>
+      </div>
+      <div class="FaseResult_extras">
+        <span class="FaseResult_extra">Pontos: <strong>${stats.score || 0}</strong></span>
+        ${semBuffsLabel}
+      </div>
+    `;
+
     const overlay = document.createElement("div");
     overlay.className = `FaseResult ${aprovou ? "FaseResult--win" : "FaseResult--fail"}`;
     overlay.innerHTML = `
@@ -104,13 +156,19 @@ class FaseRunner {
         <div class="FaseResult_subtitle">${subtitulo}</div>
         <div class="FaseResult_stars" data-stars="${estrelas}">${stars}</div>
         <div class="FaseResult_stats">
-          <span>Acertos: <strong>${payload.acertos}/${payload.totalQuestoes}</strong></span>
+          <span>Acertos: <strong>${acertos}/${totalQuestoes}</strong></span>
         </div>
+        ${detailsHtml}
         ${recompensaHtml}
         <button type="button" class="FaseResult_button">Continuar</button>
       </div>
     `;
     document.body.appendChild(overlay);
+
+    // Som temático: vitória/erro pra ancorar emocionalmente o resultado.
+    if (window.audioManager) {
+      window.audioManager.playSfx(aprovou ? "correct" : "wrong");
+    }
 
     const btn = overlay.querySelector(".FaseResult_button");
     const close = async () => {

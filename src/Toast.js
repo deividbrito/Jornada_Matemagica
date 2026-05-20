@@ -43,6 +43,12 @@ class Toast {
     el.textContent = message;
     this.container.appendChild(el);
 
+    // Som só em erro: success/warn aparecem em fluxos comuns (saves, sync)
+    // e ficariam barulhentos. Erro é raro e merece atenção.
+    if (level === 'error' && window.audioManager) {
+      window.audioManager.playSfx('wrong');
+    }
+
     // Fade-in
     requestAnimationFrame(() => el.classList.add('Toast--visible'));
 

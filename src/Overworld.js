@@ -95,6 +95,11 @@ class Overworld {
     // Troca sprite do mago da sala se a fase correspondente já foi concluída.
     this._applyVilaoSprites();
 
+    // BGM por mapa. Respeita o arcade: se `arcadeRun` está ativo, o BGM já é
+    // controlado pelos handlers de arcadeStart/arcadeBattle. Senão, troca pra
+    // o `bgm` declarado no map config — ou silêncio se o mapa não declarar nada.
+    this._applyMapBgm(mapConfig);
+
     // entryCutscene aceita objeto (1 cena) ou array (múltiplas cenas com
     // required diferentes — roda a PRIMEIRA que satisfaz, em ordem).
     const cutscenes = Array.isArray(mapConfig.entryCutscene)
@@ -111,6 +116,19 @@ class Overworld {
         this.map.startCutscene(cs.events);
         break;
       }
+    }
+  }
+
+  // BGM por mapa. Mapas declaram `bgm: "audio/bgm/foo.mp3"`; sem declaração,
+  // o áudio de mundo é parado. Durante uma run de arcade, NÃO mexemos — os
+  // handlers de arcadeStart/arcadeBattle têm controle exclusivo do BGM.
+  _applyMapBgm(mapConfig) {
+    if (!window.audioManager) return;
+    if (window.arcadeRun) return; // arcade controla o BGM por conta própria
+    if (mapConfig.bgm) {
+      window.audioManager.playBgm(mapConfig.bgm);
+    } else {
+      window.audioManager.stopBgm();
     }
   }
 

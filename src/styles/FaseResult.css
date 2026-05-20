@@ -101,6 +101,62 @@
   font-weight: normal;
 }
 
+/* Breakdown — 2x2 de stats detalhados (aproveitamento, streak, tempo, média). */
+.FaseResult_breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+  margin: 6px 0 12px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.FaseResult_cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.FaseResult_cellLabel {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.FaseResult_cellValue {
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.FaseResult--win .FaseResult_cellValue {
+  color: var(--color-accent-soft);
+}
+
+.FaseResult_extras {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.FaseResult_extras strong {
+  color: var(--color-text);
+}
+
+.FaseResult_extra--ok {
+  color: var(--color-success-text);
+}
+
+.FaseResult_extra--muted {
+  opacity: 0.55;
+}
+
 .FaseResult_button {
   background: var(--color-bg-menu-selected);
   color: var(--color-accent);

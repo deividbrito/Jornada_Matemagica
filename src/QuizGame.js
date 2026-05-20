@@ -195,6 +195,11 @@ class QuizGame {
         isCorrect = result.foi_correta;
         feedback = result.feedback;
         xpInfo = result.xp || null;
+        // Backend devolve `id_alternativa_correta` apenas em erro (em acerto a
+        // própria escolha é a certa). Usado pra destacar visualmente.
+        if (!isCorrect && result.id_alternativa_correta) {
+          this.correctAlternativeId = String(result.id_alternativa_correta);
+        }
       } catch (err) {
         console.error("Erro ao submeter resposta:", err);
       }
@@ -222,17 +227,37 @@ class QuizGame {
     this.lastResult = isCorrect;
     this.feedback = feedback;
 
-    // Delay de leitura: em acerto libera "Continuar" em 1s; em erro 2.5s.
-    // Mostra barra + texto "Aguarde…" durante o delay, depois "Pressione Enter ▶".
+    // Delay de leitura: em acerto libera "Continuar" em 1s; em erro 4s (mais
+    // tempo pra ler a explicação E olhar a alternativa correta destacada).
     this.canProceed = false;
-    const readDelayMs = isCorrect ? 1000 : 2500;
+    const readDelayMs = isCorrect ? 1000 : 4000;
     this._renderContinueIndicator(readDelayMs);
 
-    // Remove alternativas e imagens do enunciado após responder
-    this.element.querySelectorAll(".QuizTutorial_button2").forEach(btn => btn.remove());
-    // Também remove o grid container vazio + a borda dashed (visual mais limpo)
-    const optionsContainer = this.element.querySelector(".QuizTutorial_options");
-    if (optionsContainer) optionsContainer.remove();
+    // Marca visualmente as alternativas em vez de removê-las.
+    //   - acerto: a escolhida vira verde (Tutorial_button2--correct)
+    //   - erro:   a escolhida vira vermelha + correta destacada em verde
+    //   - todas as outras ficam esmaecidas pra não distrair
+    const optionButtons = this.element.querySelectorAll(".QuizTutorial_button2");
+    optionButtons.forEach(btn => {
+      btn.disabled = true;
+      btn.classList.remove("QuizTutorial_button2--correct", "QuizTutorial_button2--wrong");
+      const btnId = btn.dataset.id;
+      const isChosen = btnId === String(selectedAlternativaId);
+      const isCorrectAlt = isCorrect
+        ? isChosen
+        : (this.correctAlternativeId && btnId === this.correctAlternativeId);
+
+      if (isCorrectAlt) {
+        btn.classList.add("QuizTutorial_button2--correct");
+      } else if (isChosen) {
+        btn.classList.add("QuizTutorial_button2--wrong");
+      } else {
+        btn.classList.add("QuizTutorial_button2--dimmed");
+      }
+    });
+
+    // Remove só as imagens do enunciado (que ocupam muito espaço pra a leitura
+    // do feedback). Os botões ficam pra revelar a alternativa correta.
     const imgContainer = this.element.querySelector(".QuizTutorial_images");
     if (imgContainer) imgContainer.remove();
 
@@ -309,6 +334,8 @@ class QuizGame {
 
   _showRankUpToast(rank) {
     if (!rank || !rank.name) return;
+    // Som de conquista: rank-up é o momento mais celebratório da progressão.
+    if (window.audioManager) window.audioManager.playSfx("correct");
     const toast = document.createElement("div");
     toast.className = "RankUpToast";
     toast.innerHTML = `

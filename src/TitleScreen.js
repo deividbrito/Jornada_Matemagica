@@ -318,53 +318,67 @@ class TitleScreen {
     if (this.keyboardMenu) this.keyboardMenu.resume();
   }
 
-  // Onboarding na primeira partida (após login bem-sucedido).
-  // Apresenta 4 popups curtos e marca storyFlags.onboarding_done = true.
-  // Jogador convidado também passa pelo onboarding (uma vez por navegador).
+  // Onboarding interativo na primeira partida (após login bem-sucedido).
+  // Cada passo de mecânica exige uma ação real (apertar a tecla) antes de
+  // avançar — assim o jogador aprende fazendo, não só lendo. Jogador convidado
+  // também passa pelo onboarding (uma vez por navegador).
   async showOnboarding(container) {
     const flags = window.playerState && window.playerState.storyFlags;
     if (flags && flags.onboarding_done) return;
 
-    const steps = [
-      {
-        title: "Bem-vinda à Jornada Matemágica!",
-        text:
-          "Você é a Alice, e seu desafio é dominar a matemática enquanto explora o colégio. " +
-          "Vamos ver como o jogo funciona em 30 segundos."
-      },
-      {
-        title: "Como andar",
-        text:
-          "Use as <b>setas do teclado</b> (ou <b>WASD</b>). " +
-          "Em celular/tablet, use o <b>D-pad</b> que aparece na tela."
-      },
-      {
-        title: "Conversar e enfrentar desafios",
-        text:
-          "Encoste em um colega ou professor e aperte <b>Enter</b> (ou o botão <b>A</b>) para falar. " +
-          "Alguns vão te propor uma <b>questão de matemática</b> — responda escolhendo a alternativa."
-      },
-      {
-        title: "Dificuldade que se adapta",
-        text:
-          "O jogo aprende com seus acertos e erros e ajusta o nível das próximas perguntas. " +
-          "<b>Errar faz parte</b> — sempre tem explicação depois!"
-      }
-    ];
+    // Passo 0 e final: apenas leitura.
+    await this._showOnboardingPopup({
+      badge: "Passo 1 de 5",
+      title: "Bem-vinda à Jornada Matemágica!",
+      text:
+        "Você é a <b>Alice</b>, e seu desafio é dominar a matemática enquanto explora o colégio. " +
+        "Vamos treinar os controles em 30 segundos — você vai apertar as teclas você mesma."
+    });
 
-    for (let i = 0; i < steps.length; i++) {
-      const step = steps[i];
-      await new Promise((resolve) => {
-        const popup = new window.PopupWindow({
-          badge: `Passo ${i + 1} de ${steps.length}`,
-          title: step.title,
-          text: step.text,
-          size: "large",
-          onComplete: () => resolve(),
-        });
-        popup.init(document.body);
-      });
-    }
+    // Passo: andar (qualquer seta ou WASD)
+    await this._showOnboardingInteractiveStep({
+      badge: "Passo 2 de 5",
+      title: "Como andar",
+      text:
+        "Use as <b>setas do teclado</b> (ou <b>WASD</b>) para mover a Alice pelo mapa." +
+        "<br><br>Em celular/tablet, use o <b>D-pad</b> que aparece na tela.",
+      hint: "Pressione uma seta (ou W/A/S/D) para continuar",
+      isMatch: (e) => [
+        "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight",
+        "KeyW", "KeyA", "KeyS", "KeyD"
+      ].includes(e.code),
+    });
+
+    // Passo: interagir (Enter / Espaço — botão A do D-pad também emite Enter)
+    await this._showOnboardingInteractiveStep({
+      badge: "Passo 3 de 5",
+      title: "Conversar e enfrentar desafios",
+      text:
+        "Encoste em um colega ou professor e aperte <b>Enter</b> (ou o botão <b>A</b> no D-pad) para falar." +
+        "<br><br>Alguns vão te propor uma <b>questão de matemática</b> — responda escolhendo a alternativa correta.",
+      hint: "Pressione Enter para continuar",
+      isMatch: (e) => e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space",
+    });
+
+    // Passo: pausar (Esc abre o menu de pausa — Esc ou P comuns)
+    await this._showOnboardingInteractiveStep({
+      badge: "Passo 4 de 5",
+      title: "Pausa e ajustes",
+      text:
+        "A qualquer momento você pode apertar <b>Esc</b> para abrir o <b>menu de pausa</b>. " +
+        "Lá dá pra salvar, abrir o mapa, ajustar o volume e voltar à tela inicial.",
+      hint: "Pressione Esc para continuar",
+      isMatch: (e) => e.code === "Escape",
+    });
+
+    // Passo final: leitura.
+    await this._showOnboardingPopup({
+      badge: "Passo 5 de 5",
+      title: "Dificuldade que se adapta",
+      text:
+        "O jogo aprende com seus acertos e erros e ajusta o nível das próximas perguntas. " +
+        "<b>Errar faz parte</b> — sempre tem explicação depois, e a alternativa correta fica destacada."
+    });
 
     if (flags) {
       flags.onboarding_done = true;
@@ -372,6 +386,63 @@ class TitleScreen {
         window.playerState.save();
       }
     }
+  }
+
+  // Helper: popup simples só-leitura (Enter/botão pra avançar).
+  _showOnboardingPopup({ badge, title, text }) {
+    return new Promise((resolve) => {
+      const popup = new window.PopupWindow({
+        badge,
+        title,
+        text,
+        size: "large",
+        onComplete: () => resolve(),
+      });
+      popup.init(document.body);
+    });
+  }
+
+  // Helper: popup que ESPERA o jogador pressionar uma tecla específica.
+  // Mostra um hint discreto no rodapé e auto-avança ao receber a tecla certa.
+  // O botão "Pular" continua disponível pra quem não puder/quiser interagir.
+  _showOnboardingInteractiveStep({ badge, title, text, hint, isMatch }) {
+    return new Promise((resolve) => {
+      const stepHint = `
+        <div class="OnboardingHint" data-onboarding-hint>
+          <span class="OnboardingHint_pulse"></span>
+          <span class="OnboardingHint_text">${hint}</span>
+        </div>
+      `;
+      const popup = new window.PopupWindow({
+        badge,
+        title,
+        text: text + stepHint,
+        size: "large",
+        // Botão único "Pular" pra acessibilidade — jogador que não consegue
+        // interagir (ex.: tela touch sem foco no body) ainda avança.
+        buttons: [{ label: "Pular", value: "skip" }],
+        onComplete: () => {
+          document.removeEventListener("keydown", listener, true);
+          resolve();
+        },
+      });
+      popup.init(document.body);
+
+      // Listener com captura — pega a tecla antes de qualquer outro handler
+      // do jogo (ex.: o KeyPressListener global do Overworld). Removido em
+      // close() acima.
+      const listener = (e) => {
+        if (!isMatch(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        // Feedback visual rápido + som antes de fechar.
+        const hintEl = document.querySelector("[data-onboarding-hint]");
+        if (hintEl) hintEl.classList.add("OnboardingHint--done");
+        if (window.audioManager) window.audioManager.playSfx("correct");
+        setTimeout(() => popup.close("done"), 220);
+      };
+      document.addEventListener("keydown", listener, true);
+    });
   }
 
   async init(container) {

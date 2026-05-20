@@ -32,6 +32,11 @@ class Progress {
       correct: 0,
       score: 0,
       usedBuff: false,
+      // Stats acumulados pra resumo pós-fase.
+      startTime: Date.now(),
+      totalTimeMs: 0,
+      currentStreak: 0,
+      maxStreak: 0,
       // true quando o jogador veio do menu "Selecionar Fase" (replay isolado).
       // false quando entrou pela porta da sala (run longa narrativa).
       viaSelector: !!opts.viaSelector,
@@ -40,12 +45,21 @@ class Progress {
     };
   }
 
-  recordFaseAnswer({ isCorrect, scoreDelta = 0, usedBuff = false }) {
+  recordFaseAnswer({ isCorrect, scoreDelta = 0, usedBuff = false, timeTakenMs = 0 }) {
     if (!this.faseRun) return null;
     this.faseRun.answered += 1;
     if (isCorrect) this.faseRun.correct += 1;
     this.faseRun.score += Math.max(0, scoreDelta);
     if (usedBuff) this.faseRun.usedBuff = true;
+    this.faseRun.totalTimeMs += Math.max(0, timeTakenMs || 0);
+    if (isCorrect) {
+      this.faseRun.currentStreak += 1;
+      if (this.faseRun.currentStreak > this.faseRun.maxStreak) {
+        this.faseRun.maxStreak = this.faseRun.currentStreak;
+      }
+    } else {
+      this.faseRun.currentStreak = 0;
+    }
     return {
       answered: this.faseRun.answered,
       correct: this.faseRun.correct,

@@ -97,6 +97,7 @@ class OverworldEvent {
             window.progress.recordFaseAnswer({
               isCorrect: result.isCorrect,
               scoreDelta: result.isCorrect ? 10 : 0,
+              timeTakenMs: result.timeTaken || 0,
             });
           }
         }
@@ -408,6 +409,8 @@ class OverworldEvent {
       window.arcadeHUD.refresh();
       window.arcadeHUD.showRewardToast(rewardLabel);
     }
+    // Recompensa por streak é momento alto — toca som de acerto pra reforçar.
+    if (window.audioManager) window.audioManager.playSfx("correct");
   }
 
   arcadeBattle(resolve) {
@@ -718,9 +721,11 @@ class OverworldEvent {
   pause(resolve){
     console.log("JOGO PAUSADO!");
     this.map.isPaused = true;
+    if (window.audioManager) window.audioManager.playSfx("click");
     const menu = new window.PauseMenu({
       progress: this.map.overworld.progress,
       onComplete: () => {
+        if (window.audioManager) window.audioManager.playSfx("click");
         resolve();
         this.map.isPaused = false;
         this.map.overworld.startGameLoop();
