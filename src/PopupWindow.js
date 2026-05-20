@@ -78,11 +78,18 @@ PopupWindow.askDifficulty = function ({
   title = "Escolha a dificuldade",
   text = "Como você quer enfrentar este desafio?<br><span style='opacity:0.75;font-size:0.85em;'>(Automática se ajusta ao seu desempenho.)</span>",
   container = null,
+  size,
 } = {}) {
+  const target = container || document.querySelector(".game-container") || document.body;
+  // Dentro do .game-container o canvas tem scale 3.5x, então o tamanho 'default'
+  // (300px) já fica visualmente grande. Fora dele (ex.: replay via TitleScreen
+  // que monta no document.body), o tamanho nativo é minúsculo — usa 'large'.
+  const finalSize = size || (target === document.body ? "large" : "default");
   return new Promise((resolve) => {
     const popup = new PopupWindow({
       title,
       text,
+      size: finalSize,
       buttons: [
         { label: "Automática (recomendada)", value: "auto" },
         { label: "Fácil",   value: "1" },
@@ -93,7 +100,6 @@ PopupWindow.askDifficulty = function ({
         resolve(value === "auto" ? null : value);
       },
     });
-    const target = container || document.querySelector(".game-container") || document.body;
     popup.init(target);
   });
 };
