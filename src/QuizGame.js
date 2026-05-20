@@ -154,10 +154,9 @@ class QuizGame {
       p.innerHTML = "";
     }
 
-    setTimeout(() => {
-      const firstBtn = this.element.querySelector(".QuizTutorial_button2");
-      if (firstBtn) firstBtn.focus();
-    }, 0);
+    // Não auto-focar a 1ª alternativa: o destaque visual fazia parecer
+    // pré-marcada/sugerida. Tab continua entrando nas alternativas
+    // normalmente quando o jogador quiser navegar via teclado.
   }
 
   bindOptionButtons() {

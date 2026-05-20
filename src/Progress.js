@@ -158,7 +158,7 @@ class Progress {
       const sessaoId = this.sessaoData.sessao.id;
       try {
         const json = await window.api.fetch(`/api/progressos/${sessaoId}`);
-        const file = json.ponto_de_salvamento;
+        const file = this._parseSaveFile(json && json.ponto_de_salvamento);
         // Mesmo critério de getSaveFile: precisa de mapId válido.
         if (file && file.mapId) {
           this._applyFile(file);
@@ -202,18 +202,24 @@ class Progress {
     try {
       const sessaoId = this.sessaoData.sessao.id;
       const json = await window.api.fetch(`/api/progressos/${sessaoId}`);
-      // Save válido = tem `ponto_de_salvamento` com mapId. Backend cria
-      // a linha com `{}` no registro, então só Object.keys > 0 não basta.
-      return !!(
-        json &&
-        json.ponto_de_salvamento &&
-        json.ponto_de_salvamento.mapId
-      );
+      const file = this._parseSaveFile(json && json.ponto_de_salvamento);
+      return !!(file && file.mapId);
     } catch (err) {
       if (err.status && err.status < 500) return false;
       console.error("Erro ao verificar progresso remoto:", err);
       return false;
     }
+  }
+
+  // ponto_de_salvamento pode vir como objeto (coluna JSON) ou string (LONGTEXT).
+  // Normaliza pra objeto. Retorna null se não dá pra parsear.
+  _parseSaveFile(raw) {
+    if (!raw) return null;
+    if (typeof raw === 'object') return raw;
+    if (typeof raw === 'string') {
+      try { return JSON.parse(raw); } catch (_) { return null; }
+    }
+    return null;
   }
 
   reset() {
