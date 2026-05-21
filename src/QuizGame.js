@@ -75,6 +75,11 @@ class QuizGame {
   createElement() {
     this.element = document.createElement("div");
     this.element.classList.add("QuizTutorial");
+    // Modifier pro Arcade ENEM: textos longos precisam de mais espaço vertical
+    // (sem sobrepor o HUD) e fonte ligeiramente menor pra reduzir scroll.
+    if (this.campanha === "medio") {
+      this.element.classList.add("QuizTutorial--medio");
+    }
 
     // --- Texto da pergunta ---
     const p = document.createElement("p");

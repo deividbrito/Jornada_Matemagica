@@ -267,6 +267,21 @@
   display: none;
 }
 
+/* ── Modificador Arcade (campanha=medio) ──────────────────
+ * Questões ENEM são longas e a caixa default ocupa até 88% da altura
+ * — colide com o HUD do arcade (Etapa/Pts/Timer no topo). Reduzimos
+ * o teto e empurramos a caixa pra baixo, deixando uma faixa livre
+ * no topo. Fonte ligeiramente menor pra caber mais texto por linha. */
+.QuizTutorial--medio {
+  max-height: 78%;
+  top: auto;
+}
+
+.QuizTutorial--medio .QuizTutorial_p {
+  font-size: 7.5px;
+  line-height: 1.35;
+}
+
 /* Telas pequenas: uma coluna só */
 @media (max-width: 400px) {
   .QuizTutorial_options {

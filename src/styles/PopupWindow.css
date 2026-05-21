@@ -35,6 +35,32 @@
   overflow-y: auto;
 }
 
+/* Variante "small" — usada quando o popup tem MUITO texto (ex.: regras do
+ * arcade) e ficaria com scroll excessivo no tamanho default. Fontes
+ * reduzidas, padding apertado, mais espaço pro conteúdo respirar. */
+.PopupWindow_box--small {
+  max-width: 380px;
+  width: 92%;
+  max-height: 190px;
+  padding: 8px 10px 6px;
+}
+
+.PopupWindow_box--small .PopupWindow_title {
+  font-size: 10px;
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+}
+
+.PopupWindow_box--small .PopupWindow_text {
+  font-size: 7.5px;
+  line-height: 1.35;
+}
+
+.PopupWindow_box--small .PopupWindow_button {
+  font-size: 8px;
+  padding: 2px 10px;
+}
+
 /* Variante "large" — usada por onboarding e popups montados em document.body
  * (resolução nativa, sem escala 3.5x do canvas). Tamanhos generosos pra que
  * o texto fique confortavelmente legível em monitor full HD. */

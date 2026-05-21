@@ -149,6 +149,7 @@ class OverworldEvent {
     const popup = new window.PopupWindow({
       title: this.event.title || "",
       text: this.event.text || "",
+      size: this.event.size,
       onComplete: () => resolve(),
     });
     popup.init(document.querySelector(".game-container"));
@@ -304,11 +305,10 @@ class OverworldEvent {
       popup.init(document.querySelector(".game-container"));
     });
 
-    // 2. Dificuldade da run (null = automática/adaptativa)
-    const dificuldadeManual = await window.PopupWindow.askDifficulty({
-      title: "Modo Gincana",
-      text: `Como você quer encarar a run de ${count} questões?<br><span style='opacity:0.75;font-size:0.85em;'>(Automática ajusta ao seu desempenho. Manual fixa o nível pela run inteira.)</span>`,
-    });
+    // Arcade ENEM tem nível único no pool (todas as questões são 'medio'/2),
+    // então não faz sentido perguntar dificuldade — backend serve aleatório
+    // dentro da campanha. Deixamos null pra preservar o flow downstream.
+    const dificuldadeManual = null;
 
     // 3. Setup da run
     const startTime = Date.now();

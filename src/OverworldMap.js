@@ -2404,6 +2404,7 @@ window.OverworldMaps = {
       required: [],
       events: [
         { type: "popup",
+          size: "small",
           title: "📚 Gincana Acadêmica",
           text:
             "<b>Como funciona a gincana</b><br>" +
