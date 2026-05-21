@@ -371,6 +371,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O ar perto da Sala 2 parece fora de foco. Tudo lá dentro fica meio aproximado.]" },
           { type: "textMessage", text: "Alice: ...o Mestre da Aproximação me espera." },
           { type: "addStoryFlag", flag: "mago2_aviso" },
+          { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" },
         ]},
         { events: [
           { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -407,6 +408,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "Alice: ...o Conde dos Decimais está lá dentro." },
           { type: "textMessage", text: "Alice: Preciso preparar minha cabeça antes de entrar." },
           { type: "addStoryFlag", flag: "mago1_aviso" },
+          { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" },
         ]},
         { events: [
           { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -445,6 +447,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[Uma voz fria conta números: 'dois, três, cinco...']" },
           { type: "textMessage", text: "Alice: A Sentinela dos Primos. Hora de contar com ela." },
           { type: "addStoryFlag", flag: "mago3_aviso" },
+          { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" },
         ]},
         { events: [
           { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
@@ -541,6 +544,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[Tudo está dividido em pedaços. Nada inteiro sobrevive lá dentro.]" },
           { type: "textMessage", text: "Alice: O Bibliófilo das Frações. Vou recompor o que ele rasgou." },
           { type: "addStoryFlag", flag: "mago4_aviso" },
+          { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" },
         ]},
         { events: [
           { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
