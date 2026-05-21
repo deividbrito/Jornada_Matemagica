@@ -84,6 +84,13 @@ class TitleScreen {
             this.show();
             return;
           }
+          // Zera o flag de onboarding ANTES de chamar showOnboarding — assim
+          // "Novo Jogo" sempre re-exibe o tutorial, mesmo que sessões
+          // anteriores já o tenham marcado como concluído.
+          if (window.playerState && window.playerState.storyFlags) {
+            delete window.playerState.storyFlags.onboarding_done;
+          }
+          await this.showOnboarding(container);
           this.close();
           this.progress.campanha = campanha;
           resolve({ action: "new" });
@@ -326,18 +333,22 @@ class TitleScreen {
     const flags = window.playerState && window.playerState.storyFlags;
     if (flags && flags.onboarding_done) return;
 
-    // Passo 0 e final: apenas leitura.
+    const TOTAL = 7;
+
+    // 1. História + objetivo
     await this._showOnboardingPopup({
-      badge: "Passo 1 de 5",
+      badge: `Passo 1 de ${TOTAL}`,
       title: "Bem-vinda à Jornada Matemágica!",
       text:
-        "Você é a <b>Alice</b>, e seu desafio é dominar a matemática enquanto explora o colégio. " +
-        "Vamos treinar os controles em 30 segundos — você vai apertar as teclas você mesma."
+        "Você é a <b>Alice</b>. O colégio caiu sob a influência de <b>6 magos da matemática</b> " +
+        "que zombam dos alunos e prendem o saber em salas seladas. Sua missão é " +
+        "<b>estudar, enfrentar e libertar</b> uma sala de cada vez." +
+        "<br><br>Vamos treinar os controles em 30 segundos — você vai apertar as teclas você mesma."
     });
 
-    // Passo: andar (qualquer seta ou WASD)
+    // 2. Andar (interativo)
     await this._showOnboardingInteractiveStep({
-      badge: "Passo 2 de 5",
+      badge: `Passo 2 de ${TOTAL}`,
       title: "Como andar",
       text:
         "Use as <b>setas do teclado</b> (ou <b>WASD</b>) para mover a Alice pelo mapa." +
@@ -349,35 +360,66 @@ class TitleScreen {
       ].includes(e.code),
     });
 
-    // Passo: interagir (Enter / Espaço — botão A do D-pad também emite Enter)
+    // 3. Interagir (interativo)
     await this._showOnboardingInteractiveStep({
-      badge: "Passo 3 de 5",
+      badge: `Passo 3 de ${TOTAL}`,
       title: "Conversar e enfrentar desafios",
       text:
-        "Encoste em um colega ou professor e aperte <b>Enter</b> (ou o botão <b>A</b> no D-pad) para falar." +
-        "<br><br>Alguns vão te propor uma <b>questão de matemática</b> — responda escolhendo a alternativa correta.",
+        "Encoste em um colega, professor ou mago e aperte <b>Enter</b> " +
+        "(ou o botão <b>A</b> no D-pad) para interagir." +
+        "<br><br>Magos abrem <b>duelos de matemática</b>: uma sequência de questões. " +
+        "Acerte a meta e a sala é libertada.",
       hint: "Pressione Enter para continuar",
       isMatch: (e) => e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space",
     });
 
-    // Passo: pausar (Esc abre o menu de pausa — Esc ou P comuns)
+    // 4. Pausa (interativo)
     await this._showOnboardingInteractiveStep({
-      badge: "Passo 4 de 5",
+      badge: `Passo 4 de ${TOTAL}`,
       title: "Pausa e ajustes",
       text:
-        "A qualquer momento você pode apertar <b>Esc</b> para abrir o <b>menu de pausa</b>. " +
-        "Lá dá pra salvar, abrir o mapa, ajustar o volume e voltar à tela inicial.",
+        "Aperte <b>Esc</b> a qualquer momento para abrir o <b>menu de pausa</b>: " +
+        "salvar, ver o mapa, ajustar volume ou voltar pra tela inicial." +
+        "<br><br>Seu progresso é salvo no servidor — pode fechar e voltar depois.",
       hint: "Pressione Esc para continuar",
       isMatch: (e) => e.code === "Escape",
     });
 
-    // Passo final: leitura.
+    // 5. Resposta e feedback (leitura)
     await this._showOnboardingPopup({
-      badge: "Passo 5 de 5",
-      title: "Dificuldade que se adapta",
+      badge: `Passo 5 de ${TOTAL}`,
+      title: "Errar faz parte",
       text:
-        "O jogo aprende com seus acertos e erros e ajusta o nível das próximas perguntas. " +
-        "<b>Errar faz parte</b> — sempre tem explicação depois, e a alternativa correta fica destacada."
+        "Em cada questão, escolha a alternativa que você acha correta. Depois do clique:" +
+        "<br>&nbsp;• Se <b>acertou</b>, ganha pontos e vê a explicação do raciocínio." +
+        "<br>&nbsp;• Se <b>errou</b>, a alternativa correta fica destacada e a explicação aparece." +
+        "<br><br>O jogo <b>se adapta</b> ao seu desempenho — quanto mais você acerta num assunto, " +
+        "mais ele aumenta a dificuldade."
+    });
+
+    // 6. Progressão + estrelas
+    await this._showOnboardingPopup({
+      badge: `Passo 6 de ${TOTAL}`,
+      title: "Progressão pelas salas",
+      text:
+        "Você enfrenta os magos <b>em ordem</b>: " +
+        "Decimais → Aproximação → Primos → Frações → Racionais → Porcentagem." +
+        "<br><br>Cada sala libertada rende <b>até 3 estrelas</b> (acertos %, sem buffs, sem erros) " +
+        "e uma <b>medalha temática</b>. Você pode repetir qualquer fase pelo menu " +
+        "<b>Selecionar Fase</b> a qualquer momento."
+    });
+
+    // 7. Gincana Acadêmica
+    await this._showOnboardingPopup({
+      badge: `Passo 7 de ${TOTAL}`,
+      title: "Gincana Acadêmica (modo ENEM)",
+      text:
+        "Depois de libertar a primeira sala, o <b>Modo Gincana</b> é desbloqueado: " +
+        "um arcade no estilo ENEM com runs de 5 a 60 questões, <b>tentativas limitadas</b>, " +
+        "buffs em altares e <b>ranking global</b>." +
+        "<br><br>Cada acerto vira <b>XP</b> que sobe seu rank " +
+        "(Calouro → Estudante → Bolsista → Destaque → Campeão Nacional). " +
+        "<br><br>Bons estudos!"
     });
 
     if (flags) {
@@ -448,8 +490,10 @@ class TitleScreen {
   async init(container) {
     await this.showLogin(container);
 
-    // Onboarding (idempotente: storyFlags.onboarding_done evita repetir)
-    await this.showOnboarding(container);
+    // Onboarding NÃO é mais chamado aqui antes do menu — agora é disparado
+    // dentro do handler de "Novo Jogo" (após zerar storyFlags), garantindo
+    // que sempre apareça quando o jogador inicia uma run nova,
+    // independentemente de já ter visto antes em outra sessão.
 
     return new Promise(async (resolve) => {
       this.createElement();
