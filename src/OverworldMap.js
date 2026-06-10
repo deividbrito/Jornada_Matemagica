@@ -355,10 +355,12 @@ window.OverworldMaps = {
       //acesso sala2 — só acessível durante a fase 2 (mago1 derrotado, mago2 não)
       [window.utils.asGridCoord(0,12)]: [
         { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
+          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -366,10 +368,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,13)]: [
         { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
+          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["MAGO_DECIMAIS_DERROTADO", "!mago2_aviso"], events: [
           { type: "textMessage", text: "[O ar perto da Sala 2 parece fora de foco. Tudo lá dentro fica meio aproximado.]" },
@@ -383,10 +387,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,14)]: [
         { required: ["MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
+          { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -396,7 +402,8 @@ window.OverworldMaps = {
       //acesso sala1 — bloqueia após derrota; aviso (1ª vez) no tile central
       [window.utils.asGridCoord(9,12)]: [
         { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" }
+          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { events: [
           { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -404,7 +411,8 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(9,13)]: [
         { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" }
+          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { required: ["!mago1_aviso"], events: [
           { type: "textMessage", text: "[Vozes baixas vêm de dentro da Sala 1.]" },
@@ -420,7 +428,8 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(9,14)]: [
         { required: ["MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" }
+          { type: "textMessage", text: "[A porta está fria ao toque. O Conde foi liberto — a Sala 1 selou-se atrás dele.]" },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { events: [
           { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -430,10 +439,12 @@ window.OverworldMaps = {
       //acesso gremio — só acessível durante a fase 3 (mago2 derrotado, mago3 não)
       [window.utils.asGridCoord(0,19)]: [
         { required: ["MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
+          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
@@ -441,10 +452,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,20)]: [
         { required: ["MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
+          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["MAGO_APROXIMACAO_DERROTADO", "!mago3_aviso"], events: [
           { type: "textMessage", text: "[Papéis rasgados saem por baixo da porta do Grêmio.]" },
@@ -459,10 +472,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,21)]: [
         { required: ["MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
+          { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
@@ -510,27 +525,32 @@ window.OverworldMaps = {
       //acesso toalete — trancado durante todo o arco (fora de escopo)
       [window.utils.asGridCoord(0,27)]: [
         { events: [
-          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" }
+          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]}
       ],
       [window.utils.asGridCoord(0,28)]: [
         { events: [
-          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" }
+          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]}
       ],
       [window.utils.asGridCoord(0,29)]: [
         { events: [
-          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" }
+          { type: "textMessage", text: "[A porta do toalete está trancada por dentro. Alguém ainda se esconde lá.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]}
       ],
 
       //acesso biblioteca — só acessível durante a fase 4 (mago3 derrotado, mago4 não)
       [window.utils.asGridCoord(9,27)]: [
         { required: ["MAGO_FRACOES_DERROTADO"], events: [
-          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
+          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até o Grêmio primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até o Grêmio primeiro." },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { events: [
           { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
@@ -538,10 +558,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(9,28)]: [
         { required: ["MAGO_FRACOES_DERROTADO"], events: [
-          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
+          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até o Grêmio primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até o Grêmio primeiro." },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { required: ["MAGO_PRIMOS_DERROTADO", "!mago4_aviso"], events: [
           { type: "textMessage", text: "[Páginas voam pela fresta da porta da Biblioteca.]" },
@@ -556,10 +578,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(9,29)]: [
         { required: ["MAGO_FRACOES_DERROTADO"], events: [
-          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
+          { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até o Grêmio primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até o Grêmio primeiro." },
+          { type: "walk", who: "hero", direction: "left" }
         ]},
         { events: [
           { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
@@ -627,6 +651,15 @@ window.OverworldMaps = {
 
       //maquininha de refris
       [window.utils.asGridCoord(6,3)]: true, [window.utils.asGridCoord(7,3)]: true,
+
+      //vazio além das portas — segurança: cenários que bloqueiam a entrada
+      //(porta selada/aviso) deixam o herói no vão da porta, sem teleporte.
+      [window.utils.asGridCoord(-1,12)]: true, [window.utils.asGridCoord(-1,13)]: true, [window.utils.asGridCoord(-1,14)]: true,
+      [window.utils.asGridCoord(-1,19)]: true, [window.utils.asGridCoord(-1,20)]: true, [window.utils.asGridCoord(-1,21)]: true,
+      [window.utils.asGridCoord(-1,27)]: true, [window.utils.asGridCoord(-1,28)]: true, [window.utils.asGridCoord(-1,29)]: true,
+      [window.utils.asGridCoord(10,12)]: true, [window.utils.asGridCoord(10,13)]: true, [window.utils.asGridCoord(10,14)]: true,
+      [window.utils.asGridCoord(10,19)]: true, [window.utils.asGridCoord(10,20)]: true, [window.utils.asGridCoord(10,21)]: true,
+      [window.utils.asGridCoord(10,27)]: true, [window.utils.asGridCoord(10,28)]: true, [window.utils.asGridCoord(10,29)]: true,
     },
     // entryCutscene é array de cenas — a PRIMEIRA cujo `required` satisfaz roda.
     // Ordem: epílogo > transição 1 > intro (mais específico antes do genérico).
@@ -859,17 +892,18 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(16,12)]: true, [window.utils.asGridCoord(16,13)]: true,
       [window.utils.asGridCoord(16,14)]: true, [window.utils.asGridCoord(16,15)]: true,
 
-      //árvore (canto superior direito — copa ocupa 3x3, tronco no centro)
-      [window.utils.asGridCoord(10,3)]: true, [window.utils.asGridCoord(11,3)]: true, [window.utils.asGridCoord(12,3)]: true,
-      [window.utils.asGridCoord(10,4)]: true, [window.utils.asGridCoord(11,4)]: true, [window.utils.asGridCoord(12,4)]: true,
-      [window.utils.asGridCoord(11,5)]: true,
+      //árvore (canto superior direito — tronco em x11-12, raízes na linha 5; copa fica na camada superior)
+      [window.utils.asGridCoord(11,3)]: true, [window.utils.asGridCoord(12,3)]: true,
+      [window.utils.asGridCoord(11,4)]: true, [window.utils.asGridCoord(12,4)]: true,
+      [window.utils.asGridCoord(11,5)]: true, [window.utils.asGridCoord(12,5)]: true,
 
-      //poste com placa "GINÁSIO" (canto superior esquerdo)
-      [window.utils.asGridCoord(1,1)]: true,
+      //poste com placa "GINÁSIO" (canto superior esquerdo) — coluna inteira do poste
+      [window.utils.asGridCoord(1,1)]: true, [window.utils.asGridCoord(1,2)]: true,
       [window.utils.asGridCoord(1,3)]: true, [window.utils.asGridCoord(1,4)]: true,
 
-      //banco abaixo da placa
-      [window.utils.asGridCoord(2,3)]: true, [window.utils.asGridCoord(3,3)]: true,
+      //banco abaixo da placa (encosto na linha 3, assento na linha 4)
+      [window.utils.asGridCoord(3,3)]: true, [window.utils.asGridCoord(4,3)]: true,
+      [window.utils.asGridCoord(3,4)]: true, [window.utils.asGridCoord(4,4)]: true,
     },
     cutsceneSpaces: {
       [window.utils.asGridCoord(15,7)]: [
@@ -939,8 +973,9 @@ window.OverworldMaps = {
         ]
       }),
       // Figurante 4 — aluna trancada na Sala 2 (linha do ROTEIRO).
+      // Em (4,15) fica AO LADO da carteira C1 (que ocupa x5-7), não em cima dela.
       figurante4: new window.Person({
-        x: window.utils.withGrid(5),
+        x: window.utils.withGrid(4),
         y: window.utils.withGrid(15),
         src: "imagens/personagens/figurante4.png",
         behaviorLoop: [
@@ -969,14 +1004,16 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(25,4)]: true, [window.utils.asGridCoord(26,4)]: true,
       [window.utils.asGridCoord(27,4)]: true, [window.utils.asGridCoord(28,4)]: true,
 
-      //parede esquerda
+      //parede esquerda (a faixa cinza desenhada fica toda na coluna 0;
+      //x1 já é assoalho livre — sem zigue-zague entre as colunas)
       [window.utils.asGridCoord(0,5)]: true, [window.utils.asGridCoord(0,6)]: true,
-      [window.utils.asGridCoord(1,7)]: true, [window.utils.asGridCoord(1,8)]: true,
-      [window.utils.asGridCoord(1,9)]: true, [window.utils.asGridCoord(0,10)]: true,
-      [window.utils.asGridCoord(0,11)]: true, [window.utils.asGridCoord(1,12)]: true,
-      [window.utils.asGridCoord(1,13)]: true, [window.utils.asGridCoord(1,14)]: true,
-      [window.utils.asGridCoord(0,15)]: true, [window.utils.asGridCoord(1 ,16)]: true,
-      [window.utils.asGridCoord(1,17)]: true, [window.utils.asGridCoord(1,18)]: true,
+      [window.utils.asGridCoord(0,7)]: true, [window.utils.asGridCoord(0,8)]: true,
+      [window.utils.asGridCoord(0,9)]: true, [window.utils.asGridCoord(0,10)]: true,
+      [window.utils.asGridCoord(0,11)]: true, [window.utils.asGridCoord(0,12)]: true,
+      [window.utils.asGridCoord(0,13)]: true, [window.utils.asGridCoord(0,14)]: true,
+      [window.utils.asGridCoord(0,15)]: true, [window.utils.asGridCoord(0,16)]: true,
+      [window.utils.asGridCoord(0,17)]: true, [window.utils.asGridCoord(0,18)]: true,
+      [window.utils.asGridCoord(0,19)]: true,
 
       //parede direita
       [window.utils.asGridCoord(29,5)]: true, [window.utils.asGridCoord(29,6)]: true,
@@ -1001,25 +1038,56 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(25,19)]: true, [window.utils.asGridCoord(26,19)]: true,
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
 
-      // carteiras (mesas em pares) — 3 fileiras. x=15 livre pra Alex chegar
-      // ao mago em (15,6). Mesas em x=13,14 e 19,20 deixam o vão central.
-      [window.utils.asGridCoord(3,6)]:  true, [window.utils.asGridCoord(4,6)]:  true,
-      [window.utils.asGridCoord(8,6)]:  true, [window.utils.asGridCoord(9,6)]:  true,
-      [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
+      //vazio além da porta (segurança caso a saída deixe de teleportar)
+      [window.utils.asGridCoord(13,20)]: true, [window.utils.asGridCoord(14,20)]: true,
+      [window.utils.asGridCoord(15,20)]: true, [window.utils.asGridCoord(16,20)]: true,
+
+      // Bases da estante (sup. esq., x1-3) e do armário (sup. dir., x25-27),
+      // que descem 1 linha abaixo da parede de fundo (y4).
+      [window.utils.asGridCoord(1,5)]: true, [window.utils.asGridCoord(2,5)]: true,
+      [window.utils.asGridCoord(25,5)]: true, [window.utils.asGridCoord(26,5)]: true,
+
+      // Carteiras — 3 fileiras de 4 (arte: colunas x5-7, x12-14, x19-21, x24-26).
+      // Corredor central x15-18 livre pra Alex chegar ao mago em (15,6).
+      // Fileira A (tampos y6-7, cadeiras y8)
+      [window.utils.asGridCoord(5,6)]:  true, [window.utils.asGridCoord(6,6)]:  true, [window.utils.asGridCoord(7,6)]:  true,
+      [window.utils.asGridCoord(5,7)]:  true, [window.utils.asGridCoord(6,7)]:  true, [window.utils.asGridCoord(7,7)]:  true,
+      [window.utils.asGridCoord(6,8)]:  true,
+      [window.utils.asGridCoord(12,6)]: true, [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
+      [window.utils.asGridCoord(12,7)]: true, [window.utils.asGridCoord(13,7)]: true, [window.utils.asGridCoord(14,7)]: true,
+      [window.utils.asGridCoord(13,8)]: true,
       [window.utils.asGridCoord(19,6)]: true, [window.utils.asGridCoord(20,6)]: true,
+      [window.utils.asGridCoord(19,7)]: true, [window.utils.asGridCoord(20,7)]: true, [window.utils.asGridCoord(21,7)]: true,
+      [window.utils.asGridCoord(19,8)]: true, [window.utils.asGridCoord(20,8)]: true,
       [window.utils.asGridCoord(25,6)]: true, [window.utils.asGridCoord(26,6)]: true,
+      [window.utils.asGridCoord(24,7)]: true, [window.utils.asGridCoord(25,7)]: true, [window.utils.asGridCoord(26,7)]: true,
+      [window.utils.asGridCoord(25,8)]: true, [window.utils.asGridCoord(26,8)]: true,
 
-      [window.utils.asGridCoord(3,10)]:  true, [window.utils.asGridCoord(4,10)]:  true,
-      [window.utils.asGridCoord(8,10)]:  true, [window.utils.asGridCoord(9,10)]:  true,
-      [window.utils.asGridCoord(13,10)]: true, [window.utils.asGridCoord(14,10)]: true,
-      [window.utils.asGridCoord(19,10)]: true, [window.utils.asGridCoord(20,10)]: true,
-      [window.utils.asGridCoord(25,10)]: true, [window.utils.asGridCoord(26,10)]: true,
-
-      [window.utils.asGridCoord(3,13)]:  true, [window.utils.asGridCoord(4,13)]:  true,
-      [window.utils.asGridCoord(8,13)]:  true, [window.utils.asGridCoord(9,13)]:  true,
-      [window.utils.asGridCoord(13,13)]: true, [window.utils.asGridCoord(14,13)]: true,
-      [window.utils.asGridCoord(19,13)]: true, [window.utils.asGridCoord(20,13)]: true,
+      // Fileira B (tampos y11, corpos y12)
+      [window.utils.asGridCoord(5,11)]:  true, [window.utils.asGridCoord(6,11)]:  true, [window.utils.asGridCoord(7,11)]:  true,
+      [window.utils.asGridCoord(5,12)]:  true, [window.utils.asGridCoord(6,12)]:  true, [window.utils.asGridCoord(7,12)]:  true,
+      [window.utils.asGridCoord(12,11)]: true, [window.utils.asGridCoord(13,11)]: true, [window.utils.asGridCoord(14,11)]: true,
+      [window.utils.asGridCoord(12,12)]: true, [window.utils.asGridCoord(13,12)]: true, [window.utils.asGridCoord(14,12)]: true,
+      [window.utils.asGridCoord(19,11)]: true, [window.utils.asGridCoord(20,11)]: true, [window.utils.asGridCoord(21,11)]: true,
+      [window.utils.asGridCoord(19,12)]: true, [window.utils.asGridCoord(20,12)]: true, [window.utils.asGridCoord(21,12)]: true,
+      [window.utils.asGridCoord(24,11)]: true, [window.utils.asGridCoord(25,11)]: true, [window.utils.asGridCoord(26,11)]: true,
+      [window.utils.asGridCoord(24,12)]: true, [window.utils.asGridCoord(25,12)]: true, [window.utils.asGridCoord(26,12)]: true,
+      // cadeira da B4 desce até y~13.5
       [window.utils.asGridCoord(25,13)]: true, [window.utils.asGridCoord(26,13)]: true,
+
+      // Fileira C (tampos y15, corpos y16, cadeiras y17)
+      [window.utils.asGridCoord(5,15)]:  true, [window.utils.asGridCoord(6,15)]:  true, [window.utils.asGridCoord(7,15)]:  true,
+      [window.utils.asGridCoord(6,16)]:  true, [window.utils.asGridCoord(7,16)]:  true,
+      [window.utils.asGridCoord(6,17)]:  true,
+      [window.utils.asGridCoord(12,15)]: true, [window.utils.asGridCoord(13,15)]: true, [window.utils.asGridCoord(14,15)]: true,
+      [window.utils.asGridCoord(12,16)]: true, [window.utils.asGridCoord(13,16)]: true, [window.utils.asGridCoord(14,16)]: true,
+      [window.utils.asGridCoord(13,17)]: true,
+      [window.utils.asGridCoord(19,15)]: true, [window.utils.asGridCoord(20,15)]: true,
+      [window.utils.asGridCoord(19,16)]: true, [window.utils.asGridCoord(20,16)]: true,
+      [window.utils.asGridCoord(19,17)]: true, [window.utils.asGridCoord(20,17)]: true,
+      [window.utils.asGridCoord(25,15)]: true, [window.utils.asGridCoord(26,15)]: true,
+      [window.utils.asGridCoord(25,16)]: true, [window.utils.asGridCoord(26,16)]: true,
+      [window.utils.asGridCoord(25,17)]: true, [window.utils.asGridCoord(26,17)]: true,
     },
     cutsceneSpaces: {
       //acesso sala2
@@ -1100,8 +1168,9 @@ window.OverworldMaps = {
         ]
       }),
       // Figurante 3 — aluno trancado na Sala 1 (linha do ROTEIRO 1.A/figurantes).
+      // Em (4,7) fica AO LADO da carteira A1 (que ocupa x5-7), não em cima dela.
       figurante3: new window.Person({
-        x: window.utils.withGrid(5),
+        x: window.utils.withGrid(4),
         y: window.utils.withGrid(7),
         src: "imagens/personagens/figurante3.png",
         behaviorLoop: [
@@ -1176,43 +1245,60 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(29,15)]: true, [window.utils.asGridCoord(29,16)]: true,
       [window.utils.asGridCoord(29,17)]: true, [window.utils.asGridCoord(29,18)]: true,
 
-      //parede inferior
+      //parede inferior (vão da porta desenhado em x14-17)
       [window.utils.asGridCoord(1,19)]: true, [window.utils.asGridCoord(2,19)]: true,
       [window.utils.asGridCoord(3,19)]: true, [window.utils.asGridCoord(4,19)]: true,
       [window.utils.asGridCoord(5,19)]: true, [window.utils.asGridCoord(6,19)]: true,
       [window.utils.asGridCoord(7,19)]: true, [window.utils.asGridCoord(8,19)]: true,
       [window.utils.asGridCoord(9,19)]: true, [window.utils.asGridCoord(10,19)]: true,
       [window.utils.asGridCoord(11,19)]: true, [window.utils.asGridCoord(12,19)]: true,
-      [window.utils.asGridCoord(17,19)]: true, [window.utils.asGridCoord(18,19)]: true,
+      [window.utils.asGridCoord(13,19)]: true, [window.utils.asGridCoord(18,19)]: true,
       [window.utils.asGridCoord(19,19)]: true, [window.utils.asGridCoord(20,19)]: true,
       [window.utils.asGridCoord(21,19)]: true, [window.utils.asGridCoord(22,19)]: true,
       [window.utils.asGridCoord(23,19)]: true, [window.utils.asGridCoord(24,19)]: true,
       [window.utils.asGridCoord(25,19)]: true, [window.utils.asGridCoord(26,19)]: true,
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
 
-      // carteiras (mesas em pares) — 3 fileiras. Caminho central x=15 fica
-      // livre pra Alex chegar até o mago em (15,14).
-      [window.utils.asGridCoord(3,6)]:  true, [window.utils.asGridCoord(4,6)]:  true,
-      [window.utils.asGridCoord(8,6)]:  true, [window.utils.asGridCoord(9,6)]:  true,
+      //vazio além da porta (segurança caso a saída deixe de teleportar)
+      [window.utils.asGridCoord(14,20)]: true, [window.utils.asGridCoord(15,20)]: true,
+      [window.utils.asGridCoord(16,20)]: true, [window.utils.asGridCoord(17,20)]: true,
+
+      // Carteiras — 3 fileiras de 4 (arte: colunas x5-7, x12-14, x19-20, x25-26).
+      // Corredor central x15-18 livre pra Alex chegar até o mago em (15,14).
+      // Fileira 1 (tampos y6, corpos y7; a da direita desce até y8)
+      [window.utils.asGridCoord(5,6)]:  true, [window.utils.asGridCoord(6,6)]:  true, [window.utils.asGridCoord(7,6)]:  true,
+      [window.utils.asGridCoord(5,7)]:  true, [window.utils.asGridCoord(6,7)]:  true, [window.utils.asGridCoord(7,7)]:  true,
       [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
+      [window.utils.asGridCoord(12,7)]: true, [window.utils.asGridCoord(13,7)]: true, [window.utils.asGridCoord(14,7)]: true,
       [window.utils.asGridCoord(19,6)]: true, [window.utils.asGridCoord(20,6)]: true,
+      [window.utils.asGridCoord(19,7)]: true, [window.utils.asGridCoord(20,7)]: true,
       [window.utils.asGridCoord(25,6)]: true, [window.utils.asGridCoord(26,6)]: true,
+      [window.utils.asGridCoord(25,7)]: true, [window.utils.asGridCoord(26,7)]: true,
+      [window.utils.asGridCoord(25,8)]: true, [window.utils.asGridCoord(26,8)]: true,
 
-      [window.utils.asGridCoord(3,10)]:  true, [window.utils.asGridCoord(4,10)]:  true,
-      [window.utils.asGridCoord(8,10)]:  true, [window.utils.asGridCoord(9,10)]:  true,
-      [window.utils.asGridCoord(13,10)]: true, [window.utils.asGridCoord(14,10)]: true,
-      [window.utils.asGridCoord(19,10)]: true, [window.utils.asGridCoord(20,10)]: true,
-      [window.utils.asGridCoord(25,10)]: true, [window.utils.asGridCoord(26,10)]: true,
+      // Fileira 2 (tampos y11, corpos y12)
+      [window.utils.asGridCoord(5,11)]:  true, [window.utils.asGridCoord(6,11)]:  true, [window.utils.asGridCoord(7,11)]:  true,
+      [window.utils.asGridCoord(6,12)]:  true, [window.utils.asGridCoord(7,12)]:  true,
+      [window.utils.asGridCoord(12,11)]: true, [window.utils.asGridCoord(13,11)]: true, [window.utils.asGridCoord(14,11)]: true,
+      [window.utils.asGridCoord(13,12)]: true, [window.utils.asGridCoord(14,12)]: true,
+      [window.utils.asGridCoord(19,11)]: true, [window.utils.asGridCoord(20,11)]: true,
+      [window.utils.asGridCoord(19,12)]: true, [window.utils.asGridCoord(20,12)]: true,
+      [window.utils.asGridCoord(25,11)]: true, [window.utils.asGridCoord(26,11)]: true,
+      [window.utils.asGridCoord(25,12)]: true, [window.utils.asGridCoord(26,12)]: true,
 
-      [window.utils.asGridCoord(3,13)]:  true, [window.utils.asGridCoord(4,13)]:  true,
-      [window.utils.asGridCoord(8,13)]:  true, [window.utils.asGridCoord(9,13)]:  true,
-      [window.utils.asGridCoord(13,13)]: true, [window.utils.asGridCoord(14,13)]: true,
-      [window.utils.asGridCoord(19,13)]: true, [window.utils.asGridCoord(20,13)]: true,
-      [window.utils.asGridCoord(25,13)]: true, [window.utils.asGridCoord(26,13)]: true,
+      // Fileira 3 (tampos y15, corpos y16)
+      [window.utils.asGridCoord(5,15)]:  true, [window.utils.asGridCoord(6,15)]:  true, [window.utils.asGridCoord(7,15)]:  true,
+      [window.utils.asGridCoord(6,16)]:  true, [window.utils.asGridCoord(7,16)]:  true,
+      [window.utils.asGridCoord(13,15)]: true, [window.utils.asGridCoord(14,15)]: true,
+      [window.utils.asGridCoord(13,16)]: true, [window.utils.asGridCoord(14,16)]: true,
+      [window.utils.asGridCoord(19,15)]: true, [window.utils.asGridCoord(20,15)]: true,
+      [window.utils.asGridCoord(19,16)]: true, [window.utils.asGridCoord(20,16)]: true,
+      [window.utils.asGridCoord(25,15)]: true, [window.utils.asGridCoord(26,15)]: true,
+      [window.utils.asGridCoord(25,16)]: true, [window.utils.asGridCoord(26,16)]: true,
     },
     cutsceneSpaces: {
-      //acesso sala1
-      [window.utils.asGridCoord(13,19)]: [
+      //acesso sala1 (vão da porta desenhado em x14-17)
+      [window.utils.asGridCoord(17,19)]: [
         {
           events: [
             { type: "changeMap",
@@ -1367,12 +1453,14 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(0,5)]: true, [window.utils.asGridCoord(0,6)]: true,
       [window.utils.asGridCoord(0,7)]: true, [window.utils.asGridCoord(0,8)]: true,
 
-      //mesas
+      //mesas (a célula extra abaixo de cada cadeira cobre os pés dela)
       [window.utils.asGridCoord(5,4)]: true, [window.utils.asGridCoord(5,5)]: true,
       [window.utils.asGridCoord(6,4)]: true, [window.utils.asGridCoord(6,5)]: true,
+      [window.utils.asGridCoord(6,6)]: true,
 
       [window.utils.asGridCoord(2,6)]: true, [window.utils.asGridCoord(3,6)]: true,
       [window.utils.asGridCoord(2,7)]: true, [window.utils.asGridCoord(3,7)]: true,
+      [window.utils.asGridCoord(3,8)]: true,
     }
   },
   Gremio: {
@@ -1435,12 +1523,15 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(5,2)]: true, [window.utils.asGridCoord(6,2)]: true,
       [window.utils.asGridCoord(7,2)]: true, [window.utils.asGridCoord(8,2)]: true,
 
-      //escrivaninha e sofá
+      //escrivaninha e sofá (x8 y4-5 = encosto do sofá)
       [window.utils.asGridCoord(8,3)]: true,
       [window.utils.asGridCoord(7,4)]: true, [window.utils.asGridCoord(7,5)]: true,
+      [window.utils.asGridCoord(8,4)]: true, [window.utils.asGridCoord(8,5)]: true,
       [window.utils.asGridCoord(7,6)]: true, [window.utils.asGridCoord(8,6)]: true,
 
-      //parede direita
+      //parede direita (madeira desenhada de y3 a y8)
+      [window.utils.asGridCoord(9,3)]: true, [window.utils.asGridCoord(9,4)]: true,
+      [window.utils.asGridCoord(9,5)]: true, [window.utils.asGridCoord(9,6)]: true,
       [window.utils.asGridCoord(9,7)]: true, [window.utils.asGridCoord(9,8)]: true,
 
       //parede inferior
@@ -1452,6 +1543,9 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(0,3)]: true, [window.utils.asGridCoord(0,4)]: true,
       [window.utils.asGridCoord(0,5)]: true, [window.utils.asGridCoord(0,6)]: true,
       [window.utils.asGridCoord(0,7)]: true, [window.utils.asGridCoord(0,8)]: true,
+
+      //vazio além da porta (segurança caso a saída deixe de teleportar)
+      [window.utils.asGridCoord(4,10)]: true, [window.utils.asGridCoord(5,10)]: true,
     },
     cutsceneSpaces: {
       //acesso sala1
@@ -1568,14 +1662,15 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(27,8)]: true, [window.utils.asGridCoord(27,9)]: true,
       [window.utils.asGridCoord(28,8)]: true, [window.utils.asGridCoord(28,9)]: true,
 
-      //prateleiras 3
+      //prateleiras 3 (o desenho da estante se estende até x26)
       [window.utils.asGridCoord(19,11)]: true, [window.utils.asGridCoord(19,12)]: true,
       [window.utils.asGridCoord(20,11)]: true, [window.utils.asGridCoord(20,12)]: true,
       [window.utils.asGridCoord(21,11)]: true, [window.utils.asGridCoord(21,12)]: true,
       [window.utils.asGridCoord(22,11)]: true, [window.utils.asGridCoord(22,12)]: true,
       [window.utils.asGridCoord(23,11)]: true, [window.utils.asGridCoord(23,12)]: true,
       [window.utils.asGridCoord(24,11)]: true, [window.utils.asGridCoord(24,12)]: true,
-      [window.utils.asGridCoord(25,11)]: true, [window.utils.asGridCoord(25,12)]: true, 
+      [window.utils.asGridCoord(25,11)]: true, [window.utils.asGridCoord(25,12)]: true,
+      [window.utils.asGridCoord(26,11)]: true, [window.utils.asGridCoord(26,12)]: true,
 
       //prateleiras 4
       [window.utils.asGridCoord(21,15)]: true, [window.utils.asGridCoord(21,16)]: true,
@@ -1598,13 +1693,22 @@ window.OverworldMaps = {
       //sofá comprido à esquerda
       [window.utils.asGridCoord(1,8)]: true, [window.utils.asGridCoord(1,9)]: true,
 
-      //mesas de leitura espalhadas — caminho central x=14,15 livre
-      [window.utils.asGridCoord(7,8)]:  true,
-      [window.utils.asGridCoord(11,8)]: true,
-      [window.utils.asGridCoord(8,11)]: true,
-      [window.utils.asGridCoord(12,12)]: true,
-      [window.utils.asGridCoord(6,14)]: true,
-      [window.utils.asGridCoord(10,15)]: true,
+      //mesa comprida preta (x1-3, pés na linha 8)
+      [window.utils.asGridCoord(2,8)]: true, [window.utils.asGridCoord(3,8)]: true,
+
+      //biombos/divisórias em pé (x12-14, corpo y5-6)
+      [window.utils.asGridCoord(12,5)]: true, [window.utils.asGridCoord(13,5)]: true, [window.utils.asGridCoord(14,5)]: true,
+      [window.utils.asGridCoord(12,6)]: true, [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
+
+      //mesas de leitura espalhadas (cada uma cobre tampo + corpo desenhados)
+      [window.utils.asGridCoord(8,9)]:  true, [window.utils.asGridCoord(9,9)]:  true,
+      [window.utils.asGridCoord(7,11)]: true, [window.utils.asGridCoord(8,11)]: true,
+      [window.utils.asGridCoord(7,12)]: true, [window.utils.asGridCoord(8,12)]: true,
+      [window.utils.asGridCoord(12,10)]: true, [window.utils.asGridCoord(13,10)]: true,
+      [window.utils.asGridCoord(14,12)]: true, [window.utils.asGridCoord(15,12)]: true,
+      [window.utils.asGridCoord(11,14)]: true, [window.utils.asGridCoord(12,14)]: true,
+      [window.utils.asGridCoord(17,15)]: true, [window.utils.asGridCoord(18,15)]: true,
+      [window.utils.asGridCoord(8,16)]: true, [window.utils.asGridCoord(9,16)]: true,
 
       //parede esquerda
       [window.utils.asGridCoord(0,4)]: true, [window.utils.asGridCoord(0,5)]: true,
@@ -1630,6 +1734,9 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(23,19)]: true, [window.utils.asGridCoord(24,19)]: true,
       [window.utils.asGridCoord(25,19)]: true, [window.utils.asGridCoord(26,19)]: true,
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
+
+      //vazio além da porta (segurança caso a saída deixe de teleportar)
+      [window.utils.asGridCoord(14,20)]: true, [window.utils.asGridCoord(15,20)]: true,
 
       //parede direita
       [window.utils.asGridCoord(29,1)]: true, [window.utils.asGridCoord(29,2)]: true,
@@ -1716,9 +1823,11 @@ window.OverworldMaps = {
           { events: [{ type: "textMessage", text: "Aluna: Ele me fez acreditar numa piada que ainda dói. Não caia nas piadas dele." }] },
         ],
       }),
+      // Em (10,11) fica em FRENTE à mesa/plataforma da estátua (x9-11, y10),
+      // olhando pra cima — não em cima dela.
       figurante3: new window.Person({
         x: window.utils.withGrid(10),
-        y: window.utils.withGrid(10),
+        y: window.utils.withGrid(11),
         src: "imagens/personagens/figurante8.png",
         behaviorLoop: [
           { type: "stand",  direction: "up", time: 3200 },
@@ -1811,22 +1920,80 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(9,8)]:  true, [window.utils.asGridCoord(10,8)]: true,
       [window.utils.asGridCoord(9,9)]:  true, [window.utils.asGridCoord(10,9)]: true,
 
-      // Lampiões/vasos com plantas nos cantos superiores
-      [window.utils.asGridCoord(2,2)]:  true,
-      [window.utils.asGridCoord(14,2)]: true,
+      // Mesa/plataforma de madeira em frente à estátua
+      [window.utils.asGridCoord(9,10)]: true, [window.utils.asGridCoord(10,10)]: true,
+      [window.utils.asGridCoord(11,10)]: true,
 
-      // Bancos da parte superior
-      [window.utils.asGridCoord(4,2)]:  true, [window.utils.asGridCoord(5,2)]:  true,
-      [window.utils.asGridCoord(11,2)]: true, [window.utils.asGridCoord(12,2)]: true,
+      // Tijolo isolado no canto superior esquerdo
+      [window.utils.asGridCoord(2,2)]:  true,
+
+      // Bancos da parte superior (3 bancos na linha 1, com vãos entre eles)
+      [window.utils.asGridCoord(6,1)]:  true, [window.utils.asGridCoord(7,1)]:  true,
+      [window.utils.asGridCoord(9,1)]:  true, [window.utils.asGridCoord(10,1)]: true,
+      [window.utils.asGridCoord(12,1)]: true, [window.utils.asGridCoord(13,1)]: true,
+
+      // Máquinas de vendas (x3-4 e x15-16, y1-3)
+      [window.utils.asGridCoord(3,1)]: true, [window.utils.asGridCoord(4,1)]: true,
+      [window.utils.asGridCoord(3,2)]: true, [window.utils.asGridCoord(4,2)]: true,
+      [window.utils.asGridCoord(3,3)]: true, [window.utils.asGridCoord(4,3)]: true,
+      [window.utils.asGridCoord(15,1)]: true, [window.utils.asGridCoord(16,1)]: true,
+      [window.utils.asGridCoord(15,2)]: true, [window.utils.asGridCoord(16,2)]: true,
+      [window.utils.asGridCoord(15,3)]: true, [window.utils.asGridCoord(16,3)]: true,
+
+      // Estante/armário vermelho (lado direito)
+      [window.utils.asGridCoord(18,7)]: true, [window.utils.asGridCoord(19,7)]: true,
+      [window.utils.asGridCoord(18,8)]: true, [window.utils.asGridCoord(19,8)]: true,
+      [window.utils.asGridCoord(18,9)]: true, [window.utils.asGridCoord(19,9)]: true,
+
+      // Vasos de plantas (canto inferior direito da área central)
+      [window.utils.asGridCoord(18,10)]: true, [window.utils.asGridCoord(19,10)]: true,
+      [window.utils.asGridCoord(18,11)]: true, [window.utils.asGridCoord(19,11)]: true,
+      [window.utils.asGridCoord(19,12)]: true,
+
+      // Cantos de tijolos desenhados (escadas de parede) — sup. esquerdo
+      [window.utils.asGridCoord(0,0)]: true, [window.utils.asGridCoord(0,1)]: true,
+      [window.utils.asGridCoord(1,1)]: true, [window.utils.asGridCoord(2,1)]: true,
+      [window.utils.asGridCoord(0,2)]: true, [window.utils.asGridCoord(1,2)]: true,
+      [window.utils.asGridCoord(0,3)]: true, [window.utils.asGridCoord(1,3)]: true, [window.utils.asGridCoord(2,3)]: true,
+      [window.utils.asGridCoord(0,4)]: true, [window.utils.asGridCoord(1,4)]: true,
+      [window.utils.asGridCoord(0,5)]: true,
+
+      // Cantos de tijolos — sup. direito
+      [window.utils.asGridCoord(19,0)]: true,
+      [window.utils.asGridCoord(17,1)]: true, [window.utils.asGridCoord(18,1)]: true, [window.utils.asGridCoord(19,1)]: true,
+      [window.utils.asGridCoord(17,2)]: true, [window.utils.asGridCoord(18,2)]: true, [window.utils.asGridCoord(19,2)]: true,
+      [window.utils.asGridCoord(17,3)]: true, [window.utils.asGridCoord(18,3)]: true, [window.utils.asGridCoord(19,3)]: true,
+      [window.utils.asGridCoord(18,4)]: true, [window.utils.asGridCoord(19,4)]: true,
+      [window.utils.asGridCoord(19,5)]: true,
+
+      // Cantos de tijolos — inf. esquerdo (saída pro Jardim fica em x0, y6-12)
+      [window.utils.asGridCoord(0,13)]: true,
+      [window.utils.asGridCoord(0,14)]: true, [window.utils.asGridCoord(1,14)]: true,
+      [window.utils.asGridCoord(0,15)]: true, [window.utils.asGridCoord(1,15)]: true, [window.utils.asGridCoord(2,15)]: true,
+      [window.utils.asGridCoord(0,16)]: true, [window.utils.asGridCoord(1,16)]: true, [window.utils.asGridCoord(2,16)]: true, [window.utils.asGridCoord(3,16)]: true,
+      [window.utils.asGridCoord(0,17)]: true, [window.utils.asGridCoord(1,17)]: true, [window.utils.asGridCoord(2,17)]: true, [window.utils.asGridCoord(3,17)]: true, [window.utils.asGridCoord(4,17)]: true,
+      [window.utils.asGridCoord(0,18)]: true, [window.utils.asGridCoord(1,18)]: true, [window.utils.asGridCoord(2,18)]: true, [window.utils.asGridCoord(3,18)]: true, [window.utils.asGridCoord(4,18)]: true,
+      [window.utils.asGridCoord(0,19)]: true, [window.utils.asGridCoord(1,19)]: true, [window.utils.asGridCoord(2,19)]: true, [window.utils.asGridCoord(3,19)]: true, [window.utils.asGridCoord(4,19)]: true,
+
+      // Cantos de tijolos — inf. direito (saída pro Corredor fica em x5-14, y19)
+      [window.utils.asGridCoord(19,13)]: true,
+      [window.utils.asGridCoord(18,14)]: true, [window.utils.asGridCoord(19,14)]: true,
+      [window.utils.asGridCoord(17,15)]: true, [window.utils.asGridCoord(18,15)]: true, [window.utils.asGridCoord(19,15)]: true,
+      [window.utils.asGridCoord(16,16)]: true, [window.utils.asGridCoord(17,16)]: true, [window.utils.asGridCoord(18,16)]: true, [window.utils.asGridCoord(19,16)]: true,
+      [window.utils.asGridCoord(15,17)]: true, [window.utils.asGridCoord(16,17)]: true, [window.utils.asGridCoord(17,17)]: true, [window.utils.asGridCoord(18,17)]: true, [window.utils.asGridCoord(19,17)]: true,
+      [window.utils.asGridCoord(15,18)]: true, [window.utils.asGridCoord(16,18)]: true, [window.utils.asGridCoord(17,18)]: true, [window.utils.asGridCoord(18,18)]: true, [window.utils.asGridCoord(19,18)]: true,
+      [window.utils.asGridCoord(15,19)]: true, [window.utils.asGridCoord(16,19)]: true, [window.utils.asGridCoord(17,19)]: true, [window.utils.asGridCoord(18,19)]: true, [window.utils.asGridCoord(19,19)]: true,
     },
     cutsceneSpaces: {
       // Portão do Jardim — bloqueia após Mestre das Porcentagens derrotado.
       [window.utils.asGridCoord(0,6)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1834,10 +2001,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,7)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1845,10 +2014,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,8)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1856,7 +2027,8 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,9)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         // Transição 2 — primeira vez próximo do portão, após V6 derrotado
         { required: ["MAGO_RACIONAIS_DERROTADO", "!antes_jardim_done"], events: [
@@ -1876,10 +2048,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,10)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1887,10 +2061,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,11)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1898,10 +2074,12 @@ window.OverworldMaps = {
       ],
       [window.utils.asGridCoord(0,12)]: [
         { required: ["MAGO_PORCENTAGEM_DERROTADO"], events: [
-          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
+          { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia falar com o Trapaceiro primeiro." },
+          { type: "walk", who: "hero", direction: "right" }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -2413,6 +2591,7 @@ window.OverworldMaps = {
       // Rows 3-7 — palco. Aisle estreito: só col 12 livre (por onde passa o Prof).
       [0, 3, 11, 7],   // lado esquerdo do palco
       [13, 3, 23, 7],  // lado direito do palco
+      [12, 3, 12, 6],  // mesa+cadeira do palestrante atravessam a col 12; só (12,7) fica livre (posto do Prof)
 
       // Rows 8-15 — audiência. Aisle mais largo (cols 10-13) pra dar espaço pro jogador caminhar.
       [0, 8, 9, 15],   // audiência esquerda (cadeiras + degraus)
