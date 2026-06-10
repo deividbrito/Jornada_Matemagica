@@ -8,7 +8,9 @@
   background: rgba(0, 0, 0, 0.88);
   z-index: 800;
   display: flex;
-  align-items: stretch;
+  /* flex-start + margin auto na inner: a caixa cresce com o conteúdo e o
+   * overlay rola; stretch travava a altura na viewport e os cards vazavam. */
+  align-items: flex-start;
   justify-content: center;
   font-family: var(--font-retro);
   color: var(--color-text);
@@ -21,6 +23,9 @@
 .FaseSelector_inner {
   width: 100%;
   max-width: 1100px;
+  /* Centraliza verticalmente quando cabe na tela; colapsa para 0 quando o
+   * conteúdo é maior que a viewport (aí o overlay rola a partir do topo). */
+  margin: auto 0;
   background: var(--color-bg-dialog);
   border: 6px solid var(--color-border-frame);
   box-shadow: var(--shadow-frame);

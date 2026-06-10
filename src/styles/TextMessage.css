@@ -14,12 +14,15 @@
   border-top: 2px solid var(--color-border-frame);
   color: var(--color-text);
   display: flex;
-  align-items: center;
+  /* flex-start + margin auto no <p>: centraliza textos curtos, mas quando a
+   * fala excede o max-height o scroll alcança a primeira linha (com center,
+   * o overflow vazava pra cima e ficava inacessível). */
+  align-items: flex-start;
   overflow-y: auto;
 }
 
 .TextMessage_p {
-  margin: 0;
+  margin: auto 0;
   font-size: 13px;
   line-height: 1.4;
   letter-spacing: 0.3px;

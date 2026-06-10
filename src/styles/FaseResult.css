@@ -5,8 +5,12 @@
   inset: 0;
   z-index: 9998;
   display: flex;
-  align-items: center;
+  /* flex-start + margin auto na inner: em viewports baixas a caixa rola em
+   * vez de vazar pelos dois lados (center deixava o botão fora da tela). */
+  align-items: flex-start;
   justify-content: center;
+  overflow-y: auto;
+  padding: 24px 16px;
   background: radial-gradient(
     ellipse at center,
     rgba(26, 54, 34, 0.85) 0%,
@@ -33,6 +37,8 @@
   text-align: center;
   min-width: 320px;
   max-width: min(540px, 90vw);
+  /* Centraliza quando cabe na tela; colapsa pra 0 quando não cabe (rola). */
+  margin: auto 0;
   animation: FaseResult_popIn 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
