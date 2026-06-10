@@ -142,9 +142,9 @@ window.OverworldMaps = {
         src: "imagens/personagens/alice.png",
       }),
       // Professor Mentor — guia narrativo, posicionado no centro do Corredor
-      // (acessível em qualquer momento). Na intro, anda até Alice e volta.
+      // (acessível em qualquer momento). Na intro, anda até Alex e volta.
       // Ordem importa: o primeiro `required` que satisfaz é usado.
-      // `faceHero` no início de cada cenário garante que ele encara Alice
+      // `faceHero` no início de cada cenário garante que ele encara Alex
       // antes de falar, independente do lado em que ela se aproxima.
       mentor: new window.Person({
         x: window.utils.withGrid(4),
@@ -157,7 +157,7 @@ window.OverworldMaps = {
         talking: [
           { required: ["epilogo_done"], events: [
               { type: "faceHero", who: "mentor" },
-              { type: "textMessage", text: "Mentor: Que tipo de matemágico você quer ser hoje, Alice?" },
+              { type: "textMessage", text: "Mentor: Que tipo de matemágico você quer ser hoje, Alex?" },
           ]},
           { required: ["MAGO_PORCENTAGEM_DERROTADO", "boss_revelado"], events: [
               { type: "faceHero", who: "mentor" },
@@ -165,7 +165,7 @@ window.OverworldMaps = {
           ]},
           { required: ["MAGO_RACIONAIS_DERROTADO", "antes_jardim_done"], events: [
               { type: "faceHero", who: "mentor" },
-              { type: "textMessage", text: "Mentor: Apenas o Jardim resta. Eu não posso ir junto. Volte inteira." },
+              { type: "textMessage", text: "Mentor: Apenas o Jardim resta. Eu não posso ir junto. Volte com vida." },
           ]},
           { required: ["MAGO_RACIONAIS_DERROTADO"], events: [
               { type: "faceHero", who: "mentor" },
@@ -189,7 +189,7 @@ window.OverworldMaps = {
           ]},
           { events: [
               { type: "faceHero", who: "mentor" },
-              { type: "textMessage", text: "Mentor: Comece pela Sala 1, Alice. O Conde está esperando." },
+              { type: "textMessage", text: "Mentor: Comece pela Sala 1, Alex. O Conde está esperando." },
           ]},
         ]
       }),
@@ -202,14 +202,14 @@ window.OverworldMaps = {
         src: "imagens/personagens/vazio.png",
         talking: [
           { required: ["!MAGO_FRACOES_DERROTADO"], events: [
-            { type: "textMessage", text: "Alice: Ainda não posso sair. Devia ir até a Biblioteca primeiro." }
+            { type: "textMessage", text: "Alex: Ainda não posso sair. Devia ir até a Biblioteca primeiro." }
           ]},
           // Aviso 5.A — primeira vez indo ao Pátio (Trapaceiro Racional).
           { required: ["MAGO_FRACOES_DERROTADO", "!mago5_aviso"], events: [
             { type: "textMessage", text: "[Vozes do Pátio. Risadas exageradas. Algo desencaixado nelas.]" },
             { type: "textMessage", text: "Aluna (encostada na parede): O Trapaceiro me convenceu de que três vezes dois era cinco." },
             { type: "textMessage", text: "Aluna: E eu ri junto. Eu RI. Como se fosse engraçado." },
-            { type: "textMessage", text: "Aluna: Ele faz parecer que regra é piada. Não caia nisso, Alice." },
+            { type: "textMessage", text: "Aluna: Ele faz parecer que regra é piada. Não caia nisso, Alex." },
             { type: "addStoryFlag", flag: "mago5_aviso" },
             { type: "changeMap", map: "Patio", x: window.utils.withGrid(9), y: window.utils.withGrid(17), direction: "up" }
           ]},
@@ -328,8 +328,8 @@ window.OverworldMaps = {
           { type: "stand", direction: "up", time: 1200 },
         ],
         talking: [
-          { required: ["epilogo_done"], events: [{ type: "textMessage", text: "Aluna: A escola voltou. Você é a Alice, né? Obrigada." }] },
-          { events: [{ type: "textMessage", text: "Aluna: Você é a Alice, né? Por favor... a gente precisa de você." }] },
+          { required: ["epilogo_done"], events: [{ type: "textMessage", text: "Aluna: A escola voltou. Você é Alex, né? Obrigada." }] },
+          { events: [{ type: "textMessage", text: "Aluna: Você é Alex, né? Por favor... a gente precisa de você." }] },
         ],
       }),
       // figurante10 — só fala depois do epílogo (pré-epílogo fica silencioso).
@@ -354,7 +354,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
         ]},
         { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -365,11 +365,11 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
         ]},
         { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
         ]},
         { required: ["MAGO_DECIMAIS_DERROTADO", "!mago2_aviso"], events: [
           { type: "textMessage", text: "[O ar perto da Sala 2 parece fora de foco. Tudo lá dentro fica meio aproximado.]" },
-          { type: "textMessage", text: "Alice: ...o Mestre da Aproximação me espera." },
+          { type: "textMessage", text: "Alex: ...o Mestre da Aproximação me espera." },
           { type: "addStoryFlag", flag: "mago2_aviso" },
           { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" },
         ]},
@@ -382,7 +382,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[A porta vibra como uma respiração que finalmente parou. A Sala 2 selou-se.]" }
         ]},
         { required: ["!MAGO_DECIMAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
+          { type: "textMessage", text: "Alex: ...ainda não. Eu devia ir até a Sala 1 primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Sala2", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" }
@@ -405,8 +405,8 @@ window.OverworldMaps = {
         { required: ["!mago1_aviso"], events: [
           { type: "textMessage", text: "[Vozes baixas vêm de dentro da Sala 1.]" },
           { type: "textMessage", text: "[Você ouve um murmurar contínuo de números... vírgulas, decimais.]" },
-          { type: "textMessage", text: "Alice: ...o Conde dos Decimais está lá dentro." },
-          { type: "textMessage", text: "Alice: Preciso preparar minha cabeça antes de entrar." },
+          { type: "textMessage", text: "Alex: ...o Conde dos Decimais está lá dentro." },
+          { type: "textMessage", text: "Alex: Preciso preparar minha cabeça antes de entrar." },
           { type: "addStoryFlag", flag: "mago1_aviso" },
           { type: "changeMap", map: "Sala1", x: window.utils.withGrid(15), y: window.utils.withGrid(18), direction: "up" },
         ]},
@@ -429,7 +429,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
         ]},
         { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
@@ -440,12 +440,12 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
         ]},
         { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." }
         ]},
         { required: ["MAGO_APROXIMACAO_DERROTADO", "!mago3_aviso"], events: [
           { type: "textMessage", text: "[Papéis rasgados saem por baixo da porta do Grêmio.]" },
           { type: "textMessage", text: "[Uma voz fria conta números: 'dois, três, cinco...']" },
-          { type: "textMessage", text: "Alice: A Sentinela dos Primos. Hora de contar com ela." },
+          { type: "textMessage", text: "Alex: A Sentinela dos Primos. Hora de contar com ela." },
           { type: "addStoryFlag", flag: "mago3_aviso" },
           { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" },
         ]},
@@ -458,7 +458,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Grêmio está em silêncio. Os papéis pararam de cair. A porta não cede.]" }
         ]},
         { required: ["!MAGO_APROXIMACAO_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Ainda não. Eu devia ir até a Sala 2 primeiro." }
+          { type: "textMessage", text: "Alex: Ainda não. Eu devia ir até a Sala 2 primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Gremio", x: window.utils.withGrid(4), y: window.utils.withGrid(8), direction: "up" }
@@ -526,7 +526,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
         ]},
         { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia ir até o Grêmio primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia ir até o Grêmio primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
@@ -537,12 +537,12 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
         ]},
         { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia ir até o Grêmio primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia ir até o Grêmio primeiro." }
         ]},
         { required: ["MAGO_PRIMOS_DERROTADO", "!mago4_aviso"], events: [
           { type: "textMessage", text: "[Páginas voam pela fresta da porta da Biblioteca.]" },
           { type: "textMessage", text: "[Tudo está dividido em pedaços. Nada inteiro sobrevive lá dentro.]" },
-          { type: "textMessage", text: "Alice: O Bibliófilo das Frações. Vou recompor o que ele rasgou." },
+          { type: "textMessage", text: "Alex: O Bibliófilo das Frações. Vou recompor o que ele rasgou." },
           { type: "addStoryFlag", flag: "mago4_aviso" },
           { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" },
         ]},
@@ -555,7 +555,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[As páginas pararam de voar. A Biblioteca está inteira. A porta não se abre.]" }
         ]},
         { required: ["!MAGO_PRIMOS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia ir até o Grêmio primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia ir até o Grêmio primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Biblioteca", x: window.utils.withGrid(14), y: window.utils.withGrid(18), direction: "up" }
@@ -636,26 +636,26 @@ window.OverworldMaps = {
           { type: "stand", who: "hero", direction: "down", time: 400 },
           { type: "textMessage", text: "[Um vento frio percorre o Corredor. As luzes piscam uma vez. Duas. Param.]" },
           { type: "textMessage", text: "[Uma voz vem de todas as direções ao mesmo tempo.]" },
-          { type: "textMessage", text: "Sombrio: Impressionante, Alice. Não acreditei quando soube que você ainda pensava." },
+          { type: "textMessage", text: "Sombrio: Impressionante, Alex. Não acreditei quando soube que você ainda pensava." },
           { type: "textMessage", text: "Sombrio: Vinte anos. Vinte anos esta escola me esqueceu." },
           { type: "textMessage", text: "Sombrio: Eu organizei tudo, sabe? Cada nota. Cada matrícula. Cada nome." },
           { type: "textMessage", text: "Sombrio: E quando me aposentaram... apagaram o meu nome também." },
-          { type: "textMessage", text: "Alice: Você usou meus colegas. Eles eram só ferramentas pra você." },
+          { type: "textMessage", text: "Alex: Você usou meus colegas. Eles eram só ferramentas pra você." },
           { type: "textMessage", text: "Sombrio: Eles eram instrumentos. Eu sou o regente." },
           { type: "textMessage", text: "Sombrio: Mas você... você sabe somar, dividir, fracionar. Você lembra." },
-          { type: "textMessage", text: "Sombrio: Por isso, hoje, eu te deixo viver. Nos vemos no próximo colégio, Alice." },
+          { type: "textMessage", text: "Sombrio: Por isso, hoje, eu te deixo viver. Nos vemos no próximo colégio, Alex." },
           { type: "textMessage", text: "[A voz se dissolve. O Corredor volta a respirar.]" },
           { type: "addStoryFlag", flag: "boss_revelado" },
-          // Mentor caminha até Alice (de (4,8) até (4,6), parando 1 tile abaixo dela).
+          // Mentor caminha até Alex (de (4,8) até (4,6), parando 1 tile abaixo dela).
           { type: "walk", who: "mentor", direction: "up" },
           { type: "walk", who: "mentor", direction: "up" },
           { type: "stand", who: "mentor", direction: "up", time: 300 },
-          { type: "textMessage", text: "Mentor: Você conseguiu, Alice. A escola respira de novo." },
+          { type: "textMessage", text: "Mentor: Você conseguiu, Alex. A escola respira de novo." },
           { type: "textMessage", text: "[Pelos cantos do Corredor, alunos voltam a circular. O Conde acena de longe. O Bibliófilo abraça um livro inteiro.]" },
-          { type: "textMessage", text: "Alice: Ele vai voltar?" },
+          { type: "textMessage", text: "Alex: Ele vai voltar?" },
           { type: "textMessage", text: "Mentor: Provavelmente. Esquecimento é um feitiço difícil de quebrar de vez." },
           { type: "textMessage", text: "Mentor: Mas hoje, ele deixou uma prova: ser apagado não dá direito a apagar os outros." },
-          { type: "textMessage", text: "Mentor: Há outros colégios, Alice. Outras escolas com magos. Você só começou." },
+          { type: "textMessage", text: "Mentor: Há outros colégios, Alex. Outras escolas com magos. Você só começou." },
           // Mentor recua pra posição original (4,8)
           { type: "walk", who: "mentor", direction: "down" },
           { type: "walk", who: "mentor", direction: "down" },
@@ -670,18 +670,18 @@ window.OverworldMaps = {
         required: ["MAGO_PRIMOS_DERROTADO", "!metade_caminho_done"],
         events: [
           { type: "stand", who: "hero", direction: "down", time: 400 },
-          // Mentor caminha até Alice (de (4,8) até (4,6), parando 1 abaixo).
+          // Mentor caminha até Alex (de (4,8) até (4,6), parando 1 abaixo).
           { type: "walk", who: "mentor", direction: "up" },
           { type: "walk", who: "mentor", direction: "up" },
           { type: "stand", who: "mentor", direction: "up", time: 300 },
           { type: "textMessage", text: "Mentor: Três magos. Três colegas libertos." },
-          { type: "textMessage", text: "Mentor: Você é mais forte do que eu esperava, Alice. Por isso preciso ser honesto com você." },
-          { type: "textMessage", text: "Alice: Sobre quem está por trás disso?" },
+          { type: "textMessage", text: "Mentor: Você é mais forte do que eu esperava, Alex. Por isso preciso ser honesto com você." },
+          { type: "textMessage", text: "Alex: Sobre quem está por trás disso?" },
           { type: "textMessage", text: "Mentor: O nome dele saiu dos registros há vinte anos. A escola tentou esquecer." },
           { type: "textMessage", text: "Mentor: Ele era vice-diretor. Adorava ordem. Listas. Hierarquia." },
           { type: "textMessage", text: "Mentor: Quando o aposentaram contra a vontade... ele descobriu algo na biblioteca." },
           { type: "textMessage", text: "Mentor: Um livro que esta escola devia ter queimado." },
-          { type: "textMessage", text: "Alice: Por que ele está fazendo isso? Vinte anos depois?" },
+          { type: "textMessage", text: "Alex: Por que ele está fazendo isso? Vinte anos depois?" },
           { type: "textMessage", text: "Mentor: Porque magia da raiva não envelhece. Só amadurece." },
           { type: "textMessage", text: "Mentor: Os próximos magos vão sentir o cheiro dele em você. Cuidado redobrado." },
           // Mentor recua pra posição original (4,8)
@@ -691,33 +691,33 @@ window.OverworldMaps = {
           { type: "addStoryFlag", flag: "metade_caminho_done" },
         ]
       },
-      // Intro — primeiro boot do save. Mentor caminha até Alice, conversa,
+      // Intro — primeiro boot do save. Mentor caminha até Alex, conversa,
       // e depois recua pra sua posição habitual no centro do Corredor.
       {
         required: ["!intro_done"],
         events: [
           { type: "stand", who: "hero", direction: "down", time: 400 },
-          { type: "textMessage", text: "Alice: ...onde estão todos?" },
+          { type: "textMessage", text: "Alex: ...onde estão todos?" },
           { type: "textMessage", text: "[Passos lentos ecoam no Corredor. Alguém se aproxima.]" },
-          // Mentor caminha 4 tiles pra cima: (4,8) → (4,4), parando abaixo de Alice
+          // Mentor caminha 4 tiles pra cima: (4,8) → (4,4), parando abaixo de Alex
           { type: "walk", who: "mentor", direction: "up" },
           { type: "walk", who: "mentor", direction: "up" },
           { type: "walk", who: "mentor", direction: "up" },
           { type: "walk", who: "mentor", direction: "up" },
           { type: "stand", who: "mentor", direction: "up", time: 300 },
-          { type: "textMessage", text: "Mentor: Alice. Que bom que você acordou." },
+          { type: "textMessage", text: "Mentor: Alex. Que bom que você acordou." },
           { type: "textMessage", text: "Mentor: Você dormiu na biblioteca. Quando despertou, a escola não era mais a mesma." },
-          { type: "textMessage", text: "Alice: O que aconteceu?" },
+          { type: "textMessage", text: "Alex: O que aconteceu?" },
           { type: "textMessage", text: "Mentor: Seis colegas — alunos, professores — foram tomados por uma magia antiga." },
           { type: "textMessage", text: "Mentor: Cada um se trancou numa sala, dominado por um conceito que amava em vida." },
-          { type: "textMessage", text: "Mentor: Você é a única que ainda pensa com clareza. Sabe o que isso significa?" },
-          { type: "textMessage", text: "Alice: ...que sou a única que pode trazê-los de volta." },
+          { type: "textMessage", text: "Mentor: Você é a única pessoa que ainda pensa com clareza. Sabe o que isso significa?" },
+          { type: "textMessage", text: "Alex: ...que sou a única pessoa que pode trazê-los de volta." },
           { type: "textMessage", text: "Mentor: Exatamente. E precisa começar agora, antes que o feitiço se aprofunde." },
           { type: "textMessage", text: "Mentor: Vá pela Sala 1. O Conde dos Decimais já sente o cheiro de quem ainda pensa." },
           { type: "textMessage", text: "Mentor: Use as setas pra andar. Encoste em alguém e aperte Enter pra falar." },
           { type: "textMessage", text: "Mentor: Quando os seis estiverem livres, volte aqui. Há algo maior por trás de tudo isso." },
-          { type: "textMessage", text: "Alice: Algo maior?" },
-          { type: "textMessage", text: "Mentor: A tempo. Vá, Alice. Cada minuto a mais aqui é um aluno a menos lá dentro." },
+          { type: "textMessage", text: "Alex: Algo maior?" },
+          { type: "textMessage", text: "Mentor: A tempo. Vá, Alex. Cada minuto a mais aqui é um aluno a menos lá dentro." },
           // Mentor recua 4 tiles pra sua posição
           { type: "walk", who: "mentor", direction: "down" },
           { type: "walk", who: "mentor", direction: "down" },
@@ -754,7 +754,7 @@ window.OverworldMaps = {
           ]},
           { events: [
             { type: "textMessage", text: "Sobrevivente: Ele... ele falou que 100% dos que entrassem viraria adubo." },
-            { type: "textMessage", text: "Sobrevivente: Por favor, Alice, não vire mais um número na estatística dele." },
+            { type: "textMessage", text: "Sobrevivente: Por favor, Alex, não vire mais um número na estatística dele." },
           ]},
         ]
       }),
@@ -777,7 +777,7 @@ window.OverworldMaps = {
           { events: [
             { type: "textMessage", text: "Mestre: 100% dos que entraram neste jardim... 100% foram aniquilados." },
             { type: "textMessage", text: "Mestre: A estatística é minha amiga. A história, minha aliada." },
-            { type: "textMessage", text: "Mestre: Você é a sexta. As cinco anteriores eu transformei em adubo." },
+            { type: "textMessage", text: "Mestre: Você é a sexta pessoa. As cinco anteriores eu transformei em adubo." },
             { type: "textMessage", text: "Mestre: Mas... talvez você seja diferente. 16,67% de chance, eu calculei." },
             { type: "textMessage", text: "Mestre: Prove-me. Domine a parte e dominará o todo." },
             { type: "startFase", codigo: "jardim_porcentagem" },
@@ -891,8 +891,8 @@ window.OverworldMaps = {
         events: [
           { type: "stand", who: "hero", direction: "left", time: 400 },
           { type: "textMessage", text: "[O Jardim está enevoado. As plantas estão imóveis, como se congeladas no tempo.]" },
-          { type: "textMessage", text: "Alice: ...as plantas. Elas não se mexem." },
-          { type: "textMessage", text: "Alice: É como se 100% delas tivessem parado de existir ao mesmo tempo." },
+          { type: "textMessage", text: "Alex: ...as plantas. Elas não se mexem." },
+          { type: "textMessage", text: "Alex: É como se 100% delas tivessem parado de existir ao mesmo tempo." },
           { type: "addStoryFlag", flag: "mago6_aviso" },
         ]
       }
@@ -921,12 +921,12 @@ window.OverworldMaps = {
             { type: "textMessage", text: "Mestre: Eu via tudo borrado. Tudo 'mais ou menos'. E achava bom assim." },
             { type: "textMessage", text: "Mestre: Mas precisão importa, não importa? Saber onde está o número exato... é saber onde você está." },
             { type: "textMessage", text: "Mestre: O Sombrio me ofereceu o conforto da imprecisão. Eu aceitei." },
-            { type: "textMessage", text: "Alice: Conforto?" },
+            { type: "textMessage", text: "Alex: Conforto?" },
             { type: "textMessage", text: "Mestre: Quem nunca tenta acertar... nunca erra. Mas também nunca chega a lugar nenhum." },
           ]},
           // Pré-luta — provocação + inicia fase
           { events: [
-            { type: "textMessage", text: "Mestre: Aproximadamente... uma intrusa. Mais ou menos uma ameaça." },
+            { type: "textMessage", text: "Mestre: Aproximadamente... alguém de fora. Mais ou menos uma ameaça." },
             { type: "textMessage", text: "Mestre: Por que se importar com a casa do meio? Com a casa exata?" },
             { type: "textMessage", text: "Mestre: O suficiente sempre foi suficiente. Por que insistir em ser preciso?" },
             { type: "textMessage", text: "Mestre: Mostre-me que sabe arredondar... antes que eu te arredonde pra fora daqui." },
@@ -997,7 +997,7 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(25,19)]: true, [window.utils.asGridCoord(26,19)]: true,
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
 
-      // carteiras (mesas em pares) — 3 fileiras. x=15 livre pra Alice chegar
+      // carteiras (mesas em pares) — 3 fileiras. x=15 livre pra Alex chegar
       // ao mago em (15,6). Mesas em x=13,14 e 19,20 deixam o vão central.
       [window.utils.asGridCoord(3,6)]:  true, [window.utils.asGridCoord(4,6)]:  true,
       [window.utils.asGridCoord(8,6)]:  true, [window.utils.asGridCoord(9,6)]:  true,
@@ -1090,7 +1090,7 @@ window.OverworldMaps = {
           ]},
           { events: [
             { type: "textMessage", text: "Aluno: Eu... eu tava na chamada quando o Conde veio." },
-            { type: "textMessage", text: "Aluno: Ele anotou meu nome com a vírgula no lugar errado. Salva a gente, Alice." },
+            { type: "textMessage", text: "Aluno: Ele anotou meu nome com a vírgula no lugar errado. Salva a gente, Alex." },
           ]},
         ]
       }),
@@ -1120,13 +1120,13 @@ window.OverworldMaps = {
             { type: "textMessage", text: "Conde: ...obrigado. Eu já não me lembrava do meu próprio nome." },
             { type: "textMessage", text: "Conde: Quando o Mago Sombrio me tocou, tudo virou número. Eu só via vírgulas." },
             { type: "textMessage", text: "Conde: Cada aluno que entrava nesta sala... eu queria apagar." },
-            { type: "textMessage", text: "Alice: Quem é o Mago Sombrio?" },
+            { type: "textMessage", text: "Alex: Quem é o Mago Sombrio?" },
             { type: "textMessage", text: "Conde: Alguém que esta escola esqueceu. E que não esquece. Cuide-se." },
           ]},
           // Pré-luta — provocação + inicia fase
           { events: [
             { type: "textMessage", text: "Conde: ...zero vírgula zero zero zero... um... cinco..." },
-            { type: "textMessage", text: "Conde: Ah. Uma intrusa." },
+            { type: "textMessage", text: "Conde: Ah. Alguém de fora." },
             { type: "textMessage", text: "Conde: Você acha que sabe contar? Que conhece o valor de cada algarismo?" },
             { type: "textMessage", text: "Conde: Mostre-me. Erre uma única vírgula, e eu te apago do quadro." },
             { type: "startFase", codigo: "sala1_decimais" },
@@ -1186,7 +1186,7 @@ window.OverworldMaps = {
       [window.utils.asGridCoord(27,19)]: true, [window.utils.asGridCoord(28,19)]: true,
 
       // carteiras (mesas em pares) — 3 fileiras. Caminho central x=15 fica
-      // livre pra Alice chegar até o mago em (15,14).
+      // livre pra Alex chegar até o mago em (15,14).
       [window.utils.asGridCoord(3,6)]:  true, [window.utils.asGridCoord(4,6)]:  true,
       [window.utils.asGridCoord(8,6)]:  true, [window.utils.asGridCoord(9,6)]:  true,
       [window.utils.asGridCoord(13,6)]: true, [window.utils.asGridCoord(14,6)]: true,
@@ -1279,17 +1279,17 @@ window.OverworldMaps = {
           {
             required: ["FALOU_COM_PEDRO"],
             events:[
-            {type: "textMessage", text: "Alice: Professora, o que aconteceu com o Pedro?"},
+            {type: "textMessage", text: "Alex: Professora, o que aconteceu com o Pedro?"},
             {type: "textMessage", text: "Professora: Ele foi abalado pelos desafios da prova e agora está amedrontado. Estou fazendo tudo que posso para acalmá-lo."},
             ]
           },
           {
             events: [
-              { type: "textMessage", text: "Alice: Professora! O que está acontecendo?", faceHero: "professora" },
-              { type: "textMessage", text: "Professora: Não sei ao certo, Alice... "},
+              { type: "textMessage", text: "Alex: Professora! O que está acontecendo?", faceHero: "professora" },
+              { type: "textMessage", text: "Professora: Não sei ao certo, Alex... "},
               { type: "textMessage", text: "Professora: Mas quais forem esses desafios... você precisa enfrentá-los."},
               { type: "textMessage", text: "Professora: Enfrente e vença seus desafios, para que este pesadelo acabe."},
-              { type: "textMessage", text: "Alice: Como, professora? Como venço esses desafios?"},
+              { type: "textMessage", text: "Alex: Como, professora? Como venço esses desafios?"},
               { type: "textMessage", text: "Professora: Jogue pelas regras deles e responda cada pergunta da forma correta."},
               {type: "addStoryFlag", flag: "FALOU_COM_PROFESSORA"},
             ]
@@ -1308,7 +1308,7 @@ window.OverworldMaps = {
             required: ["FALOU_COM_PROFESSORA"],
             events: [
               {type: "textMessage", text:"Pedro: E-eu não sei.. não sei o que fazer...", faceHero: "npcA"},
-              {type: "textMessage", text: "Alice: Pedro? Tudo bem?"},
+              {type: "textMessage", text: "Alex: Pedro? Tudo bem?"},
               {type: "textMessage", text: "Pedro: ..."},
               {type: "addStoryFlag", flag: "FALOU_COM_PEDRO"},
             ]
@@ -1392,17 +1392,17 @@ window.OverworldMaps = {
             { type: "textMessage", text: "Sentinela: Eu fui presidente do grêmio. Eu organizava festas, debates, eleições." },
             { type: "textMessage", text: "Sentinela: O Sombrio me disse que só os 'melhores' mereciam representação." },
             { type: "textMessage", text: "Sentinela: E eu acreditei. Eu acreditei que dividir era fraqueza." },
-            { type: "textMessage", text: "Alice: Mas todo número composto é feito de primos." },
+            { type: "textMessage", text: "Alex: Mas todo número composto é feito de primos." },
             { type: "textMessage", text: "Sentinela: ...sim. Eu esqueci disso. Obrigada." },
           ]},
           // Pré-luta — provocação + inicia fase
           { events: [
             { type: "textMessage", text: "Sentinela: Dois. Três. Cinco. Sete." },
-            { type: "textMessage", text: "Sentinela: Você não está na lista. Você é... composta." },
-            { type: "textMessage", text: "Alice: Composta de quê?" },
+            { type: "textMessage", text: "Sentinela: Você não está na lista. Você é... um número composto." },
+            { type: "textMessage", text: "Alex: Composto de quê?" },
             { type: "textMessage", text: "Sentinela: De partes. De divisões. De fraquezas." },
             { type: "textMessage", text: "Sentinela: O primo é puro. Indivisível. Como deveria ser todo aluno deste colégio." },
-            { type: "textMessage", text: "Sentinela: Prove que sabe a diferença entre o puro e o sujo. Ou seja descartada." },
+            { type: "textMessage", text: "Sentinela: Prove que sabe a diferença entre o puro e o sujo. Ou vá para o descarte." },
             { type: "startFase", codigo: "gremio_primos" },
           ]},
         ]
@@ -1498,12 +1498,12 @@ window.OverworldMaps = {
             { type: "textMessage", text: "Bibliófilo: Eu era professor de literatura. Eu ensinava poesia." },
             { type: "textMessage", text: "Bibliófilo: Mas ninguém ouvia. As salas estavam sempre vazias." },
             { type: "textMessage", text: "Bibliófilo: O Sombrio me sussurrou que se eu virasse fragmentos... talvez alguém recolhesse." },
-            { type: "textMessage", text: "Alice: Eu vou ler seus livros. Os inteiros e os que sobraram." },
+            { type: "textMessage", text: "Alex: Eu vou ler seus livros. Os inteiros e os que sobraram." },
             { type: "textMessage", text: "Bibliófilo: ...isso é mais do que eu mereço." },
           ]},
           // Pré-luta — provocação + inicia fase
           { events: [
-            { type: "textMessage", text: "Bibliófilo: Você chegou em pedaços, Alice. Como todos nós." },
+            { type: "textMessage", text: "Bibliófilo: Você chegou em pedaços, Alex. Como todos nós." },
             { type: "textMessage", text: "Bibliófilo: Meu corpo é três quartos memória, um quarto presente." },
             { type: "textMessage", text: "Bibliófilo: Minha alma é dois terços tristeza, um terço esperança que rasguei." },
             { type: "textMessage", text: "Bibliófilo: Você acha que existe inteiro? Diga-me, antes que eu te divida também." },
@@ -1683,7 +1683,7 @@ window.OverworldMaps = {
           ]},
           { events: [
             { type: "textMessage", text: "Aluna: O Trapaceiro tirou tudo a sério de mim. Hoje eu rio até quando tô triste." },
-            { type: "textMessage", text: "Aluna: Cuidado com o sorriso dele, Alice. Ele esconde mais do que mostra." },
+            { type: "textMessage", text: "Aluna: Cuidado com o sorriso dele, Alex. Ele esconde mais do que mostra." },
           ]},
         ]
       }),
@@ -1736,14 +1736,14 @@ window.OverworldMaps = {
             { type: "textMessage", text: "Trapaceiro: Eu era o mais popular daqui. Todo mundo ria das minhas piadas." },
             { type: "textMessage", text: "Trapaceiro: Mas ninguém me ouvia quando eu falava sério. Então parei de falar sério." },
             { type: "textMessage", text: "Trapaceiro: O Sombrio me ofereceu uma piada eterna. Uma onde ninguém me cobrava resposta." },
-            { type: "textMessage", text: "Alice: Você ainda pode falar sério. Comigo, pelo menos." },
+            { type: "textMessage", text: "Alex: Você ainda pode falar sério. Comigo, pelo menos." },
             { type: "textMessage", text: "Trapaceiro: ...obrigado. Mesmo." },
           ]},
           // Pré-luta — provocação + inicia fase
           { events: [
-            { type: "textMessage", text: "Trapaceiro: Olha só quem chegou! A herói da escola!" },
+            { type: "textMessage", text: "Trapaceiro: Olha só quem chegou! A estrela da escola!" },
             { type: "textMessage", text: "Trapaceiro: Quer apostar? Eu te dou dois terços, você me dá metade. Ninguém perde, ninguém ganha. Topa?" },
-            { type: "textMessage", text: "Alice: Isso não faz sentido." },
+            { type: "textMessage", text: "Alex: Isso não faz sentido." },
             { type: "textMessage", text: "Trapaceiro: EXATAMENTE! Hahaha! Sentido é só um acordo entre tolos." },
             { type: "textMessage", text: "Trapaceiro: Vamos brincar do seu jeito. Operações com racionais. Tenta acompanhar." },
             { type: "startFase", codigo: "patio_racionais" },
@@ -1817,7 +1817,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1828,7 +1828,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1839,7 +1839,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1851,13 +1851,13 @@ window.OverworldMaps = {
         ]},
         // Transição 2 — primeira vez próximo do portão, após V6 derrotado
         { required: ["MAGO_RACIONAIS_DERROTADO", "!antes_jardim_done"], events: [
-          { type: "textMessage", text: "[Alice se aproxima do portão. O ar fica mais frio. Os sons da escola desaparecem.]" },
-          { type: "textMessage", text: "Alice: ...por que o Jardim está tão silencioso?" },
+          { type: "textMessage", text: "[Alex se aproxima do portão. O ar fica mais frio. Os sons da escola desaparecem.]" },
+          { type: "textMessage", text: "Alex: ...por que o Jardim está tão silencioso?" },
           { type: "textMessage", text: "[A voz do Mentor ecoa, vinda de longe.]" },
-          { type: "textMessage", text: "Mentor (eco): Alice. Está me ouvindo?" },
+          { type: "textMessage", text: "Mentor (eco): Alex. Está me ouvindo?" },
           { type: "textMessage", text: "Mentor (eco): O último mago não é como os outros. Ele já estava perdido antes do feitiço." },
           { type: "textMessage", text: "Mentor (eco): O Sombrio o escolheu primeiro. Se você cair lá dentro... ninguém vem te buscar." },
-          { type: "textMessage", text: "Alice: Eu não vou cair." },
+          { type: "textMessage", text: "Alex: Eu não vou cair." },
           { type: "textMessage", text: "Mentor (eco): Eu sei. Por isso eu te chamei." },
           { type: "addStoryFlag", flag: "antes_jardim_done" },
         ]},
@@ -1870,7 +1870,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1881,7 +1881,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -1892,7 +1892,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Jardim está em paz. O portão se fechou. Não há mais o que enfrentar lá dentro.]" }
         ]},
         { required: ["!MAGO_RACIONAIS_DERROTADO"], events: [
-          { type: "textMessage", text: "Alice: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
+          { type: "textMessage", text: "Alex: Não ainda. Eu devia falar com o Trapaceiro primeiro." }
         ]},
         { events: [
           { type: "changeMap", map: "Jardim", x: window.utils.withGrid(14), y: window.utils.withGrid(7), direction: "down" }
@@ -2073,9 +2073,9 @@ window.OverworldMaps = {
           { type: "textMessage", text: "Conde: ...obrigado." },
           { type: "textMessage", text: "Conde: Eu já não me lembrava do meu próprio nome." },
           { type: "textMessage", text: "Conde: Quando o Sombrio me tocou, tudo virou número. Eu só via vírgulas." },
-          { type: "textMessage", text: "Alice: Quem é o Sombrio?" },
+          { type: "textMessage", text: "Alex: Quem é o Sombrio?" },
           { type: "textMessage", text: "Conde: Alguém que esta escola esqueceu. E que não esquece." },
-          { type: "textMessage", text: "Conde: Cuide-se, Alice. Eu vou descansar agora." },
+          { type: "textMessage", text: "Conde: Cuide-se, Alex. Eu vou descansar agora." },
         ]},
         { type: "finalizarFase" },
         { type: "changeMap", map: "Corredor", x: window.utils.withGrid(4), y: window.utils.withGrid(3), direction: "down" },
@@ -2121,7 +2121,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "[O Mestre fica imóvel pela primeira vez. Olha as próprias mãos.]" },
           { type: "textMessage", text: "Mestre: ...eu via tudo borrado. Tudo 'mais ou menos'." },
           { type: "textMessage", text: "Mestre: E achava bom assim." },
-          { type: "textMessage", text: "Alice: Por quê?" },
+          { type: "textMessage", text: "Alex: Por quê?" },
           { type: "textMessage", text: "Mestre: Quem nunca tenta acertar... nunca erra." },
           { type: "textMessage", text: "Mestre: Mas também nunca chega a lugar nenhum. Obrigado por me apontar onde eu estava." },
         ]},
@@ -2170,7 +2170,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "Sentinela: Pare. Pelo menos uma vez na vida, eu posso parar de contar." },
           { type: "textMessage", text: "Sentinela: Eu fui presidente do grêmio. Eu organizava festas, eleições, listas." },
           { type: "textMessage", text: "Sentinela: O Sombrio me disse que só os 'melhores' mereciam representação." },
-          { type: "textMessage", text: "Alice: Mas todo número composto é feito de primos." },
+          { type: "textMessage", text: "Alex: Mas todo número composto é feito de primos." },
           { type: "textMessage", text: "Sentinela: ...sim. Eu esqueci disso. Obrigada por lembrar." },
         ]},
         { type: "finalizarFase" },
@@ -2207,7 +2207,7 @@ window.OverworldMaps = {
     entryCutscene: {
       events: [
         { type: "textMessage", text: "[Páginas voam pelo ar. O Bibliófilo segura metade de um livro contra o peito.]" },
-        { type: "textMessage", text: "Bibliófilo: Você chegou em pedaços, Alice. Como todos nós." },
+        { type: "textMessage", text: "Bibliófilo: Você chegou em pedaços, Alex. Como todos nós." },
         { type: "textMessage", text: "Bibliófilo: Some, subtraia, compare. Cada pedaço pesa." },
         { type: "quizGame", idAssunto: 4 },
         { type: "quizGame", idAssunto: 4 },
@@ -2221,7 +2221,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "Bibliófilo: Eu era professor de literatura. Eu ensinava poesia em voz alta." },
           { type: "textMessage", text: "Bibliófilo: Mas as salas estavam sempre vazias." },
           { type: "textMessage", text: "Bibliófilo: O Sombrio me sussurrou que se eu virasse fragmentos... talvez alguém recolhesse os pedaços." },
-          { type: "textMessage", text: "Alice: Eu vou ler seus livros. Os inteiros e os que sobraram." },
+          { type: "textMessage", text: "Alex: Eu vou ler seus livros. Os inteiros e os que sobraram." },
           { type: "textMessage", text: "Bibliófilo: ...isso é mais do que eu mereço." },
         ]},
         { type: "finalizarFase" },
@@ -2258,7 +2258,7 @@ window.OverworldMaps = {
     entryCutscene: {
       events: [
         { type: "textMessage", text: "[O Trapaceiro lança a moeda no ar uma, duas, três vezes. Nunca olha.]" },
-        { type: "textMessage", text: "Trapaceiro: Vai lá, heroína. Acompanhe meu ritmo. Se conseguir." },
+        { type: "textMessage", text: "Trapaceiro: Vai lá, estrela. Acompanhe meu ritmo. Se conseguir." },
         { type: "quizGame", idAssunto: 5 },
         { type: "quizGame", idAssunto: 5 },
         { type: "quizGame", idAssunto: 5 },
@@ -2272,7 +2272,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "Trapaceiro: Eu era o mais popular daqui. Todo mundo ria das minhas piadas." },
           { type: "textMessage", text: "Trapaceiro: Mas ninguém me ouvia quando eu falava sério." },
           { type: "textMessage", text: "Trapaceiro: O Sombrio me ofereceu uma piada eterna. Sem cobrança de resposta." },
-          { type: "textMessage", text: "Alice: Conta uma piada de verdade pra mim algum dia." },
+          { type: "textMessage", text: "Alex: Conta uma piada de verdade pra mim algum dia." },
           { type: "textMessage", text: "Trapaceiro: ...obrigado. Conto, sim. Quando eu lembrar de alguma." },
         ]},
         { type: "finalizarFase" },
@@ -2310,7 +2310,7 @@ window.OverworldMaps = {
       events: [
         { type: "textMessage", text: "[O Jardim está enevoado. As plantas estão congeladas no tempo, paradas em flor.]" },
         { type: "textMessage", text: "Mestre: 100% dos que entraram aqui... 100% foram aniquilados." },
-        { type: "textMessage", text: "Mestre: Você é a sexta. Calculei 16,67% de chance de você ser diferente." },
+        { type: "textMessage", text: "Mestre: Você é a sexta pessoa. Calculei 16,67% de chance de você ser diferente." },
         { type: "quizGame", idAssunto: 7 },
         { type: "quizGame", idAssunto: 7 },
         { type: "quizGame", idAssunto: 7 },
@@ -2324,7 +2324,7 @@ window.OverworldMaps = {
           { type: "textMessage", text: "Mestre: 100% derrotado. 100% lúcido. Pela primeira vez em vinte anos." },
           { type: "textMessage", text: "Mestre: Eu fui coordenador. Eu organizava as filas, os horários, os boletins." },
           { type: "textMessage", text: "Mestre: O Sombrio me ofereceu hierarquia eterna. Eu aceitei sem pensar." },
-          { type: "textMessage", text: "Alice: E o Sombrio?" },
+          { type: "textMessage", text: "Alex: E o Sombrio?" },
           { type: "textMessage", text: "Mestre: Cuidado. Ele te observou desde a primeira sala." },
           { type: "textMessage", text: "Mestre: Ele vai te procurar. Não no Jardim. No lugar que você menos espera." },
         ]},
@@ -2370,7 +2370,7 @@ window.OverworldMaps = {
             events: [
               { type: "textMessage", text: "Prof.-chefe: Encare meu desafio se for capaz!" },
               { type: "arcadeBattle" },
-              { type: "textMessage", text: "Prof.-chefe: Impressionante... você foi aprovada com louvor!" },
+              { type: "textMessage", text: "Prof.-chefe: Impressionante... você passou com louvor!" },
               { type: "changeSprite", who: "mago1", src: "imagens/personagens/vilao_derrotado.png" },
               { type: "addStoryFlag", flag: "ARCADE_DUELO_COMPLETO" },
               { type: "arcadeCheckEnd" },
@@ -2412,7 +2412,7 @@ window.OverworldMaps = {
           title: "📚 Gincana Acadêmica",
           text:
             "<b>Como funciona a gincana</b><br>" +
-            "Responda todas as questões para ser aprovada. Cada <b>acerto</b> soma pontos (multiplicados pelo seu streak). Cada <b>erro</b> consome uma <b>tentativa ◆</b>. Você começa com <b>3 ◆</b>, teto de <b>5 ◆</b>.<br><br>" +
+            "Responda todas as questões para passar. Cada <b>acerto</b> soma pontos (multiplicados pelo seu streak). Cada <b>erro</b> consome uma <b>tentativa ◆</b>. Você começa com <b>3 ◆</b>, teto de <b>5 ◆</b>.<br><br>" +
 
             "<b>🔥 Recompensas automáticas de streak</b><br>" +
             "A cada <b>5 acertos seguidos</b>, o jogo te dá um bônus — sem você escolher. A prioridade é:<br>" +

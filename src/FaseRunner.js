@@ -112,6 +112,13 @@ class FaseRunner {
           ? `<div class="FaseResult_reward FaseResult_reward--repeat">XP já obtido em conclusão anterior</div>`
           : "");
 
+    // Convidado: nada persiste no servidor. Convida a criar conta pra guardar
+    // estrelas/XP. Usa o estilo "--repeat" (discreto) e só aparece na vitória.
+    const isGuest = !(window.progress && window.progress.hasRemoteSession());
+    const guestHintHtml = (isGuest && aprovou)
+      ? `<div class="FaseResult_reward FaseResult_reward--repeat">Crie uma conta para salvar suas estrelas e XP</div>`
+      : "";
+
     // Stats detalhados — todos derivados localmente, sem dependência do backend.
     const totalQuestoes = payload.totalQuestoes || 0;
     const acertos = payload.acertos || 0;
@@ -160,6 +167,7 @@ class FaseRunner {
         </div>
         ${detailsHtml}
         ${recompensaHtml}
+        ${guestHintHtml}
         <button type="button" class="FaseResult_button">Continuar</button>
       </div>
     `;
@@ -180,7 +188,7 @@ class FaseRunner {
         return;
       }
       // Run longa: volta ao Corredor com hero 3 tiles acima do Mentor (4,8).
-      // Distância suficiente pra Mentor caminhar até Alice durante cutscenes
+      // Distância suficiente pra Mentor caminhar até Alex durante cutscenes
       // de Transição/Epílogo sem o tile do caminho estar bloqueado pelo hero.
       window.progress.mapId = "Corredor";
       window.progress.startingHeroX = 4;

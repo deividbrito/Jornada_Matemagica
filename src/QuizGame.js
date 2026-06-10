@@ -19,50 +19,152 @@ class QuizGame {
     this.lastResult = null;
     this.actionListener = null;
     this.startTime = 0;
+    // true quando a questão não pôde ser carregada e caímos no botão "OK".
+    // Sinaliza pra done()/onComplete NÃO pontuar essa "resposta".
+    this.loadFailed = false;
+  }
+
+  // Quantas vezes tentamos buscar uma questão antes de desistir e mostrar o
+  // fallback amigável. Cada tentativa pede uma NOVA questão aleatória ao
+  // backend — então se uma questão específica veio quebrada (sem alternativas)
+  // ou a requisição falhou de forma transitória, re-rolar costuma resolver.
+  static get MAX_FETCH_ATTEMPTS() { return 3; }
+  static get FETCH_RETRY_DELAY_MS() { return 400; }
+
+  // Uma questão só é "carregável" se tiver enunciado e pelo menos 2 alternativas.
+  // O backend pode devolver 200 com payload incompleto (ex.: quiz sem
+  // alternativas cadastradas); isso conta como falha pra acionar o re-roll.
+  _isValidQuestion(data) {
+    return !!(
+      data &&
+      data.id != null &&
+      typeof data.pergunta === "string" &&
+      data.pergunta.trim().length > 0 &&
+      Array.isArray(data.options) &&
+      data.options.length >= 2
+    );
+  }
+
+  _sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async fetchQuestion() {
+    const params = new URLSearchParams();
+    if (this.idAssunto !== null && this.idAssunto !== undefined) {
+      params.append("id_assunto", this.idAssunto);
+    }
+    // Envia a dificuldade sempre que o cliente tiver uma (manual ou adaptativa).
+    // O backend tem fallback: se o pool da campanha não tem aquele nível,
+    // ele relaxa o filtro automaticamente (quizService._fetchPool).
+    if (this.dificuldade) {
+      params.append("dificuldade", this.dificuldade);
+    }
+    params.append("campanha", this.campanha);
+    if (this.useFiftyFifty) params.append("fiftyFifty", "true");
+
+    const query = params.toString();
+    const maxAttempts = QuizGame.MAX_FETCH_ATTEMPTS;
+
+    // Overlay de carregamento com revelação adiada: o caso comum (resposta
+    // rápida) NÃO pisca o spinner; mas se a 1ª busca demora, ou caímos em
+    // retry, o jogador vê feedback em vez de uma tela parada por segundos.
+    let overlayShown = false;
+    const revealOverlay = (label) => {
+      if (!window.loadingOverlay) return;
+      if (overlayShown) { window.loadingOverlay.setLabel(label); return; }
+      window.loadingOverlay.show(label);
+      overlayShown = true;
+    };
+    const overlayTimer = setTimeout(() => revealOverlay("Carregando pergunta…"), 400);
+
     try {
-      const params = new URLSearchParams();
-      if (this.idAssunto !== null && this.idAssunto !== undefined) {
-        params.append("id_assunto", this.idAssunto);
-      }
-      // Envia a dificuldade sempre que o cliente tiver uma (manual ou adaptativa).
-      // O backend tem fallback: se o pool da campanha não tem aquele nível,
-      // ele relaxa o filtro automaticamente (quizService._fetchPool).
-      if (this.dificuldade) {
-        params.append("dificuldade", this.dificuldade);
-      }
-      params.append("campanha", this.campanha);
-      if (this.useFiftyFifty) params.append("fiftyFifty", "true");
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          // `silent: true` evita que o apiClient empilhe um toast (+ som de erro)
+          // a cada tentativa — só avisamos o usuário se TODAS as tentativas falham.
+          const data = await window.api.fetch(`/api/quizzes/random?${query}`, { silent: true });
 
-      const data = await window.api.fetch(`/api/quizzes/random?${params.toString()}`);
-      if (this.useFiftyFifty) {
-        const hiddenCount = (data.options || []).filter(o => o.hidden).length;
-        console.log("[50/50] Hidden count from server:", hiddenCount);
-      }
+          if (!this._isValidQuestion(data)) {
+            // Questão malformada (sem enunciado ou sem alternativas). Trata como
+            // falha pra cair no re-roll por uma nova questão.
+            throw Object.assign(new Error("Questão recebida está incompleta."), { malformed: true });
+          }
 
-      this.quizId = data.id;
-      this.text = data.pergunta ?? "Pergunta indisponível.";
-      this.options = Array.isArray(data.options) ? data.options : [];
-      this.questionDifficulty = data.dificuldade ?? this.dificuldade ?? "1";
-      this.files = Array.isArray(data.files) ? data.files : [];
+          if (this.useFiftyFifty) {
+            const hiddenCount = data.options.filter(o => o.hidden).length;
+            console.log("[50/50] Hidden count from server:", hiddenCount);
+          }
 
-    } catch (err) {
-      console.error("Erro ao buscar quiz aleatório:", err);
-      if (window.toast) {
-        window.toast.error("Não foi possível carregar a pergunta. Verifique sua conexão.");
+          this.quizId = data.id;
+          this.text = data.pergunta;
+          this.options = data.options;
+          this.questionDifficulty = data.dificuldade ?? this.dificuldade ?? "1";
+          this.files = Array.isArray(data.files) ? data.files : [];
+          this.loadFailed = false;
+          return; // sucesso
+        } catch (err) {
+          console.error(`Erro ao buscar quiz aleatório (tentativa ${attempt}/${maxAttempts}):`, err);
+
+          // 404 = não existe NENHUMA pergunta pra esses filtros, mesmo após o
+          // relaxamento do backend. Re-rolar com os mesmos parâmetros devolveria
+          // o mesmo 404 — então vai direto pro fallback.
+          const isNotFound = err && err.status === 404;
+          const hasMoreAttempts = attempt < maxAttempts;
+
+          if (!isNotFound && hasMoreAttempts) {
+            revealOverlay("Tentando outra pergunta…");
+            await this._sleep(QuizGame.FETCH_RETRY_DELAY_MS);
+            continue; // tenta uma NOVA questão como fallback
+          }
+
+          // Esgotou as tentativas (ou 404 definitivo) → fallback amigável,
+          // com mensagem condizente com a causa real.
+          this._applyLoadFailure(err);
+          return;
+        }
       }
-      this.text = "Não foi possível carregar a pergunta. Tente novamente mais tarde.";
-      this.options = [{ id: "fallback", texto: "OK" }];
-      this.questionDifficulty = this.dificuldade || "1";
-      this.files = [];
+    } finally {
+      clearTimeout(overlayTimer);
+      if (overlayShown && window.loadingOverlay) window.loadingOverlay.hide();
     }
   }
 
+  // Estado de "não deu pra carregar a pergunta": mostra um aviso adequado à
+  // causa (conexão x sem perguntas x dado quebrado) e deixa só o botão "OK".
+  // Marca loadFailed pra que essa "resposta" NÃO seja pontuada — ver done() e
+  // os onComplete em OverworldEvent (fase e arcade).
+  _applyLoadFailure(err) {
+    const isNotFound = err && err.status === 404;
+    const isMalformed = err && err.malformed === true;
+
+    let toastMsg;
+    let boxMsg;
+    if (isNotFound) {
+      toastMsg = "Não há perguntas disponíveis para este desafio agora.";
+      boxMsg = "Não encontramos uma pergunta para este desafio. Tente novamente mais tarde.";
+    } else if (isMalformed) {
+      toastMsg = "A pergunta veio com um problema. Tente novamente.";
+      boxMsg = "Não foi possível carregar a pergunta. Tente novamente mais tarde.";
+    } else {
+      toastMsg = "Não foi possível carregar a pergunta. Verifique sua conexão.";
+      boxMsg = "Não foi possível carregar a pergunta. Tente novamente mais tarde.";
+    }
+
+    if (window.toast) window.toast.error(toastMsg);
+    this.text = boxMsg;
+    this.options = [{ id: "fallback", texto: "OK" }];
+    this.questionDifficulty = this.dificuldade || "1";
+    this.files = [];
+    this.loadFailed = true;
+  }
+
   async init(container) {
-    this.startTime = Date.now();
     await this.fetchQuestion();
+    // Cronômetro só começa DEPOIS que a questão carregou (e renderizou), pra
+    // que latência de rede / retries não entrem no tempo de resposta do jogador
+    // (que vira bônus de pontos no arcade e tempo_resposta_ms no backend).
+    this.startTime = Date.now();
     this.createElement();
     container.appendChild(this.element);
     this.bindOptionButtons();
@@ -363,7 +465,10 @@ class QuizGame {
         isCorrect: !!this.lastResult,
         idAssunto: this.idAssunto,
         dificuldade: this.questionDifficulty || this.dificuldade || "1",
-        timeTaken: this.timeTaken
+        timeTaken: this.timeTaken,
+        // Questão não carregou (jogador só clicou "OK"): não deve pontuar,
+        // ajustar dificuldade, mexer no streak/vidas nem contar acerto.
+        unscored: this.loadFailed,
       });
     }
   }

@@ -73,11 +73,16 @@
       }
       return res;
     } catch (err) {
-      // AbortError = timeout; TypeError = sem rede / CORS / DNS
-      if (err.name === 'AbortError' && window.toast) {
-        window.toast.error("A API demorou demais para responder. Tente novamente.");
-      } else if (err.name === 'TypeError' && window.toast) {
-        window.toast.error("Sem conexão com o servidor. Verifique sua internet.");
+      // AbortError = timeout; TypeError = sem rede / CORS / DNS.
+      // `opts.silent` deixa o chamador suprimir o toast automático — útil quando
+      // ele tem sua própria lógica de retry/fallback (ex.: QuizGame re-rola a
+      // questão e só avisa o usuário se TODAS as tentativas falharem).
+      if (!opts.silent) {
+        if (err.name === 'AbortError' && window.toast) {
+          window.toast.error("A API demorou demais para responder. Tente novamente.");
+        } else if (err.name === 'TypeError' && window.toast) {
+          window.toast.error("Sem conexão com o servidor. Verifique sua internet.");
+        }
       }
       throw err;
     } finally {

@@ -76,7 +76,9 @@ class OverworldEvent {
 
     const quizGame = new window.QuizGame({
       onComplete: (result) => {
-        if (result && typeof result.isCorrect === "boolean") {
+        // `unscored` = a questão não pôde ser carregada (jogador só fechou o
+        // aviso). Não conta como resposta: não pontua, não ajusta dificuldade.
+        if (result && typeof result.isCorrect === "boolean" && !result.unscored) {
           if (window.progress?.campanha === "medio") {
             window.arcadeStats = window.arcadeStats || { total: 0, correct: 0 };
             window.arcadeStats.total++;
@@ -162,7 +164,7 @@ class OverworldEvent {
       title: "Fim de Capítulo",
       text:
         "<p>Você libertou a escola dos seis magos. O Sombrio fugiu — mas há de voltar.</p>" +
-        "<p>Outras escolas guardam magos parecidos. Outras Alices, em outras bibliotecas, ainda dormem esperando acordar.</p>" +
+        "<p>Outras escolas guardam magos parecidos. Outras pessoas como você, em outras bibliotecas, ainda dormem esperando acordar.</p>" +
         "<p style='margin-top:14px;opacity:0.85;font-style:italic;'>Obrigado por jogar Jornada Matemágica.</p>",
       size: "large",
       buttons: [
@@ -244,7 +246,11 @@ class OverworldEvent {
       const fases = await window.api.fetch(`/api/fases?campanha=fundamental`);
       const fase = fases.find((f) => f.codigo === codigo);
       if (!fase) throw new Error(`Fase ${codigo} não encontrada`);
-      if (fase.progresso.status === "bloqueada") {
+      // O gate de "bloqueada" só vale pra jogador logado (o backend conhece o
+      // progresso persistido). Convidado não tem progresso no servidor — sua
+      // ordem é garantida client-side (storyFlags + salas seladas), então o
+      // backend marca fases 2+ como "bloqueada" por padrão; ignoramos aqui.
+      if (fase.progresso.status === "bloqueada" && window.progress.hasRemoteSession()) {
         if (window.toast) window.toast.warn("Conclua a fase anterior primeiro.");
         resolve();
         return;
@@ -467,7 +473,14 @@ class OverworldEvent {
         onComplete: (result) => {
           run.questionsAnswered++;
 
-          if (!result || typeof result.isCorrect !== "boolean") {
+          // `unscored` = a questão não carregou (jogador só fechou o aviso).
+          // Avança a etapa pra não travar a run (nem entrar em loop de re-roll
+          // se o backend estiver fora), mas NÃO pontua, não tira vida e não
+          // mexe no streak.
+          if (!result || typeof result.isCorrect !== "boolean" || result.unscored) {
+            if (window.arcadeHUD) {
+              window.arcadeHUD.updateEtapa(run.questionsAnswered, run.totalQuestions);
+            }
             runNext();
             return;
           }
@@ -647,7 +660,7 @@ class OverworldEvent {
       ? `<b style="color:#88ff99">${rankLineAfter.name}</b> ⬆`
       : `<b>${rankLineAfter.name}</b>`;
 
-    const titleStr = victory ? "Aprovado!" : "Reprovado...";
+    const titleStr = victory ? "Você passou!" : "Não foi dessa vez...";
     const subtitle = victory
       ? "Você completou todas as questões da gincana!"
       : "Suas tentativas acabaram. Revise o conteúdo e tente de novo.";

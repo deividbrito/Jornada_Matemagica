@@ -90,7 +90,7 @@ class TitleScreen {
           if (window.playerState && window.playerState.storyFlags) {
             delete window.playerState.storyFlags.onboarding_done;
           }
-          await this.showOnboarding(container);
+          await this.showOnboarding(container, campanha);
           this.close();
           this.progress.campanha = campanha;
           resolve({ action: "new" });
@@ -116,7 +116,7 @@ class TitleScreen {
         }
       },
       // Seleção de fases — atalho que coexiste com o modo história.
-      // Modo história: Alice anda pelas salas, encontra cada mago e dispara
+      // Modo história: Alex anda pelas salas, encontra cada mago e dispara
       // a fase pelo diálogo (com cutscenes de provocação/redenção).
       // Selecionar Fase: teleporta direto pra arena. Útil pra replay/treino
       // sem precisar re-assistir as cutscenes.
@@ -329,98 +329,30 @@ class TitleScreen {
   // Cada passo de mecânica exige uma ação real (apertar a tecla) antes de
   // avançar — assim o jogador aprende fazendo, não só lendo. Jogador convidado
   // também passa pelo onboarding (uma vez por navegador).
-  async showOnboarding(container) {
+  //
+  // É específico por campanha: "fundamental" mostra os passos da história
+  // (magos, salas, progressão); "medio" mostra um tutorial enxuto do arcade
+  // (Gincana/ENEM), sem menção a magos/salas. A seta ← volta um passo.
+  async showOnboarding(container, campanha = "fundamental") {
     const flags = window.playerState && window.playerState.storyFlags;
     if (flags && flags.onboarding_done) return;
 
-    const TOTAL = 7;
+    const steps = campanha === "medio"
+      ? this._onboardingStepsMedio()
+      : this._onboardingStepsFundamental();
+    const total = steps.length;
 
-    // 1. História + objetivo
-    await this._showOnboardingPopup({
-      badge: `Passo 1 de ${TOTAL}`,
-      title: "Bem-vinda à Jornada Matemágica!",
-      text:
-        "Você é a <b>Alice</b>. O colégio caiu sob a influência de <b>6 magos da matemática</b> " +
-        "que zombam dos alunos e prendem o saber em salas seladas. Sua missão é " +
-        "<b>estudar, enfrentar e libertar</b> uma sala de cada vez." +
-        "<br><br>Vamos treinar os controles em 30 segundos — você vai apertar as teclas você mesma."
-    });
-
-    // 2. Andar (interativo)
-    await this._showOnboardingInteractiveStep({
-      badge: `Passo 2 de ${TOTAL}`,
-      title: "Como andar",
-      text:
-        "Use as <b>setas do teclado</b> (ou <b>WASD</b>) para mover a Alice pelo mapa." +
-        "<br><br>Em celular/tablet, use o <b>D-pad</b> que aparece na tela.",
-      hint: "Pressione uma seta (ou W/A/S/D) para continuar",
-      isMatch: (e) => [
-        "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight",
-        "KeyW", "KeyA", "KeyS", "KeyD"
-      ].includes(e.code),
-    });
-
-    // 3. Interagir (interativo)
-    await this._showOnboardingInteractiveStep({
-      badge: `Passo 3 de ${TOTAL}`,
-      title: "Conversar e enfrentar desafios",
-      text:
-        "Encoste em um colega, professor ou mago e aperte <b>Enter</b> " +
-        "(ou o botão <b>A</b> no D-pad) para interagir." +
-        "<br><br>Magos abrem <b>duelos de matemática</b>: uma sequência de questões. " +
-        "Acerte a meta e a sala é libertada.",
-      hint: "Pressione Enter para continuar",
-      isMatch: (e) => e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space",
-    });
-
-    // 4. Pausa (interativo)
-    await this._showOnboardingInteractiveStep({
-      badge: `Passo 4 de ${TOTAL}`,
-      title: "Pausa e ajustes",
-      text:
-        "Aperte <b>Esc</b> a qualquer momento para abrir o <b>menu de pausa</b>: " +
-        "salvar, ver o mapa, ajustar volume ou voltar pra tela inicial." +
-        "<br><br>Seu progresso é salvo no servidor — pode fechar e voltar depois.",
-      hint: "Pressione Esc para continuar",
-      isMatch: (e) => e.code === "Escape",
-    });
-
-    // 5. Resposta e feedback (leitura)
-    await this._showOnboardingPopup({
-      badge: `Passo 5 de ${TOTAL}`,
-      title: "Errar faz parte",
-      text:
-        "Em cada questão, escolha a alternativa que você acha correta. Depois do clique:" +
-        "<br>&nbsp;• Se <b>acertou</b>, ganha pontos e vê a explicação do raciocínio." +
-        "<br>&nbsp;• Se <b>errou</b>, a alternativa correta fica destacada e a explicação aparece." +
-        "<br><br>O jogo <b>se adapta</b> ao seu desempenho — quanto mais você acerta num assunto, " +
-        "mais ele aumenta a dificuldade."
-    });
-
-    // 6. Progressão + estrelas
-    await this._showOnboardingPopup({
-      badge: `Passo 6 de ${TOTAL}`,
-      title: "Progressão pelas salas",
-      text:
-        "Você enfrenta os magos <b>em ordem</b>: " +
-        "Decimais → Aproximação → Primos → Frações → Racionais → Porcentagem." +
-        "<br><br>Cada sala libertada rende <b>até 3 estrelas</b> (acertos %, sem buffs, sem erros) " +
-        "e uma <b>medalha temática</b>. Você pode repetir qualquer fase pelo menu " +
-        "<b>Selecionar Fase</b> a qualquer momento."
-    });
-
-    // 7. Gincana Acadêmica
-    await this._showOnboardingPopup({
-      badge: `Passo 7 de ${TOTAL}`,
-      title: "Gincana Acadêmica (modo ENEM)",
-      text:
-        "Depois de libertar a primeira sala, o <b>Modo Gincana</b> é desbloqueado: " +
-        "um arcade no estilo ENEM com runs de 5 a 60 questões, <b>tentativas limitadas</b>, " +
-        "buffs em altares e <b>ranking global</b>." +
-        "<br><br>Cada acerto vira <b>XP</b> que sobe seu rank " +
-        "(Calouro → Estudante → Bolsista → Destaque → Campeão Nacional). " +
-        "<br><br>Bons estudos!"
-    });
+    // Driver navegável: cada passo resolve "next" ou "back" (← ou botão Voltar).
+    // O índice nunca vai abaixo de 0 — Voltar some no passo 1 (canGoBack=false).
+    let i = 0;
+    while (i < total) {
+      const step = steps[i];
+      const ctx = { badge: `Passo ${i + 1} de ${total}`, canGoBack: i > 0 };
+      const dir = step.kind === "interactive"
+        ? await this._showOnboardingInteractiveStep({ ...step, ...ctx })
+        : await this._showOnboardingPopup({ ...step, ...ctx });
+      i += dir === "back" ? -1 : 1;
+    }
 
     if (flags) {
       flags.onboarding_done = true;
@@ -430,50 +362,223 @@ class TitleScreen {
     }
   }
 
-  // Helper: popup simples só-leitura (Enter/botão pra avançar).
-  _showOnboardingPopup({ badge, title, text }) {
+  // Passos do modo história (Ensino Fundamental): campanha narrativa dos 6
+  // magos. NÃO menciona a Gincana/ENEM — esse é outro modo (escolhido no menu).
+  _onboardingStepsFundamental() {
+    return [
+      {
+        kind: "read",
+        title: "Boas-vindas à Jornada Matemágica!",
+        text:
+          "Você é <b>Alex</b>. O colégio caiu sob a influência de <b>6 magos da matemática</b> " +
+          "que zombam dos alunos e prendem o saber em salas seladas. Sua missão é " +
+          "<b>estudar, enfrentar e libertar</b> uma sala de cada vez." +
+          "<br><br>Vamos treinar os controles em 30 segundos — na prática, apertando as teclas.",
+      },
+      {
+        kind: "interactive",
+        title: "Como andar",
+        text:
+          "Use as <b>setas do teclado</b> (ou <b>WASD</b>) para mover Alex pelo mapa." +
+          "<br><br>Em celular/tablet, use o <b>D-pad</b> que aparece na tela.",
+        hint: "Pressione ↑ ↓ → ou W/A/S/D para continuar · ← volta",
+        isMatch: (e) => [
+          "ArrowUp", "ArrowDown", "ArrowRight",
+          "KeyW", "KeyA", "KeyS", "KeyD"
+        ].includes(e.code),
+      },
+      {
+        kind: "interactive",
+        title: "Conversar e enfrentar desafios",
+        text:
+          "Encoste em um colega, professor ou mago e aperte <b>Enter</b> " +
+          "(ou o botão <b>A</b> no D-pad) para interagir." +
+          "<br><br>Magos abrem <b>duelos de matemática</b>: uma sequência de questões. " +
+          "Acerte a meta e a sala é libertada.",
+        hint: "Pressione Enter para continuar · ← volta",
+        isMatch: (e) => e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space",
+      },
+      {
+        kind: "interactive",
+        title: "Pausa e ajustes",
+        text:
+          "Aperte <b>Esc</b> a qualquer momento para abrir o <b>menu de pausa</b>: " +
+          "salvar, ver o mapa, ajustar volume ou voltar pra tela inicial." +
+          "<br><br>Seu progresso é salvo no servidor — pode fechar e voltar depois.",
+        hint: "Pressione Esc para continuar · ← volta",
+        isMatch: (e) => e.code === "Escape",
+      },
+      {
+        kind: "read",
+        title: "Errar faz parte",
+        text:
+          "Em cada questão, escolha a alternativa que você acha correta. Depois do clique:" +
+          "<br>&nbsp;• Se <b>acertou</b>, ganha pontos e vê a explicação do raciocínio." +
+          "<br>&nbsp;• Se <b>errou</b>, a alternativa correta fica destacada e a explicação aparece." +
+          "<br><br>O jogo <b>se adapta</b> ao seu desempenho — quanto mais você acerta num assunto, " +
+          "mais ele aumenta a dificuldade.",
+      },
+      {
+        kind: "read",
+        title: "Progressão pelas salas",
+        text:
+          "Você enfrenta os magos <b>em ordem</b>: " +
+          "Decimais → Aproximação → Primos → Frações → Racionais → Porcentagem." +
+          "<br><br>Cada sala libertada rende <b>até 3 estrelas</b> (acertos %, sem buffs, sem erros) " +
+          "e uma <b>medalha temática</b>. Você pode repetir qualquer fase pelo menu " +
+          "<b>Selecionar Fase</b> a qualquer momento.",
+      },
+    ];
+  }
+
+  // Passos do modo arcade (ENEM/Gincana). Enxuto de propósito: tentativas,
+  // streak, altares e ranking são detalhados no popup de entrada do Auditório.
+  _onboardingStepsMedio() {
+    return [
+      {
+        kind: "read",
+        title: "Boas-vindas à Gincana Acadêmica!",
+        text:
+          "Você está no <b>Modo ENEM</b>: um <b>arcade de questões</b> no estilo da prova. " +
+          "Seu objetivo é <b>responder a gincana</b>, manter suas <b>tentativas</b> e " +
+          "<b>subir no ranking</b>." +
+          "<br><br>Vamos treinar os controles em 30 segundos — na prática, apertando as teclas.",
+      },
+      {
+        kind: "interactive",
+        title: "Como andar",
+        text:
+          "Use as <b>setas do teclado</b> (ou <b>WASD</b>) para circular pelo auditório." +
+          "<br><br>Em celular/tablet, use o <b>D-pad</b> que aparece na tela.",
+        hint: "Pressione ↑ ↓ → ou W/A/S/D para continuar · ← volta",
+        isMatch: (e) => [
+          "ArrowUp", "ArrowDown", "ArrowRight",
+          "KeyW", "KeyA", "KeyS", "KeyD"
+        ].includes(e.code),
+      },
+      {
+        kind: "interactive",
+        title: "Iniciar a gincana",
+        text:
+          "Encoste no <b>professor</b> no palco e aperte <b>Enter</b> " +
+          "(ou o botão <b>A</b> no D-pad) para começar." +
+          "<br><br>Você escolhe <b>quantas questões</b> enfrentar — de <b>5 a 60</b>.",
+        hint: "Pressione Enter para continuar · ← volta",
+        isMatch: (e) => e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space",
+      },
+      {
+        kind: "interactive",
+        title: "Pausa e ajustes",
+        text:
+          "Aperte <b>Esc</b> a qualquer momento para abrir o <b>menu de pausa</b>: " +
+          "ver o mapa, ajustar volume ou voltar pra tela inicial.",
+        hint: "Pressione Esc para continuar · ← volta",
+        isMatch: (e) => e.code === "Escape",
+      },
+      {
+        kind: "read",
+        title: "Tentativas, streak e ranking",
+        text:
+          "Cada <b>erro</b> consome uma <b>tentativa ◆</b> (você começa com 3). " +
+          "Sequências de <b>acertos</b> rendem bônus, e <b>altares</b> no caminho dão buffs." +
+          "<br><br>Os detalhes completos aparecem assim que a gincana começa. " +
+          "Cada acerto vira <b>XP</b> que sobe seu rank " +
+          "(Calouro → Estudante → Bolsista → Destaque → Campeão Nacional)." +
+          "<br><br>Bons estudos!",
+      },
+    ];
+  }
+
+  // Helper: passo só-leitura. Resolve "next" (Continuar / Enter / Espaço) ou
+  // "back" (botão Voltar / ←). Retorna Promise<"next"|"back">.
+  _showOnboardingPopup({ badge, title, text, canGoBack }) {
     return new Promise((resolve) => {
+      let settled = false;
+      const finish = (dir) => {
+        if (settled) return;
+        settled = true;
+        document.removeEventListener("keydown", listener, true);
+        resolve(dir);
+      };
+      // Botão de avançar PRIMEIRO (vira o foco padrão do PopupWindow), pra que
+      // um Enter/Espaço distraído avance — nunca volte sem querer. A seta ← e o
+      // botão Voltar cuidam de retroceder.
+      const buttons = [{ label: "Continuar", value: "next" }];
+      if (canGoBack) buttons.push({ label: "◀ Voltar", value: "back" });
+
       const popup = new window.PopupWindow({
         badge,
         title,
         text,
         size: "large",
-        onComplete: () => resolve(),
+        buttons,
+        onComplete: (value) => finish(value === "back" ? "back" : "next"),
       });
       popup.init(document.body);
+
+      // Captura: ← volta (quando permitido); Enter/Espaço avança.
+      const listener = (e) => {
+        if (e.code === "ArrowLeft") {
+          if (!canGoBack) return;
+          e.preventDefault();
+          e.stopPropagation();
+          popup.close("back");
+        } else if (e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space") {
+          e.preventDefault();
+          e.stopPropagation();
+          popup.close("next");
+        }
+      };
+      document.addEventListener("keydown", listener, true);
     });
   }
 
-  // Helper: popup que ESPERA o jogador pressionar uma tecla específica.
-  // Mostra um hint discreto no rodapé e auto-avança ao receber a tecla certa.
-  // O botão "Pular" continua disponível pra quem não puder/quiser interagir.
-  _showOnboardingInteractiveStep({ badge, title, text, hint, isMatch }) {
+  // Helper: passo que ESPERA o jogador pressionar uma tecla específica (isMatch)
+  // pra avançar. A seta ← SEMPRE volta um passo (tem precedência sobre o match
+  // de avanço, inclusive no passo de movimento), e o botão "Pular" continua
+  // disponível pra acessibilidade. Retorna Promise<"next"|"back">.
+  _showOnboardingInteractiveStep({ badge, title, text, hint, isMatch, canGoBack }) {
     return new Promise((resolve) => {
+      let settled = false;
+      const finish = (dir) => {
+        if (settled) return;
+        settled = true;
+        document.removeEventListener("keydown", listener, true);
+        resolve(dir);
+      };
       const stepHint = `
         <div class="OnboardingHint" data-onboarding-hint>
           <span class="OnboardingHint_pulse"></span>
           <span class="OnboardingHint_text">${hint}</span>
         </div>
       `;
+      // Avançar/Pular PRIMEIRO (foco padrão) — um Enter/Espaço distraído pula,
+      // nunca volta. A seta ← e o botão Voltar retrocedem.
+      const buttons = [{ label: "Pular", value: "next" }];
+      if (canGoBack) buttons.push({ label: "◀ Voltar", value: "back" });
+
       const popup = new window.PopupWindow({
         badge,
         title,
         text: text + stepHint,
         size: "large",
-        // Botão único "Pular" pra acessibilidade — jogador que não consegue
-        // interagir (ex.: tela touch sem foco no body) ainda avança.
-        buttons: [{ label: "Pular", value: "skip" }],
-        onComplete: () => {
-          document.removeEventListener("keydown", listener, true);
-          resolve();
-        },
+        buttons,
+        onComplete: (value) => finish(value === "back" ? "back" : "next"),
       });
       popup.init(document.body);
 
       // Listener com captura — pega a tecla antes de qualquer outro handler
-      // do jogo (ex.: o KeyPressListener global do Overworld). Removido em
-      // close() acima.
+      // do jogo (ex.: o KeyPressListener global do Overworld).
       const listener = (e) => {
+        // ← tem precedência: volta um passo (mesmo nos passos de movimento,
+        // onde a ← deixa de contar como avanço justamente por causa disso).
+        if (e.code === "ArrowLeft") {
+          if (!canGoBack) return;
+          e.preventDefault();
+          e.stopPropagation();
+          popup.close("back");
+          return;
+        }
         if (!isMatch(e)) return;
         e.preventDefault();
         e.stopPropagation();
@@ -481,7 +586,7 @@ class TitleScreen {
         const hintEl = document.querySelector("[data-onboarding-hint]");
         if (hintEl) hintEl.classList.add("OnboardingHint--done");
         if (window.audioManager) window.audioManager.playSfx("correct");
-        setTimeout(() => popup.close("done"), 220);
+        setTimeout(() => popup.close("next"), 220);
       };
       document.addEventListener("keydown", listener, true);
     });
