@@ -10,6 +10,13 @@ class TextMessage {
     this.element = document.createElement("div");
     this.element.classList.add("TextMessage");
 
+    // Falas seguem o formato "Personagem: texto". Quem não é Alex
+    // fala em amarelo pra diferenciar da protagonista.
+    const speaker = (this.text.match(/^\s*([^:\[\]]{1,30}):/) || [])[1];
+    if (speaker && speaker.trim() !== "Alex") {
+      this.element.classList.add("TextMessage--npc");
+    }
+
     this.element.innerHTML = `
       <p class="TextMessage_p"></p>
       ${this.options ? this.renderOptions() : ''}

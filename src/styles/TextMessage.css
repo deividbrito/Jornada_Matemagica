@@ -29,6 +29,9 @@
 .TextMessage span         { opacity: 0; }
 .TextMessage span.revealed { opacity: 1; }
 
+/* Falas de outros personagens (Conde, Mentor, etc.) — amarelo */
+.TextMessage--npc .TextMessage_p { color: var(--color-accent); }
+
 /* Botões inline (raramente usados, mas mantidos pelo legado) */
 .TextMessage_button,
 .TextMessage_button2 {
