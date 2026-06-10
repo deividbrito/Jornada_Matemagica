@@ -55,9 +55,9 @@ class QuizGame {
       params.append("id_assunto", this.idAssunto);
     }
     // Envia a dificuldade sempre que o cliente tiver uma (manual ou adaptativa).
-    // O backend tem fallback: se o pool da campanha não tem aquele nível,
-    // ele relaxa o filtro automaticamente (quizService._fetchPool).
-    if (this.dificuldade) {
+    // Exceção: campanha "medio" (ENEM) tem pool de nível único (tudo 2) —
+    // filtrar por dificuldade adaptativa "1"/"3" esvaziaria o resultado.
+    if (this.dificuldade && this.campanha !== "medio") {
       params.append("dificuldade", this.dificuldade);
     }
     params.append("campanha", this.campanha);
