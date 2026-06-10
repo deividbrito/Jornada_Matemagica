@@ -462,7 +462,7 @@ class TitleScreen {
         text:
           "Encoste no <b>professor</b> no palco e aperte <b>Enter</b> " +
           "(ou o botão <b>A</b> no D-pad) para começar." +
-          "<br><br>Você escolhe <b>quantas questões</b> enfrentar — de <b>5 a 60</b>.",
+          "<br><br>Você escolhe <b>quantas questões</b> enfrentar — de <b>5 a 15</b>.",
         hint: "Pressione Enter para continuar · ← volta",
         isMatch: (e) => e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Space",
       },
