@@ -93,7 +93,7 @@ PopupWindow.askDifficulty = function ({
       buttons: [
         { label: "Automática (recomendada)", value: "auto" },
         { label: "Fácil",   value: "1" },
-        { label: "Médio",   value: "2" },
+        { label: "Média",   value: "2" },
         { label: "Difícil", value: "3" },
       ],
       onComplete: (value) => {

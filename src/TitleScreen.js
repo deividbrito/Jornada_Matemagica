@@ -256,7 +256,7 @@ class TitleScreen {
         ? `<div style="font-size:14px;text-align:center;margin-top:8px;color:#88ff99;">Sua posição: <b>#${data.playerPositions[sortKey]}</b></div>`
         : (loggedIn
             ? `<div style="font-size:14px;text-align:center;margin-top:8px;color:#cce0ff;"><i>Jogue uma prova para entrar no ranking.</i></div>`
-            : `<div style="font-size:14px;text-align:center;margin-top:8px;color:#ffaa33;"><i>Entre para participar do ranking.</i></div>`);
+            : `<div style="font-size:14px;text-align:center;margin-top:8px;color:#ffaa33;"><i>Faça login para participar do ranking.</i></div>`);
       return `<table style="width:100%;border-collapse:collapse;font-size:15px;text-align:center;">
         ${headerRow}${rows}
       </table>${posLine}`;
@@ -424,7 +424,7 @@ class TitleScreen {
         text:
           "Você enfrenta os magos <b>em ordem</b>: " +
           "Decimais → Aproximação → Primos → Frações → Racionais → Porcentagem." +
-          "<br><br>Cada sala libertada rende <b>até 3 estrelas</b> (acertos %, sem buffs, sem erros) " +
+          "<br><br>Cada sala libertada rende <b>até 3 estrelas</b> (% de acertos, sem buffs, sem erros) " +
           "e uma <b>medalha temática</b>. Você pode repetir qualquer fase pelo menu " +
           "<b>Selecionar Fase</b> a qualquer momento.",
       },
@@ -440,7 +440,7 @@ class TitleScreen {
         title: "Boas-vindas à Gincana Acadêmica!",
         text:
           "Você está no <b>Modo ENEM</b>: um <b>arcade de questões</b> no estilo da prova. " +
-          "Seu objetivo é <b>responder a gincana</b>, manter suas <b>tentativas</b> e " +
+          "Seu objetivo é <b>concluir a gincana</b>, manter suas <b>tentativas</b> e " +
           "<b>subir no ranking</b>." +
           "<br><br>Vamos treinar os controles em 30 segundos — na prática, apertando as teclas.",
       },
@@ -482,7 +482,7 @@ class TitleScreen {
           "Cada <b>erro</b> consome uma <b>tentativa ◆</b> (você começa com 3). " +
           "Sequências de <b>acertos</b> rendem bônus, e <b>altares</b> no caminho dão buffs." +
           "<br><br>Os detalhes completos aparecem assim que a gincana começa. " +
-          "Cada acerto vira <b>XP</b> que sobe seu rank " +
+          "Cada acerto vira <b>XP</b> que aumenta seu rank " +
           "(Calouro → Estudante → Bolsista → Destaque → Campeão Nacional)." +
           "<br><br>Bons estudos!",
       },

@@ -168,7 +168,7 @@ class OverworldEvent {
         "<p style='margin-top:14px;opacity:0.85;font-style:italic;'>Obrigado por jogar Jornada Matemágica.</p>",
       size: "large",
       buttons: [
-        { label: "Voltar ao Menu", value: "menu" },
+        { label: "Voltar ao menu", value: "menu" },
         { label: "Continuar explorando", value: "continue" },
       ],
       onComplete: (value) => {
@@ -568,7 +568,7 @@ class OverworldEvent {
       title: "🎓 Altar de Apoio",
       text:
         `<b>${header}</b><br><br>` +
-        "Você chegou a um <b>checkpoint</b> da gincana. Escolha <b>1 dos 3 buffs</b> abaixo — a escolha vale pelo restante da run.<br><br>" +
+        "Você chegou a um <b>checkpoint</b> da gincana. Escolha <b>1 dos 3 buffs</b> abaixo — a escolha é definitiva.<br><br>" +
         "Clique no botão correspondente ao buff que quer ativar:" +
         `<div class="ArcadeAltar_cards">${cards}</div>`,
       buttons: buffs.map(b => ({ label: `${b.icon} ${b.label}`, value: b.id })),
@@ -662,7 +662,7 @@ class OverworldEvent {
 
     const titleStr = victory ? "Você passou!" : "Não foi dessa vez...";
     const subtitle = victory
-      ? "Você completou todas as questões da gincana!"
+      ? "Você respondeu a todas as questões da gincana!"
       : "Suas tentativas acabaram. Revise o conteúdo e tente de novo.";
 
     let persistenceWarning = "";

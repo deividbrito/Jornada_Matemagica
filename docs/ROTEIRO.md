@@ -8,7 +8,7 @@ Roteiro completo para a run contínua narrativa. Cada bloco é uma cutscene a se
 
 O **Colégio Saint-Math** foi tomado por uma magia antiga. O **Mago Sombrio**, antigo vice-diretor amargurado pela aposentadoria forçada, descobriu um grimório nos arquivos da biblioteca e enfeitiçou seis alunos e professores — cada um se tornou guardião distorcido de um conceito matemático que dominava em vida.
 
-**Alex**, estudante que acabou de chegar, é a única pessoa que ainda consegue raciocinar livre do feitiço. Precisa percorrer as salas, derrotar cada mago num duelo de provas matemáticas, e libertar as pessoas presas dentro dos guardiões. No fim, encarará o próprio Mago Sombrio no Jardim.
+**Alex**, estudante que acabou de chegar, é a única pessoa que ainda consegue raciocinar livre do feitiço. Precisa percorrer as salas, derrotar cada mago num duelo de provas matemáticas e libertar as pessoas presas dentro dos guardiões. No fim, encarará o próprio Mago Sombrio no Jardim.
 
 A filosofia: cada mago acredita que **seu** conceito é o único caminho verdadeiro. Alex prova, através do domínio, que a matemática é uma rede — não um único trono.
 
@@ -20,7 +20,7 @@ A filosofia: cada mago acredita que **seu** conceito é o único caminho verdade
 |---|---|---|
 | `alice.png` | Protagonista | Curiosidade, praticidade, fala pouco |
 | `p1.png` | **Professor Mentor** (Corredor) | Sereno, enigmático, antigo professor de Alex |
-| `p2.png`-`p5.png` | NPCs auxiliares | Figuras que sobreviveram, dão dicas |
+| `p2.png`-`p5.png` | NPCs auxiliares | Figuras que sobreviveram e dão dicas |
 | `figurante1.png`-`figurante10.png` | Alunos comuns | Aterrorizados, comentários ambientais |
 | `vilao.png` | **Mago Sombrio** | Antagonista oculto; ex-vice-diretor; voz ecoante |
 | `vilao2.png` | **Conde dos Decimais** (Sala 1) | Formal, lento, pedante. Ex-professor de cálculo |
@@ -44,7 +44,7 @@ Alex: ...onde estão todos?
 
 [Professor Mentor caminha lentamente em direção a Alex.]
 
-Professor: Alex. Que bom que você acordou.
+Professor: Alex, que bom que acordou!
 Professor: Algo terrível aconteceu enquanto você dormia na biblioteca.
 Professor: Seis alunos e professores foram tomados por uma magia antiga.
 Professor: Cada um se trancou numa sala diferente, dominado por um conceito que amava em vida.
@@ -99,7 +99,7 @@ Conde: Mostre-me. Erre uma única vírgula, e eu te apago do quadro.
 [O combate matemático começa.]
 ```
 
-Após o jogador aceitar (ou ao abrir o menu de quiz), inicia a fase `sala1_decimais` → teleport pra `Desafio1d1`.
+Após o jogador aceitar (ou ao abrir o menu de quiz), inicia-se a fase `sala1_decimais` → teleport pra `Desafio1d1`.
 
 ### 1.C — Pós-luta (falar com Conde derrotado na Sala 1)
 
@@ -215,7 +215,7 @@ Sentinela: E eu acreditei. Eu acreditei que dividir era fraqueza.
 
 Alex: Mas todo número composto é feito de primos.
 
-Sentinela: ...sim. Eu esqueci disso. Obrigada.
+Sentinela: ...sim. Eu esqueci disso. Obrigada por me lembrar.
 ```
 
 ---
@@ -234,7 +234,7 @@ Professor: Três magos. Três alunos libertos. Você é mais forte do que eu esp
 
 Professor: Mas você precisa saber quem está por trás disso.
 Professor: O nome dele se foi dos registros. A escola o expulsou há vinte anos.
-Professor: Ele era vice-diretor. Adorava número, ordem, hierarquia.
+Professor: Ele era vice-diretor. Adorava números, ordem, hierarquia.
 Professor: Quando o tiraram do cargo... ele não conseguiu aceitar.
 
 Alex: Ele virou o Mago Sombrio?
@@ -289,7 +289,7 @@ Bibliófilo: Some, subtraia, compare. Mostre-me que entende as partes.
 Bibliófilo: Você somou minhas partes. Conseguiu juntar o que eu separava.
 Bibliófilo: Eu era professor de literatura. Eu ensinava poesia.
 Bibliófilo: Mas ninguém ouvia. As salas estavam sempre vazias.
-Bibliófilo: O Sombrio me sussurrou que se eu virasse fragmentos... talvez alguém recolhesse.
+Bibliófilo: O Sombrio me sussurrou que se eu virasse fragmentos... talvez alguém recolhesse os pedaços.
 
 Alex: Eu vou ler seus livros. Os inteiros e os que sobraram.
 
@@ -343,7 +343,7 @@ Trapaceiro: Tenta acompanhar. Se conseguir.
 Trapaceiro: ...você levou a sério. Ninguém leva a sério.
 Trapaceiro: Eu era o mais popular daqui. Todo mundo ria das minhas piadas.
 Trapaceiro: Mas ninguém me ouvia quando eu falava sério. Então eu parei de falar sério.
-Trapaceiro: O Sombrio me ofereceu uma piada eterna. Uma onde ninguém me cobrava resposta.
+Trapaceiro: O Sombrio me ofereceu uma piada eterna. Uma em que ninguém me cobrava resposta.
 
 Alex: Você ainda pode falar sério. Comigo, pelo menos.
 
@@ -490,7 +490,7 @@ Falar com o Mentor a qualquer momento (NPC permanente no Corredor) deve mostrar 
 
 ## Falas Idle de Figurantes (ambientação curta)
 
-Para encher os mapas com vida. Cada figurante pode ter 1 fala fixa. Use para preencher tile no Corredor e nas salas.
+Para encher os mapas com vida. Cada figurante pode ter 1 fala fixa. Use para preencher tiles no Corredor e nas salas.
 
 | Sprite | Sala | Fala |
 |---|---|---|
@@ -500,7 +500,7 @@ Para encher os mapas com vida. Cada figurante pode ter 1 fala fixa. Use para pre
 | `figurante4.png` | Sala 2 | "Tudo aqui é 'mais ou menos'. Sinto falta do exato." |
 | `figurante5.png` | Grêmio | "Eu estava na lista da Sentinela. Acho que eu sumi por um tempo." |
 | `figurante6.png` | Biblioteca | "Esse livro... metade tá faltando." |
-| `figurante7.png` | Pátio | "Ele me convenceu de uma piada que ainda dói." |
+| `figurante7.png` | Pátio | "Ele me fez acreditar numa piada que ainda dói." |
 | `figurante8.png` | Jardim | "Eu não sei como cheguei aqui. As plantas pararam." |
 | `figurante9.png` | Corredor (pós-jogo) | "A escola voltou. Você é Alex, né? Obrigada." |
 | `figurante10.png` | Corredor (pós-jogo) | "Quer dividir meu lanche? Eu sei calcular as porções." |

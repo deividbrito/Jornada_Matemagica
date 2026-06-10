@@ -55,7 +55,7 @@ class PauseMenu{
                 },
                 {
                     label: "Voltar ao Menu",
-                    description: "Encerra a sessão atual e volta à tela inicial (lembre de salvar antes)",
+                    description: "Encerra a sessão atual e volta à tela inicial (lembre-se de salvar antes)",
                     handler: () => {
                         // Limpa estado em memória de fase ativa pra não vazar pro próximo boot.
                         if (window.progress && window.progress.faseRun) {

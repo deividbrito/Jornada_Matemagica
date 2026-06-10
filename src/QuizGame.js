@@ -1,7 +1,7 @@
 class QuizGame {
   constructor({ onComplete, idAssunto = null, dificuldade = null, campanha = null, useFiftyFifty = false }) {
     this.useFiftyFifty = useFiftyFifty;
-    this.text = "Carregando pergunta...";
+    this.text = "Carregando pergunta…";
     this.options = [];
     this.feedback = "";
     this.idAssunto = idAssunto;
@@ -370,7 +370,7 @@ class QuizGame {
     const pEl = this.element.querySelector(".QuizTutorial_p");
     pEl.innerHTML = "";
 
-    const successMessages = ["Muito bem! Você acertou! ", "Mandou super bem! ", "Ótimo trabalho!", "Que incrível! Você conseguiu! "];
+    const successMessages = ["Muito bem! Você acertou! ", "Mandou super bem! ", "Ótimo trabalho! ", "Que incrível! Você conseguiu! "];
     const errorMessages = ["Quase lá! Vamos entender juntos: ", "Não foi dessa vez! Veja só: ", "Boa tentativa! Agora veja: ", "Errar faz parte! Vamos aprender: "];
 
     const messageArray = isCorrect ? successMessages : errorMessages;

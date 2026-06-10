@@ -79,7 +79,7 @@
       // questão e só avisa o usuário se TODAS as tentativas falharem).
       if (!opts.silent) {
         if (err.name === 'AbortError' && window.toast) {
-          window.toast.error("A API demorou demais para responder. Tente novamente.");
+          window.toast.error("O servidor demorou demais para responder. Tente novamente.");
         } else if (err.name === 'TypeError' && window.toast) {
           window.toast.error("Sem conexão com o servidor. Verifique sua internet.");
         }

@@ -22,7 +22,7 @@ class LoginForm {
           </label>
           <label class="LoginForm_field">
             <span class="LoginForm_fieldLabel">Email</span>
-            <input type="email" name="email" placeholder="seu@email" autocomplete="email" required />
+            <input type="email" name="email" placeholder="seu@email.com" autocomplete="email" required />
           </label>
           <label class="LoginForm_field">
             <span class="LoginForm_fieldLabel">Senha</span>
