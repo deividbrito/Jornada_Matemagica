@@ -35,7 +35,31 @@ class AudioManager {
     this.currentBgm = new Audio(bgmSrc);
     this.currentBgm.volume = this.bgmVolume;
     this.currentBgm.loop = true;
-    this.currentBgm.play().catch(() => {});
+    this._tryPlayBgm();
+  }
+
+  // O autoplay é bloqueado quando o BGM inicia sem interação prévia na página
+  // (ex.: reload pós-fase com jm_skip_title, que pula a TitleScreen). Nesse
+  // caso, tenta de novo a cada interação do jogador até conseguir. Usa
+  // pointerup (pointerdown de toque ainda não concede user activation) e
+  // rearma se falhar — Esc e keydowns sintéticos dos TouchControls também
+  // não concedem activation.
+  _tryPlayBgm() {
+    const bgm = this.currentBgm;
+    if (!bgm) return;
+    const arm = () => {
+      document.addEventListener("pointerup", retry, { once: true });
+      document.addEventListener("keydown", retry, { once: true });
+    };
+    const retry = () => {
+      document.removeEventListener("pointerup", retry);
+      document.removeEventListener("keydown", retry);
+      // Só retoma se este áudio ainda for o BGM atual (pode ter trocado).
+      if (this.currentBgm !== bgm) return;
+      if (document.hidden) { arm(); return; } // visível de novo → _onVisibilityChange
+      bgm.play().catch(arm);
+    };
+    bgm.play().catch(arm);
   }
 
   stopBgm() {

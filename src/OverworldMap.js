@@ -134,6 +134,10 @@ window.OverworldMaps = {
     id: "Corredor",
     lowerSrc: "imagens/mapas/corredor.png",
     upperSrc: "imagens/personagens/vazio.png",
+    // Trilha da campanha: ambiente (arcade.mp3) nos mapas de exploração,
+    // desafio (battle.mp3) nas arenas Desafio* e no Jardim (boss final).
+    // Mesmas músicas do modo ENEM — lá controladas por arcadeStart/arcadeBattle.
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -733,9 +737,8 @@ window.OverworldMaps = {
     id: "Jardim",
     lowerSrc: "imagens/mapas/jardim.png",
     upperSrc: "imagens/mapas/jardimUpper.png",
-    // BGM tenso pra ancorar a atmosfera do boss final. Demais mapas ficam
-    // silenciosos por padrão — basta declarar `bgm: "audio/bgm/<arquivo>.mp3"`
-    // em qualquer outro map config pra adicionar trilha sonora.
+    // BGM tenso já na exploração (não só na arena) pra ancorar a atmosfera
+    // do boss final — os demais mapas de exploração usam a trilha ambiente.
     bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
@@ -902,6 +905,7 @@ window.OverworldMaps = {
     id: "Sala2",
     lowerSrc: "imagens/mapas/sala1.png",
     upperSrc: "imagens/personagens/vazio.png",
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -1073,6 +1077,7 @@ window.OverworldMaps = {
     id: "Sala1",
     lowerSrc: "imagens/mapas/sala2.png",
     upperSrc: "imagens/personagens/vazio.png",
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -1261,6 +1266,7 @@ window.OverworldMaps = {
     id: "SalaEstudos",
     lowerSrc: "imagens/mapas/salaestudos.png",
     upperSrc: "imagens/personagens/vazio.png",
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -1373,6 +1379,7 @@ window.OverworldMaps = {
     id: "Gremio",
     lowerSrc: "imagens/mapas/gremio.png",
     upperSrc: "imagens/personagens/vazio.png",
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -1478,6 +1485,7 @@ window.OverworldMaps = {
     id: "Biblioteca",
     lowerSrc: "imagens/mapas/biblioteca.png",
     upperSrc: "imagens/personagens/vazio.png",
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -1662,10 +1670,11 @@ window.OverworldMaps = {
       ],
     }
   },
-  Patio: { 
+  Patio: {
     id: "Patio",
     lowerSrc: "imagens/mapas/patio2.png",
     upperSrc: "imagens/mapas/patio2Upper.png",
+    bgm: "audio/bgm/arcade.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -2038,6 +2047,7 @@ window.OverworldMaps = {
     id: "Desafio1d1",
     lowerSrc: "imagens/personagens/vazio.png",
     upperSrc: "imagens/mapas/desafios/desafio1.png",
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -2087,6 +2097,7 @@ window.OverworldMaps = {
     id: "Desafio2d1",
     lowerSrc: "imagens/personagens/vazio.png",
     upperSrc: "imagens/mapas/desafios/desafio2.png",
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -2135,6 +2146,7 @@ window.OverworldMaps = {
     id: "Desafio3d1",
     lowerSrc: "imagens/personagens/vazio.png",
     upperSrc: "imagens/mapas/desafios/desafio3.png",
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -2183,6 +2195,7 @@ window.OverworldMaps = {
     id: "Desafio5d1",
     lowerSrc: "imagens/personagens/vazio.png",
     upperSrc: "imagens/mapas/desafios/desafio5.png",
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -2234,6 +2247,7 @@ window.OverworldMaps = {
     id: "Desafio6d1",
     lowerSrc: "imagens/personagens/vazio.png",
     upperSrc: "imagens/mapas/desafios/desafio6.png",
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
@@ -2285,6 +2299,7 @@ window.OverworldMaps = {
     id: "Desafio7d1",
     lowerSrc: "imagens/personagens/vazio.png",
     upperSrc: "imagens/mapas/desafios/desafio7.png",
+    bgm: "audio/bgm/battle.mp3",
     gameObjects: {
       hero: new window.Person({
         isPlayerControlled: true,
